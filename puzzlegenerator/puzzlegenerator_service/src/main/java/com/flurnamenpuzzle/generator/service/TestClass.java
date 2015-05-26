@@ -1,7 +1,7 @@
 package com.flurnamenpuzzle.generator.service;
 
 /**
- * Random JavaDoc
+ * This is a test class
  * @author Hoang
  *
  */
