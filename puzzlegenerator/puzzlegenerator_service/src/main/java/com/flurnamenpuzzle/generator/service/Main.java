@@ -1,4 +1,4 @@
-package com.flurnamenpuzzle.generator;
+package com.flurnamenpuzzle.generator.service;
 
 import javax.swing.SwingUtilities;
 
