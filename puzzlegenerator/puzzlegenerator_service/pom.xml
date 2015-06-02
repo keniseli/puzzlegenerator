@@ -19,11 +19,6 @@
 
 	<dependencies>
 		<dependency>
-			<groupId>com.flurnamenpuzzle.generator</groupId>
-			<artifactId>puzzlegenerator_ui</artifactId>
-			<version>1.00.00</version>
-		</dependency>
-		<dependency>
 			<groupId>junit</groupId>
 			<artifactId>junit</artifactId>
 			<version>4.12</version>
