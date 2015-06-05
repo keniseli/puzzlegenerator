@@ -13,8 +13,6 @@ public interface Observer {
      * relevantly.
      * 
      * @param observable
-     * 
-     * @param observable
      *            the {@link Observable} that changed.
      */
     void update(Observable observable);
