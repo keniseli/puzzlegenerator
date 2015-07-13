@@ -22,7 +22,7 @@ public class ShapeServiceTest {
 	public void setUp() {
 		shapeService = new ShapeService();
 	}
-	
+
 	@Test
 	public void testFilterContainingFeaturesOfFeature() throws IOException {
 		// arrange
@@ -58,34 +58,34 @@ public class ShapeServiceTest {
 		String pathToFlurnamenShapeFile = urlFlurnamen.getFile();
 		File flurnamenShapeFile = new File(pathToFlurnamenShapeFile);
 		flurnamenShapeFile.setReadOnly();
-    	FileDataStore dataStoreFlurnamen = FileDataStoreFinder.getDataStore(flurnamenShapeFile);
-        SimpleFeatureSource shapeFileSourceFlurnamen = dataStoreFlurnamen.getFeatureSource();
-        dataStoreFlurnamen.dispose();
-        SimpleFeatureCollection flurnamenSimpleFeatureCollection = shapeFileSourceFlurnamen.getFeatures();
-        List<SimpleFeature> flurnamenFeatures = Arrays.asList((SimpleFeature[]) (flurnamenSimpleFeatureCollection.toArray()));
-        
+		FileDataStore dataStoreFlurnamen = FileDataStoreFinder.getDataStore(flurnamenShapeFile);
+		SimpleFeatureSource shapeFileSourceFlurnamen = dataStoreFlurnamen.getFeatureSource();
+		dataStoreFlurnamen.dispose();
+		SimpleFeatureCollection flurnamenSimpleFeatureCollection = shapeFileSourceFlurnamen.getFeatures();
+		List<SimpleFeature> flurnamenFeatures = Arrays.asList((SimpleFeature[]) (flurnamenSimpleFeatureCollection.toArray()));
+
 		URL urlGemeinde = ShapeServiceTest.class.getResource("file/ExportPerimeter.shp");
 		String pathToGemeindeShapeFile = urlGemeinde.getFile();
 		File gemeindeShapeFile = new File(pathToGemeindeShapeFile);
 		gemeindeShapeFile.setReadOnly();
-    	FileDataStore dataStoreGemeinde = FileDataStoreFinder.getDataStore(gemeindeShapeFile);
-        SimpleFeatureSource shapeFileSourceGemeinde = dataStoreGemeinde.getFeatureSource();
-        dataStoreGemeinde.dispose();
-        SimpleFeatureCollection gemeindeSimpleFeatureCollection = shapeFileSourceGemeinde.getFeatures();
-        List<SimpleFeature> gemeindeFeatures = Arrays.asList((SimpleFeature[]) (gemeindeSimpleFeatureCollection.toArray()));
-        SimpleFeature gemeindeFeature = gemeindeFeatures.get(0);
-        
-        // act
-        List<SimpleFeature> filteredFeatures = shapeService.filterContainingFeaturesOfFeature(gemeindeFeature, flurnamenFeatures);
-	
-        // assert
-        Assert.assertTrue(filteredFeatures.size() == expectedIndices.size());
-        for (int i : expectedIndices) {
-        	SimpleFeature currentFeature = flurnamenFeatures.get(i);
-        	Assert.assertTrue(filteredFeatures.contains(currentFeature));
-        }
+		FileDataStore dataStoreGemeinde = FileDataStoreFinder.getDataStore(gemeindeShapeFile);
+		SimpleFeatureSource shapeFileSourceGemeinde = dataStoreGemeinde.getFeatureSource();
+		dataStoreGemeinde.dispose();
+		SimpleFeatureCollection gemeindeSimpleFeatureCollection = shapeFileSourceGemeinde.getFeatures();
+		List<SimpleFeature> gemeindeFeatures = Arrays.asList((SimpleFeature[]) (gemeindeSimpleFeatureCollection.toArray()));
+		SimpleFeature gemeindeFeature = gemeindeFeatures.get(0);
+
+		// act
+		List<SimpleFeature> filteredFeatures = shapeService.filterContainingFeaturesOfFeature(gemeindeFeature, flurnamenFeatures);
+
+		// assert
+		Assert.assertTrue(filteredFeatures.size() == expectedIndices.size());
+		for (int i : expectedIndices) {
+			SimpleFeature currentFeature = flurnamenFeatures.get(i);
+			Assert.assertTrue(filteredFeatures.contains(currentFeature));
+		}
 	}
-	
+
 	@Test
 	public void testGetNamesOfShapes() {
 		List<String> expectedNames = Arrays.asList("Im Bansteibode", "Galgenacher", "Steigrube", "Talweid",

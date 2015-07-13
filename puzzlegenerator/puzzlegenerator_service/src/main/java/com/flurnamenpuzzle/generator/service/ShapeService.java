@@ -57,22 +57,26 @@ public class ShapeService {
 		return featuresCollection;
 	}
 
-    /**
-     * Returns a {@link List}<{@link SimpleFeature}> where all SimpleFeatures are in the area of the parentFeature.
-     *
-     * @param parentFeature SimpleFeature that covers the area of all wanted SimpleFeatures
-     * @param childFeatures List of SimpleFeatures to be filtered
-     * @return Filtered {@code List<SimpleFeature>}
-     */
-    public List<SimpleFeature> filterContainingFeaturesOfFeature(SimpleFeature parentFeature, List<SimpleFeature> childFeatures) {
-        List<SimpleFeature> filteredFeatures = new ArrayList<SimpleFeature>();
-        Geometry parentGeometry = (Geometry) parentFeature.getDefaultGeometry();
-        for (SimpleFeature childFeature : childFeatures) {
-            Geometry childGeometry = (Geometry) childFeature.getDefaultGeometry();
-            if (parentGeometry.contains(childGeometry.getCentroid())) {
-                filteredFeatures.add(childFeature);
-            }
-        }
-        return filteredFeatures;
-    }
+	/**
+	 * Returns a {@link List}<{@link SimpleFeature}> where all SimpleFeatures
+	 * are in the area of the parentFeature.
+	 *
+	 * @param parentFeature
+	 *            SimpleFeature that covers the area of all wanted
+	 *            SimpleFeatures
+	 * @param childFeatures
+	 *            List of SimpleFeatures to be filtered
+	 * @return Filtered {@code List<SimpleFeature>}
+	 */
+	public List<SimpleFeature> filterContainingFeaturesOfFeature(SimpleFeature parentFeature, List<SimpleFeature> childFeatures) {
+		List<SimpleFeature> filteredFeatures = new ArrayList<SimpleFeature>();
+		Geometry parentGeometry = (Geometry) parentFeature.getDefaultGeometry();
+		for (SimpleFeature childFeature : childFeatures) {
+			Geometry childGeometry = (Geometry) childFeature.getDefaultGeometry();
+			if (parentGeometry.contains(childGeometry.getCentroid())) {
+				filteredFeatures.add(childFeature);
+			}
+		}
+		return filteredFeatures;
+	}
 }
