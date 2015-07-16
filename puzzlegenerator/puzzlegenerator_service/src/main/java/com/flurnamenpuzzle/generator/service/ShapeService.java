@@ -79,4 +79,115 @@ public class ShapeService {
 		}
 		return filteredFeatures;
 	}
+	
+	/**
+	 * Calculate pixel coordinates on tiff image of given lontitude and latitude in LV03
+	 * 
+	 * @param coverage
+	 * @param longitude
+	 * @param latitude
+	 * @return Point(xAxis, yAxis) of representive pixel
+	 * @throws Exception
+	 */
+	private static Point getPointByCoordinates(GridCoverage2D coverage, double longitude, double latitude) throws Exception{ 
+		
+		// read width and height of tiff image
+		int tHeight	= coverage.getRenderedImage().getHeight();
+		int tWidth	= coverage.getRenderedImage().getWidth();
+		
+		// read boundaries of tiff file
+		double yAxisOrigin	= coverage.getEnvelope2D().getBounds2D().getY();
+		double xAxisOrigin	= coverage.getEnvelope2D().getBounds2D().getX();
+		double yAxisHeight	= coverage.getEnvelope2D().getHeight();
+		double xAxisWidth	= coverage.getEnvelope2D().getWidth();
+		double yAxisMaxY	= coverage.getEnvelope2D().getMaxY();
+		double xAxisMaxX	= coverage.getEnvelope2D().getMaxX();
+		
+		// check if provided coordinates are available
+		if(!(longitude >= xAxisOrigin && longitude <= xAxisMaxX && latitude >= yAxisOrigin && latitude <= yAxisMaxY))
+			throw new Exception("Provided coordinates not found within tiff file");
+		
+		// calculate coordinate offset from origin 
+		double longtidudeOffset = longitude - xAxisOrigin;
+		double latitudeOffset = yAxisMaxY - latitude;
+		
+		// calculate pixel/coordinate relation
+		double coordinatesPerPixelX = tWidth / xAxisWidth;
+		double coordinatesPerPixelY = tHeight / yAxisHeight;
+		
+		// calculate point where pixels are
+		int pixelX = (int)Math.round(longtidudeOffset * coordinatesPerPixelX);
+		int pixelY = (int)Math.round(latitudeOffset * coordinatesPerPixelY);
+		
+		return new Point(pixelX, pixelY);
+	}
+	
+	/**
+	 * To describe...
+	 * 
+	 * @param shapeFile
+	 * @param coverage
+	 * @return ArrayList<Path2D>
+	 */
+	private static ArrayList<Path2D> getPathFromShapeFile(File shapeFile, GridCoverage2D coverage) {
+		FileDataStore dataStore;
+		try {
+			shapeFile.setReadOnly();
+			dataStore = FileDataStoreFinder.getDataStore(shapeFile);
+			SimpleFeatureSource shapeFileSource = dataStore.getFeatureSource();
+			
+			SimpleFeatureCollection featuresCollection = shapeFileSource.getFeatures();
+			SimpleFeatureIterator featuresIterator = featuresCollection.features();
+			
+			ArrayList<Path2D> resultSet = new ArrayList<Path2D>();
+			
+			while(featuresIterator.hasNext()){
+				SimpleFeature feature = featuresIterator.next();
+				
+				Object object = feature.getAttribute(0);
+				if (object instanceof MultiPolygon) {
+					MultiPolygon polygon = (MultiPolygon) object;
+					
+					Coordinate[] coordinates = polygon.getCoordinates();
+					Path2D path = new Path2D.Double();
+					Coordinate firstCoordinate = coordinates[0];
+					
+					// get pixel position
+					Point firstPoint = new Point(-1,-1);
+					try {
+						firstPoint = getPointByCoordinates(coverage, firstCoordinate.x, firstCoordinate.y);
+					} catch (Exception e) {
+						e.printStackTrace();
+					}
+					
+					path.moveTo(firstPoint.x, firstPoint.y);
+					for (int i = 1; i < coordinates.length; i++) {
+						Coordinate coordinate = coordinates[i];
+						
+						Point pixelPoint = new Point(-1, -1);
+						try {
+							pixelPoint = getPointByCoordinates(coverage, coordinate.x, coordinate.y);
+						} catch (Exception e) {
+							e.printStackTrace();
+						}
+						
+						path.lineTo(pixelPoint.x, pixelPoint.y);
+					}
+					path.closePath();
+					
+					resultSet.add(path);
+				}
+			}
+			
+			featuresIterator.close();
+			dataStore.dispose();
+			
+			return resultSet;
+			
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+
+		return null;
+	}
 }
