@@ -54,7 +54,7 @@ public class ShapeServiceTest {
 				534, 535, 536, 537, 538, 539, 540, 541, 542, 543, 544, 545,
 				546, 547, 548, 549, 550);
 
-		URL urlFlurnamen = ShapeServiceTest.class.getResource("file/No_Flurname_A.shp");
+		URL urlFlurnamen = ShapeServiceTest.class.getResource("/No_Flurname_A.shp");
 		String pathToFlurnamenShapeFile = urlFlurnamen.getFile();
 		File flurnamenShapeFile = new File(pathToFlurnamenShapeFile);
 		flurnamenShapeFile.setReadOnly();
@@ -64,7 +64,7 @@ public class ShapeServiceTest {
 		SimpleFeatureCollection flurnamenSimpleFeatureCollection = shapeFileSourceFlurnamen.getFeatures();
 		List<SimpleFeature> flurnamenFeatures = Arrays.asList((SimpleFeature[]) (flurnamenSimpleFeatureCollection.toArray()));
 
-		URL urlGemeinde = ShapeServiceTest.class.getResource("file/ExportPerimeter.shp");
+		URL urlGemeinde = ShapeServiceTest.class.getResource("/ExportPerimeter.shp");
 		String pathToGemeindeShapeFile = urlGemeinde.getFile();
 		File gemeindeShapeFile = new File(pathToGemeindeShapeFile);
 		gemeindeShapeFile.setReadOnly();
@@ -164,7 +164,7 @@ public class ShapeServiceTest {
 				"Chläberain", "Forerain", "Erliacher", "Erli", "Duschacher", "Rössliberg", "Hard", "Schneitweg",
 				"Gross-Dietisberg", "Rossweid", "Forehübel");
 
-		URL url = ShapeServiceTest.class.getResource("file/No_Flurname_A.shp");
+		URL url = ShapeServiceTest.class.getResource("/No_Flurname_A.shp");
 		String pathToShapeFile = url.getFile();
 		File shapeFile = new File(pathToShapeFile);
 		List<String> namesOfShapeFile = shapeService.getNamesOfShapeFile(shapeFile);
