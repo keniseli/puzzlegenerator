@@ -1,5 +1,7 @@
 package com.flurnamenpuzzle.generator.ui;
 
+import java.io.File;
+
 import com.flurnamenpuzzle.generator.ui.model.PuzzleGeneratorModel;
 import com.flurnamenpuzzle.generator.ui.view.PuzzleGeneratorView;
 
@@ -12,21 +14,26 @@ import com.flurnamenpuzzle.generator.ui.view.PuzzleGeneratorView;
  *
  */
 public class PuzzleGeneratorController {
-    private PuzzleGeneratorView puzzleGeneratorView;
-    private PuzzleGeneratorModel puzzleGeneratorModel;
+	private PuzzleGeneratorView puzzleGeneratorView;
+	private PuzzleGeneratorModel puzzleGeneratorModel;
 
-    public PuzzleGeneratorController(PuzzleGeneratorModel puzzleGeneratorModel) {
-	this.puzzleGeneratorView = new PuzzleGeneratorView();
-	this.puzzleGeneratorModel = puzzleGeneratorModel;
-    }
+	public PuzzleGeneratorController(PuzzleGeneratorModel puzzleGeneratorModel) {
+		this.puzzleGeneratorView = new PuzzleGeneratorView();
+		this.puzzleGeneratorModel = puzzleGeneratorModel;
+	}
 
-    /**
-     * The objects of the view are initialized and shown. {@link Observer
-     * Observers} are added if necessary.
-     */
-    public void initializeView() {
-	puzzleGeneratorView.createAndShow();
-	puzzleGeneratorModel.addObserver(puzzleGeneratorView);
-    }
+	/**
+	 * The objects of the view are initialized and shown. {@link Observer
+	 * Observers} are added if necessary.
+	 */
+	public void initializeView() {
+		puzzleGeneratorView.createAndShow(this);
+		puzzleGeneratorModel.addObserver(puzzleGeneratorView);
+	}
+
+	public void setStateFilePath(File file) {
+		puzzleGeneratorModel.setStateFile(file);
+		
+	}
 
 }

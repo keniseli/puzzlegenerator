@@ -11,10 +11,11 @@ import com.flurnamenpuzzle.generator.ui.model.PuzzleGeneratorModel;
  */
 public class Main {
 
-    public static void main(String[] args) {
-	PuzzleGeneratorModel puzzleGeneratorModel = new PuzzleGeneratorModel();
-	PuzzleGeneratorController puzzleGeneratorController = new PuzzleGeneratorController(puzzleGeneratorModel);
-	SwingUtilities.invokeLater(puzzleGeneratorController::initializeView);
-    }
-    
+	public static void main(String[] args) {
+		PuzzleGeneratorModel puzzleGeneratorModel = new PuzzleGeneratorModel();
+		PuzzleGeneratorController puzzleGeneratorController = new PuzzleGeneratorController(
+				puzzleGeneratorModel);
+		SwingUtilities.invokeLater(puzzleGeneratorController::initializeView);
+	}
+
 }
