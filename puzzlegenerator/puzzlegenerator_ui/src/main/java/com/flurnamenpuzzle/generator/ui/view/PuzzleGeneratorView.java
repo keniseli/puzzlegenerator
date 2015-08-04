@@ -22,15 +22,16 @@ public class PuzzleGeneratorView extends JFrame implements Observer {
 	private static final String FOOTER_TEXT = "\u00A9 2015 Daniel Mohler-Schmid | Puzzlegenerator - "
 			+ "Ein Projekt der Fachhochschule Nordwestschweiz für Technik, Windisch AG";
 	
-	private static final String LOGO_FHNW = "../images/logoFHNW.png";
-	private static final String LOGO_PUZZLE = "../images/logoPuzzle.png";
-	private static final String STEPS_IMAGE = "../images/steps.png";
+	private static final String LOGO_FHNW = "/images/logoFHNW.png";
+	private static final String LOGO_PUZZLE = "/images/logoPuzzle.png";
+	private static final String STEPS_IMAGE = "/images/steps.png";
 
 	private CardLayout cardLayout;
 	private JPanel cards;
 	private JPanel headerPanel;
 	private JPanel footerPanel;
 	
+	// Content part
 	private StateSelectionCard stateSel;
 	private FieldnameMapSelectionCard fieldNameSel;
 	private PuzzleGeneratorController controller;
@@ -43,12 +44,10 @@ public class PuzzleGeneratorView extends JFrame implements Observer {
 		this.controller = controller;
 		initializeComponents();
 		addEvents();
-
-		add(fieldNameSel);
-
+		
 		getContentPane().setBackground(Color.WHITE);
 		setLayout(new BorderLayout());
-		cards.add(this.stateSel);
+		cards.add(this.fieldNameSel);
 		cardLayout.show(cards, "1");
 		add(cards, BorderLayout.CENTER);
 		add(headerPanel, BorderLayout.NORTH);

@@ -1,10 +1,6 @@
 package com.flurnamenpuzzle.generator.ui.view;
 
-import java.awt.BorderLayout;
 import java.awt.Dimension;
-import java.awt.GridBagConstraints;
-import java.awt.GridBagLayout;
-import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
@@ -14,9 +10,13 @@ import javax.swing.JFileChooser;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
+import javax.swing.border.EmptyBorder;
+
+import net.miginfocom.swing.MigLayout;
 
 import com.flurnamenpuzzle.generator.ui.Observable;
 import com.flurnamenpuzzle.generator.ui.Observer;
+import com.flurnamenpuzzle.generator.ui.PuzzleGeneratorConfig;
 import com.flurnamenpuzzle.generator.ui.PuzzleGeneratorController;
 import com.flurnamenpuzzle.generator.ui.model.PuzzleGeneratorModel;
 
@@ -25,15 +25,18 @@ private static final long serialVersionUID = 1L;
 	
 	private PuzzleGeneratorController controller;
 	private JFileChooser fileChooser;
+	
 	private JLabel stateDropdownLabel;
 	private JLabel chooseFieldNameLabel;
 	private JLabel chooseMapLabel;
+	
 	private JButton chooseFieldNameButton;
 	private JButton chooseMapButton;
 	private JButton nextButton;
-	private JPanel componentPanel;
+	
 	private JTextField fieldNamePath;
 	private JTextField mapPath;
+	
 	private JComboBox<String> stateDropdown;
 	
 	private String[] dropdownList = {"Bern", "Luzern", "Zürich"};
@@ -44,84 +47,53 @@ private static final long serialVersionUID = 1L;
 	 */
 	public FieldnameMapSelectionCard(PuzzleGeneratorController controller) {
 		this.controller = controller;
-		this.setLayout(new GridBagLayout());
-		initComponents();
+		initializeComponents();
 		addComponentsToPanel();
 		addEvents();
 	}
 	
 	/**
-	 * working with gridBag to set the components in place
+	 * working with migLayout to set the components in place
 	 */
 	private void addComponentsToPanel() {
-		GridBagConstraints gbc = new GridBagConstraints();
-		GridBagConstraints labelConstraints = new GridBagConstraints();
-		GridBagConstraints textBoxContraints = new GridBagConstraints();
-		GridBagConstraints buttonContraints = new GridBagConstraints();
-		
-		// State dropdown
-		gbc.gridheight = 1;
-		gbc.gridwidth = GridBagConstraints.REMAINDER;
-		gbc.anchor = GridBagConstraints.WEST;
-		gbc.insets = new Insets(0, 0, 0, 0);
-		this.add(stateDropdownLabel, gbc);
-		
-		gbc.fill = GridBagConstraints.HORIZONTAL;
-		this.add(stateDropdown, gbc);
-		
-		//Fieldname shape
-		gbc.gridheight = 1;
-		gbc.gridwidth = GridBagConstraints.REMAINDER;
-		gbc.anchor = GridBagConstraints.WEST;
-		gbc.insets = new Insets(10, 0, 0, 0);
-		this.add(chooseFieldNameLabel, gbc);
-		
-		gbc.gridwidth = 3;
-		gbc.gridheight = 1;
-		gbc.insets = new Insets(0, 0, 0, 10);
-		this.add(fieldNamePath, gbc);
-		
-		gbc.gridwidth = 1;
-		gbc.gridheight = 1;
-		gbc.insets = new Insets(0, 0, 0, 0);
-		this.add(chooseFieldNameButton, gbc);
-		
-		//Map
-		gbc.gridheight = 1;
-		gbc.gridwidth = GridBagConstraints.REMAINDER;
-		gbc.anchor = GridBagConstraints.WEST;
-		gbc.insets = new Insets(10, 0, 0, 0);
-		this.add(chooseMapLabel, gbc);
-		
-		//gbc.fill = GridBagConstraints.BOTH;
-		gbc.gridwidth = 3;
-		gbc.gridheight = 1;
-		gbc.insets = new Insets(0, 0, 0, 10);
-		this.add(mapPath, gbc);
-		
-		//gbc.fill = GridBagConstraints.BOTH;
-		gbc.gridwidth = 1;
-		gbc.gridheight = 1;
-		gbc.insets = new Insets(0, 0, 0, 0);
-		this.add(chooseMapButton, gbc);
+		add(stateDropdownLabel, "span");
+		add(stateDropdown, "height :30:, pushx, growx, span, gapbottom 10");
+		add(chooseFieldNameLabel, "span");
+		add(fieldNamePath, "height :30:, pushx, growx");
+		add(chooseFieldNameButton, "height :30:, span, wrap 10");
+		add(chooseMapLabel, "span");
+		add(mapPath, "height :30:, pushx, growx");
+		add(chooseMapButton, "height :30:, wrap");
+		add(nextButton, "right, span, gaptop 40");
 	}
 	
 	/**
 	 * initialize all components needed for the panel
 	 */
-	private void initComponents() {
-		fileChooser = new JFileChooser();
-		mapPath = new JTextField();
-		fieldNamePath = new JTextField();
-		mapPath.setPreferredSize(new Dimension(200,20));
-		fieldNamePath.setPreferredSize(new Dimension(200,20));
-		stateDropdownLabel = new JLabel("Bitte wählen Sie eine Gemeinde aus:");
-		chooseFieldNameLabel = new JLabel("Wählen Sie das Shapefile der Flurnamen:");
-		chooseMapLabel = new JLabel("Wählen Sie das Tiff-File mit dem Kartenmaterial:");
-		chooseFieldNameButton = new JButton("Durchsuchen");
-		chooseMapButton = new JButton("Durchsuchen");
-		nextButton = new JButton("Weiter");
-		stateDropdown = new JComboBox<>();
+	private void initializeComponents() {
+		this.setLayout(new MigLayout());
+		this.setBorder(new EmptyBorder(20, 200, 20, 200));
+		this.setSize(new Dimension(600, 600));
+		
+		this.fileChooser = new JFileChooser();
+		this.mapPath = new JTextField();
+		this.mapPath.setFont(PuzzleGeneratorConfig.FONT_NORMAL);
+		this.fieldNamePath = new JTextField();
+		this.fieldNamePath.setFont(PuzzleGeneratorConfig.FONT_NORMAL);
+		this.stateDropdownLabel = new JLabel("Bitte wählen Sie eine Gemeinde aus:");
+		this.stateDropdownLabel.setFont(PuzzleGeneratorConfig.FONT_NORMAL);
+		this.chooseFieldNameLabel = new JLabel("Wählen Sie das Shapefile der Flurnamen:");
+		this.chooseFieldNameLabel.setFont(PuzzleGeneratorConfig.FONT_NORMAL);
+		this.chooseMapLabel = new JLabel("Wählen Sie das Tiff-File mit dem Kartenmaterial:");
+		this.chooseMapLabel.setFont(PuzzleGeneratorConfig.FONT_NORMAL);
+		this.chooseFieldNameButton = new JButton("Durchsuchen");
+		this.chooseFieldNameButton.setFont(PuzzleGeneratorConfig.FONT_NORMAL);
+		this.chooseMapButton = new JButton("Durchsuchen");
+		this.chooseMapButton.setFont(PuzzleGeneratorConfig.FONT_NORMAL);
+		this.nextButton = new JButton("Weiter");
+		this.nextButton.setFont(PuzzleGeneratorConfig.FONT_BOLD);
+		this.stateDropdown = new JComboBox<>(dropdownList);
+		this.stateDropdown.setFont(PuzzleGeneratorConfig.FONT_NORMAL);
 	}
 	
 	/**
@@ -131,6 +103,23 @@ private static final long serialVersionUID = 1L;
 		nextButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
+				// Go to next card
+			}
+		});
+		
+		this.chooseFieldNameButton.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				fileChooser.showOpenDialog(null);
+				fieldNamePath.setText(fileChooser.getSelectedFile().getPath());
+			}
+		});
+		
+		this.chooseMapButton.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				fileChooser.showOpenDialog(null);
+				mapPath.setText(fileChooser.getSelectedFile().getPath());
 			}
 		});
 	}
