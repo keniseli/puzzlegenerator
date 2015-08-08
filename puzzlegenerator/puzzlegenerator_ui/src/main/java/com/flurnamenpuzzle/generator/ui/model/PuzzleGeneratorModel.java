@@ -6,13 +6,17 @@ import java.util.List;
 
 import com.flurnamenpuzzle.generator.ui.Observable;
 import com.flurnamenpuzzle.generator.ui.Observer;
+import com.flurnamenpuzzle.generator.ui.Steps;
 
 public class PuzzleGeneratorModel implements Observable {
 	private List<Observer> observers;
 
 	private String notification;
 	private File stateFile;
-
+	private Steps currentStep;
+	private String[] states;
+	private String fieldNameFilePath;
+	private String mapFilePath;
 
 	public PuzzleGeneratorModel() {
 		observers = new ArrayList<Observer>();
@@ -45,9 +49,46 @@ public class PuzzleGeneratorModel implements Observable {
 	public File getStateFile() {
 		return stateFile;
 	}
-	
+
 	public void setStateFile(File stateFile) {
 		this.stateFile = stateFile;
 		notifyObservers();
 	}
+
+	public Steps getCurrentStep() {
+		return currentStep;
+	}
+
+	public void setCurrentStep(Steps currentStep) {
+		this.currentStep = currentStep;
+		notifyObservers();
+	}
+
+	public String[] getStates() {
+		return states;
+	}
+
+	public void setStates(String[] states) {
+		this.states = states;
+		notifyObservers();
+	}
+
+	public String getFieldNameFilePath() {
+		return fieldNameFilePath;
+	}
+
+	public void setFieldNameFilePath(String fieldNameFilePath) {
+		this.fieldNameFilePath = fieldNameFilePath;
+		notifyObservers();
+	}
+
+	public String getMapFilePath() {
+		return mapFilePath;
+	}
+
+	public void setMapFilePath(String mapFilePath) {
+		this.mapFilePath = mapFilePath;
+		notifyObservers();
+	}
+	
 }

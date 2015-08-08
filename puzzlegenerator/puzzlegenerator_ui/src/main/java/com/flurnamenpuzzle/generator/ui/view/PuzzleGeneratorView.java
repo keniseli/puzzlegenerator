@@ -3,7 +3,11 @@ package com.flurnamenpuzzle.generator.ui.view;
 import java.awt.BorderLayout;
 import java.awt.CardLayout;
 import java.awt.Color;
+import java.awt.Container;
 import java.awt.Dimension;
+import java.util.Map;
+import java.util.Map.Entry;
+import java.util.Set;
 
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
@@ -14,14 +18,15 @@ import com.flurnamenpuzzle.generator.ui.Observable;
 import com.flurnamenpuzzle.generator.ui.Observer;
 import com.flurnamenpuzzle.generator.ui.PuzzleGeneratorConfig;
 import com.flurnamenpuzzle.generator.ui.PuzzleGeneratorController;
+import com.flurnamenpuzzle.generator.ui.Steps;
+import com.flurnamenpuzzle.generator.ui.model.PuzzleGeneratorModel;
 
 public class PuzzleGeneratorView extends JFrame implements Observer {
 	private static final long serialVersionUID = 1L;
-	
+	private static final String PUZZLE_GENERATOR_VIEW_TITLE = "Puzzle Generator";
 	private static final Dimension PREF_SIZE = new Dimension(1024, 768);
 	private static final String FOOTER_TEXT = "\u00A9 2015 Daniel Mohler-Schmid | Puzzlegenerator - "
 			+ "Ein Projekt der Fachhochschule Nordwestschweiz für Technik, Windisch AG";
-	
 	private static final String LOGO_FHNW = "/images/logoFHNW.png";
 	private static final String LOGO_PUZZLE = "/images/logoPuzzle.png";
 	private static final String STEPS_IMAGE = "/images/steps.png";
@@ -30,51 +35,58 @@ public class PuzzleGeneratorView extends JFrame implements Observer {
 	private JPanel cards;
 	private JPanel headerPanel;
 	private JPanel footerPanel;
-	
-	// Content part
-	private StateSelectionCard stateSel;
-	private FieldnameMapSelectionCard fieldNameSel;
+
 	private PuzzleGeneratorController controller;
 
 	/**
 	 * This method will create and show the ui. The view builds its components
 	 * and shows everything accordingly.
+	 * @param cardMap TODO
 	 */
-	public void createAndShow(PuzzleGeneratorController controller) {
+	public void createAndShow(PuzzleGeneratorController controller, Map<String, JPanel> cardMap) {
 		this.controller = controller;
-		initializeComponents();
+		initializeComponents(cardMap);
 		addEvents();
-		
-		getContentPane().setBackground(Color.WHITE);
-		setLayout(new BorderLayout());
-		cards.add(this.fieldNameSel);
-		cardLayout.show(cards, "1");
-		add(cards, BorderLayout.CENTER);
-		add(headerPanel, BorderLayout.NORTH);
-		add(footerPanel, BorderLayout.SOUTH);
-		setTitle("Puzzle Generator");
+
+		layoutComponents();
+
+		setTitle(PUZZLE_GENERATOR_VIEW_TITLE);
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
-		getContentPane().setPreferredSize(PREF_SIZE);
+		Container contentPane = getContentPane();
+		contentPane.setPreferredSize(PREF_SIZE);
 		pack();
 		setLocationRelativeTo(null);
 		setVisible(true);
 	}
 
-	private void initializeComponents() {
-		this.headerPanel = createHeaderPanel();
-		this.footerPanel = createFooterPanel();
-		this.stateSel = new StateSelectionCard(this.controller);
-		this.fieldNameSel = new FieldnameMapSelectionCard(this.controller);
-		this.cardLayout = new CardLayout();
-		this.cards = new JPanel(cardLayout);
+	private void initializeComponents(Map<String, JPanel> cardMap) {
+		headerPanel = createHeaderPanel();
+		footerPanel = createFooterPanel();
+		cardLayout = new CardLayout();
+		cards = new JPanel(cardLayout);
+		Set<Entry<String, JPanel>> cardAndIdEntries = cardMap.entrySet();
+		for (Entry<String, JPanel> entry : cardAndIdEntries) {
+			String idOfCard = entry.getKey();
+			JPanel card = entry.getValue();
+			cards.add(card, idOfCard);
+		}
 	}
 
 	private void addEvents() {
 		// TODO add all events from buttons, text fields etc. here. In most
 		// cases call the controller.
 	}
-	
-	private JPanel createHeaderPanel(){
+
+	private void layoutComponents() {
+		Container contentPane = getContentPane();
+		contentPane.setBackground(Color.WHITE);
+		setLayout(new BorderLayout());
+		add(cards, BorderLayout.CENTER);
+		add(headerPanel, BorderLayout.NORTH);
+		add(footerPanel, BorderLayout.SOUTH);
+	}
+
+	private JPanel createHeaderPanel() {
 		JPanel headerPanel = new JPanel();
 		headerPanel.setLayout(new BorderLayout());
 		JLabel logoFHNW = new JLabel();
@@ -88,8 +100,8 @@ public class PuzzleGeneratorView extends JFrame implements Observer {
 		headerPanel.add(logoPuzzle, BorderLayout.EAST);
 		return headerPanel;
 	}
-	
-	private JPanel createFooterPanel(){
+
+	private JPanel createFooterPanel() {
 		JPanel footerPanel = new JPanel();
 		JLabel footerText = new JLabel();
 		footerText.setFont(PuzzleGeneratorConfig.FONT_NORMAL);
@@ -100,7 +112,10 @@ public class PuzzleGeneratorView extends JFrame implements Observer {
 
 	@Override
 	public void update(Observable observable) {
-		// TODO: what happens when the model has changed?
+		PuzzleGeneratorModel model = (PuzzleGeneratorModel) observable;
+		Steps currentStep = model.getCurrentStep();
+		String currentStepId = currentStep.getId();
+		cardLayout.show(cards, currentStepId);
 	}
 
 }

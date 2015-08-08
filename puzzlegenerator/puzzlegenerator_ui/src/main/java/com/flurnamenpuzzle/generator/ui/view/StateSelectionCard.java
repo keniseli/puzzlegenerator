@@ -21,40 +21,41 @@ import com.flurnamenpuzzle.generator.ui.PuzzleGeneratorController;
 
 /**
  * Class for the state selection panel
- * @author P. Lustenberger
- *
+ * 
  */
-public class StateSelectionCard extends JPanel implements Observer{
+public class StateSelectionCard extends JPanel implements Observer {
 	private static final long serialVersionUID = 1L;
-	
+
 	private PuzzleGeneratorController controller;
 	private JFileChooser fileChooser;
 	private JLabel stateLabel;
 	private JButton chooseButton;
 	private JButton nextButton;
 	private JTextField pathField;
-	
+
 	/**
-	 * constructor
+	 * Constructs a new instance
+	 * 
 	 * @param controller
+	 *            the instance to control this class' behaviour.
 	 */
 	public StateSelectionCard(PuzzleGeneratorController controller) {
 		this.controller = controller;
 		initializeComponents();
-		addComponentsToPanel();
 		addEvents();
+		layoutComponents();
 	}
-	
+
 	/**
 	 * working with gridBag to set the components in place
 	 */
-	private void addComponentsToPanel() {
+	private void layoutComponents() {
 		add(stateLabel, "span, gapbottom 5");
 		add(pathField, "height :30:, pushx, growx");
 		add(chooseButton, "height :30:, wrap");
 		add(nextButton, "right, span, gaptop 40");
 	}
-	
+
 	/**
 	 * initialize all components needed for the panel
 	 */
@@ -62,7 +63,7 @@ public class StateSelectionCard extends JPanel implements Observer{
 		this.setLayout(new MigLayout());
 		this.setBorder(new EmptyBorder(20, 200, 20, 200));
 		this.setSize(new Dimension(600, 600));
-		
+
 		this.fileChooser = new JFileChooser();
 		this.pathField = new JTextField();
 		this.pathField.setFont(PuzzleGeneratorConfig.FONT_NORMAL);
@@ -73,7 +74,7 @@ public class StateSelectionCard extends JPanel implements Observer{
 		this.nextButton = new JButton("Weiter");
 		this.nextButton.setFont(PuzzleGeneratorConfig.FONT_BOLD);
 	}
-	
+
 	/**
 	 * add all actionlistener to the buttons
 	 */
@@ -83,21 +84,25 @@ public class StateSelectionCard extends JPanel implements Observer{
 			public void actionPerformed(ActionEvent e) {
 				int returnVal = fileChooser.showOpenDialog(null);
 				// check if user has selected a file
-				if(returnVal == JFileChooser.APPROVE_OPTION) {
-					pathField.setText(fileChooser.getSelectedFile().getPath());
+				if (returnVal == JFileChooser.APPROVE_OPTION) {
+					File selectedFile = fileChooser.getSelectedFile();
+					String pathOfSelectedFile = selectedFile.getPath();
+					pathField.setText(pathOfSelectedFile);
 				}
 			}
 		});
-		
+
 		nextButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				File stateFile = new File(pathField.getText());
-				controller.setStateFilePath(stateFile);
+				String path = pathField.getText();
+				File stateFile = new File(path);
+				controller.saveStateFilePath(stateFile);
 			}
 		});
 	}
 
 	@Override
-	public void update(Observable observable) {}
+	public void update(Observable observable) {
+	}
 }

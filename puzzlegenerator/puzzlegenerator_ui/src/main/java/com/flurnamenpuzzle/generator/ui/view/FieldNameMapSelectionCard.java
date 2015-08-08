@@ -20,38 +20,38 @@ import com.flurnamenpuzzle.generator.ui.PuzzleGeneratorConfig;
 import com.flurnamenpuzzle.generator.ui.PuzzleGeneratorController;
 import com.flurnamenpuzzle.generator.ui.model.PuzzleGeneratorModel;
 
-public class FieldnameMapSelectionCard extends JPanel implements Observer{
-private static final long serialVersionUID = 1L;
-	
+public class FieldNameMapSelectionCard extends JPanel implements Observer {
+	private static final long serialVersionUID = 1L;
+
 	private PuzzleGeneratorController controller;
 	private JFileChooser fileChooser;
-	
+
 	private JLabel stateDropdownLabel;
 	private JLabel chooseFieldNameLabel;
 	private JLabel chooseMapLabel;
-	
+
 	private JButton chooseFieldNameButton;
 	private JButton chooseMapButton;
 	private JButton nextButton;
-	
+
 	private JTextField fieldNamePath;
 	private JTextField mapPath;
-	
+
 	private JComboBox<String> stateDropdown;
-	
-	private String[] dropdownList = {"Bern", "Luzern", "Zürich"};
-	
+	private String[] selectableStates = {};
+
 	/**
 	 * constructor
+	 * 
 	 * @param controller
 	 */
-	public FieldnameMapSelectionCard(PuzzleGeneratorController controller) {
+	public FieldNameMapSelectionCard(PuzzleGeneratorController controller) {
 		this.controller = controller;
 		initializeComponents();
 		addComponentsToPanel();
 		addEvents();
 	}
-	
+
 	/**
 	 * working with migLayout to set the components in place
 	 */
@@ -66,36 +66,36 @@ private static final long serialVersionUID = 1L;
 		add(chooseMapButton, "height :30:, wrap");
 		add(nextButton, "right, span, gaptop 40");
 	}
-	
+
 	/**
 	 * initialize all components needed for the panel
 	 */
 	private void initializeComponents() {
-		this.setLayout(new MigLayout());
-		this.setBorder(new EmptyBorder(20, 200, 20, 200));
-		this.setSize(new Dimension(600, 600));
-		
-		this.fileChooser = new JFileChooser();
-		this.mapPath = new JTextField();
-		this.mapPath.setFont(PuzzleGeneratorConfig.FONT_NORMAL);
-		this.fieldNamePath = new JTextField();
-		this.fieldNamePath.setFont(PuzzleGeneratorConfig.FONT_NORMAL);
-		this.stateDropdownLabel = new JLabel("Bitte wählen Sie eine Gemeinde aus:");
-		this.stateDropdownLabel.setFont(PuzzleGeneratorConfig.FONT_NORMAL);
-		this.chooseFieldNameLabel = new JLabel("Wählen Sie das Shapefile der Flurnamen:");
-		this.chooseFieldNameLabel.setFont(PuzzleGeneratorConfig.FONT_NORMAL);
-		this.chooseMapLabel = new JLabel("Wählen Sie das Tiff-File mit dem Kartenmaterial:");
-		this.chooseMapLabel.setFont(PuzzleGeneratorConfig.FONT_NORMAL);
-		this.chooseFieldNameButton = new JButton("Durchsuchen");
-		this.chooseFieldNameButton.setFont(PuzzleGeneratorConfig.FONT_NORMAL);
-		this.chooseMapButton = new JButton("Durchsuchen");
-		this.chooseMapButton.setFont(PuzzleGeneratorConfig.FONT_NORMAL);
-		this.nextButton = new JButton("Weiter");
-		this.nextButton.setFont(PuzzleGeneratorConfig.FONT_BOLD);
-		this.stateDropdown = new JComboBox<>(dropdownList);
-		this.stateDropdown.setFont(PuzzleGeneratorConfig.FONT_NORMAL);
+		setLayout(new MigLayout());
+		setBorder(new EmptyBorder(20, 200, 20, 200));
+		setSize(new Dimension(600, 600));
+
+		fileChooser = new JFileChooser();
+		mapPath = new JTextField();
+		mapPath.setFont(PuzzleGeneratorConfig.FONT_NORMAL);
+		fieldNamePath = new JTextField();
+		fieldNamePath.setFont(PuzzleGeneratorConfig.FONT_NORMAL);
+		stateDropdownLabel = new JLabel("Bitte wählen Sie eine Gemeinde aus:");
+		stateDropdownLabel.setFont(PuzzleGeneratorConfig.FONT_NORMAL);
+		chooseFieldNameLabel = new JLabel("Wählen Sie das Shapefile der Flurnamen:");
+		chooseFieldNameLabel.setFont(PuzzleGeneratorConfig.FONT_NORMAL);
+		chooseMapLabel = new JLabel("Wählen Sie das Tiff-File mit dem Kartenmaterial:");
+		chooseMapLabel.setFont(PuzzleGeneratorConfig.FONT_NORMAL);
+		chooseFieldNameButton = new JButton("Durchsuchen");
+		chooseFieldNameButton.setFont(PuzzleGeneratorConfig.FONT_NORMAL);
+		chooseMapButton = new JButton("Durchsuchen");
+		chooseMapButton.setFont(PuzzleGeneratorConfig.FONT_NORMAL);
+		nextButton = new JButton("Weiter");
+		nextButton.setFont(PuzzleGeneratorConfig.FONT_BOLD);
+		stateDropdown = new JComboBox<>(selectableStates);
+		stateDropdown.setFont(PuzzleGeneratorConfig.FONT_NORMAL);
 	}
-	
+
 	/**
 	 * add all actionlistener to the buttons
 	 */
@@ -103,19 +103,21 @@ private static final long serialVersionUID = 1L;
 		nextButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				// Go to next card
+				String fieldNamePathText = fieldNamePath.getText();
+				String mapPathText = mapPath.getText();
+				controller.saveFieldNameFilePathAndCardMaterialFilePath(fieldNamePathText, mapPathText);
 			}
 		});
-		
-		this.chooseFieldNameButton.addActionListener(new ActionListener() {
+
+		chooseFieldNameButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				fileChooser.showOpenDialog(null);
 				fieldNamePath.setText(fileChooser.getSelectedFile().getPath());
 			}
 		});
-		
-		this.chooseMapButton.addActionListener(new ActionListener() {
+
+		chooseMapButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				fileChooser.showOpenDialog(null);
@@ -127,6 +129,12 @@ private static final long serialVersionUID = 1L;
 	@Override
 	public void update(Observable observable) {
 		PuzzleGeneratorModel model = (PuzzleGeneratorModel) observable;
-		//get dropdown list
+		selectableStates = model.getStates();
+		stateDropdown.removeAllItems();
+		if (selectableStates != null) {
+			for (String selectableState : selectableStates) {
+				stateDropdown.addItem(selectableState);
+			}
+		}
 	}
 }
