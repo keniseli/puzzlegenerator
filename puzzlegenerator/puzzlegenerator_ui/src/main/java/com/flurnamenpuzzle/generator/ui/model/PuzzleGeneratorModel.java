@@ -95,6 +95,7 @@ public class PuzzleGeneratorModel implements Observable {
 	
 	public void setStateFilePath(String stateFilePath) {
 		this.stateFilePath = stateFilePath;
+		notifyObservers();
 	}
 	
 	public String getStateFilePath() {
@@ -103,12 +104,11 @@ public class PuzzleGeneratorModel implements Observable {
 	
 	public void setStateFileName(String stateFileName) {
 		this.stateFileName = stateFileName;
+		notifyObservers();
 	}
 	
 	public String getStateFileName() {
 		return stateFileName;
 	}
-	
-
 	
 }

@@ -74,21 +74,21 @@ public class ConfirmCardGeneration extends JPanel implements Observer{
 		setSize(new Dimension(600, 600));
 		
 		stateLabel = new JLabel("Gemeinde");
-		stateLabel.setFont(PuzzleGeneratorConfig.FONT_NORMAL);
+		stateLabel.setFont(PuzzleGeneratorConfig.FONT_BOLD);
 		stateNameLabel = new JLabel(stateName);
-		stateNameLabel.setFont(PuzzleGeneratorConfig.FONT_BOLD);
+		stateNameLabel.setFont(PuzzleGeneratorConfig.FONT_NORMAL);
 		stateShapefileLabel = new JLabel("Gemeinde-Shapefile");
-		stateShapefileLabel.setFont(PuzzleGeneratorConfig.FONT_NORMAL);
+		stateShapefileLabel.setFont(PuzzleGeneratorConfig.FONT_BOLD);
 		stateShapefilePathLabel = new JLabel(stateShapefilePath);
-		stateShapefilePathLabel.setFont(PuzzleGeneratorConfig.FONT_BOLD);
+		stateShapefilePathLabel.setFont(PuzzleGeneratorConfig.FONT_NORMAL);
 		fieldnameShapefileLabel = new JLabel("Flurnamen-Shapefile");
-		fieldnameShapefileLabel.setFont(PuzzleGeneratorConfig.FONT_NORMAL);
+		fieldnameShapefileLabel.setFont(PuzzleGeneratorConfig.FONT_BOLD);
 		fieldnameShapefilePathLabel = new JLabel(fieldnameShapefilePath);
-		fieldnameShapefilePathLabel.setFont(PuzzleGeneratorConfig.FONT_BOLD);
+		fieldnameShapefilePathLabel.setFont(PuzzleGeneratorConfig.FONT_NORMAL);
 		cardTiffLabel = new JLabel("Karten-Tiff");
-		cardTiffLabel.setFont(PuzzleGeneratorConfig.FONT_NORMAL);
+		cardTiffLabel.setFont(PuzzleGeneratorConfig.FONT_BOLD);
 		cardTiffPathLabel = new JLabel(cardTiffPath);
-		cardTiffPathLabel.setFont(PuzzleGeneratorConfig.FONT_BOLD);
+		cardTiffPathLabel.setFont(PuzzleGeneratorConfig.FONT_NORMAL);
 		generateButton = new JButton("Generieren");
 		generateButton.setFont(PuzzleGeneratorConfig.FONT_BOLD);
 	}
@@ -108,9 +108,13 @@ public class ConfirmCardGeneration extends JPanel implements Observer{
 	public void update(Observable observable) {
 		PuzzleGeneratorModel model = (PuzzleGeneratorModel) observable;
 		stateName = model.getStateFileName();
+		stateNameLabel.setText(stateName);
 		stateShapefilePath = model.getStateFilePath();
-		fieldnameShapefilePath = model.getStateFileName();
+		stateShapefilePathLabel.setText(stateShapefilePath);
+		fieldnameShapefilePath = model.getFieldNameFilePath();
+		fieldnameShapefilePathLabel.setText(fieldnameShapefilePath);
 		cardTiffPath = model.getMapFilePath();
+		cardTiffPathLabel.setText(cardTiffPath);
 		
 	}
 
