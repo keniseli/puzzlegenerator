@@ -75,8 +75,6 @@ public class PuzzleGeneratorController {
 	}
 	
 	public void confirmCardGeneration() {
-		
-		
 	}
 
 }
