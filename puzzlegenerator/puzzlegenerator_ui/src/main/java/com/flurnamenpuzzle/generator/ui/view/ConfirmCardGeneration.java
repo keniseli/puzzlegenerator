@@ -107,7 +107,7 @@ public class ConfirmCardGeneration extends JPanel implements Observer{
 	@Override
 	public void update(Observable observable) {
 		PuzzleGeneratorModel model = (PuzzleGeneratorModel) observable;
-		stateName = model.getStateFileName();
+		stateName = model.getStateFilePath();
 		stateNameLabel.setText(stateName);
 		stateShapefilePath = model.getStateFilePath();
 		stateShapefilePathLabel.setText(stateShapefilePath);

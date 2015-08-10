@@ -57,9 +57,10 @@ public class PuzzleGeneratorController {
 		puzzleGeneratorModel.notifyObservers();
 	}
 
-	public void saveStateFilePath(File file) {
-		puzzleGeneratorModel.setStateFile(file);
-		List<String> namesOfShapesInFile = shapeService.getNamesOfShapeFile(file);
+	public void saveStateFilePath(String stateFilePath) {
+		puzzleGeneratorModel.setStateFilePath(stateFilePath);
+		File stateFile = new File(stateFilePath);
+		List<String> namesOfShapesInFile = shapeService.getNamesOfShapeFile(stateFile);
 		int numberOfStates = namesOfShapesInFile.size();
 		String[] states = new String[numberOfStates];
 		states = namesOfShapesInFile.toArray(states);
