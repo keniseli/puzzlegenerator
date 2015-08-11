@@ -9,6 +9,7 @@ import javax.swing.JPanel;
 
 import com.flurnamenpuzzle.generator.service.ShapeService;
 import com.flurnamenpuzzle.generator.ui.model.PuzzleGeneratorModel;
+import com.flurnamenpuzzle.generator.ui.view.ConfirmCardGeneration;
 import com.flurnamenpuzzle.generator.ui.view.FieldNameMapSelectionCard;
 import com.flurnamenpuzzle.generator.ui.view.PuzzleGeneratorView;
 import com.flurnamenpuzzle.generator.ui.view.StateSelectionCard;
@@ -47,14 +48,19 @@ public class PuzzleGeneratorController {
 		FieldNameMapSelectionCard fieldNameMapSelectionCard = new FieldNameMapSelectionCard(this);
 		cardMap.put(idOfStep2, fieldNameMapSelectionCard);
 		puzzleGeneratorModel.addObserver(fieldNameMapSelectionCard);
+		String idOfStep3 = Steps.STEP_3.getId();
+		ConfirmCardGeneration confirmCardGeneration = new ConfirmCardGeneration(this);
+		cardMap.put(idOfStep3, confirmCardGeneration);
+		puzzleGeneratorModel.addObserver(confirmCardGeneration);
 		puzzleGeneratorModel.addObserver(puzzleGeneratorView);
 		puzzleGeneratorView.createAndShow(this, cardMap);
 		puzzleGeneratorModel.notifyObservers();
 	}
 
-	public void saveStateFilePath(File file) {
-		puzzleGeneratorModel.setStateFile(file);
-		List<String> namesOfShapesInFile = shapeService.getNamesOfShapeFile(file);
+	public void saveStateFilePath(String stateFilePath) {
+		puzzleGeneratorModel.setStateFilePath(stateFilePath);
+		File stateFile = new File(stateFilePath);
+		List<String> namesOfShapesInFile = shapeService.getNamesOfShapeFile(stateFile);
 		int numberOfStates = namesOfShapesInFile.size();
 		String[] states = new String[numberOfStates];
 		states = namesOfShapesInFile.toArray(states);
@@ -65,7 +71,10 @@ public class PuzzleGeneratorController {
 	public void saveFieldNameFilePathAndCardMaterialFilePath(String fieldNameFilePath, String mapFilePath) {
 		puzzleGeneratorModel.setFieldNameFilePath(fieldNameFilePath);
 		puzzleGeneratorModel.setMapFilePath(mapFilePath);
-//		puzzleGeneratorModel.setCurrentStep(Steps.STEP_3);
+		puzzleGeneratorModel.setCurrentStep(Steps.STEP_3);
+	}
+	
+	public void confirmCardGeneration() {
 	}
 
 }

@@ -96,8 +96,7 @@ public class StateSelectionCard extends JPanel implements Observer {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				String path = pathField.getText();
-				File stateFile = new File(path);
-				controller.saveStateFilePath(stateFile);
+				controller.saveStateFilePath(path);
 			}
 		});
 	}

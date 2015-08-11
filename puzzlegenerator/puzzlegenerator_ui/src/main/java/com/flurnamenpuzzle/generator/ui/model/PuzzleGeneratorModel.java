@@ -12,11 +12,11 @@ public class PuzzleGeneratorModel implements Observable {
 	private List<Observer> observers;
 
 	private String notification;
-	private File stateFile;
 	private Steps currentStep;
 	private String[] states;
 	private String fieldNameFilePath;
 	private String mapFilePath;
+	private String stateFilePath;
 
 	public PuzzleGeneratorModel() {
 		observers = new ArrayList<Observer>();
@@ -43,15 +43,6 @@ public class PuzzleGeneratorModel implements Observable {
 
 	public void setNotification(String notification) {
 		this.notification = notification;
-		notifyObservers();
-	}
-
-	public File getStateFile() {
-		return stateFile;
-	}
-
-	public void setStateFile(File stateFile) {
-		this.stateFile = stateFile;
 		notifyObservers();
 	}
 
@@ -89,6 +80,15 @@ public class PuzzleGeneratorModel implements Observable {
 	public void setMapFilePath(String mapFilePath) {
 		this.mapFilePath = mapFilePath;
 		notifyObservers();
+	}
+	
+	public void setStateFilePath(String stateFilePath) {
+		this.stateFilePath = stateFilePath;
+		notifyObservers();
+	}
+	
+	public String getStateFilePath() {
+		return stateFilePath;
 	}
 	
 }
