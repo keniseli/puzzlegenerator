@@ -6,10 +6,7 @@ import java.net.URL;
 import java.util.Arrays;
 import java.util.List;
 
-import org.geotools.data.FileDataStore;
-import org.geotools.data.FileDataStoreFinder;
 import org.geotools.data.simple.SimpleFeatureCollection;
-import org.geotools.data.simple.SimpleFeatureSource;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -58,20 +55,14 @@ public class ShapeServiceTest {
 		String pathToFlurnamenShapeFile = urlFlurnamen.getFile();
 		File flurnamenShapeFile = new File(pathToFlurnamenShapeFile);
 		flurnamenShapeFile.setReadOnly();
-		FileDataStore dataStoreFlurnamen = FileDataStoreFinder.getDataStore(flurnamenShapeFile);
-		SimpleFeatureSource shapeFileSourceFlurnamen = dataStoreFlurnamen.getFeatureSource();
-		dataStoreFlurnamen.dispose();
-		SimpleFeatureCollection flurnamenSimpleFeatureCollection = shapeFileSourceFlurnamen.getFeatures();
+		SimpleFeatureCollection flurnamenSimpleFeatureCollection = shapeService.getFeaturesOfShapeFile(flurnamenShapeFile);
 		List<SimpleFeature> flurnamenFeatures = Arrays.asList((SimpleFeature[]) (flurnamenSimpleFeatureCollection.toArray()));
 
 		URL urlGemeinde = ShapeServiceTest.class.getResource("/ExportPerimeter.shp");
 		String pathToGemeindeShapeFile = urlGemeinde.getFile();
 		File gemeindeShapeFile = new File(pathToGemeindeShapeFile);
 		gemeindeShapeFile.setReadOnly();
-		FileDataStore dataStoreGemeinde = FileDataStoreFinder.getDataStore(gemeindeShapeFile);
-		SimpleFeatureSource shapeFileSourceGemeinde = dataStoreGemeinde.getFeatureSource();
-		dataStoreGemeinde.dispose();
-		SimpleFeatureCollection gemeindeSimpleFeatureCollection = shapeFileSourceGemeinde.getFeatures();
+		SimpleFeatureCollection gemeindeSimpleFeatureCollection = shapeService.getFeaturesOfShapeFile(gemeindeShapeFile);
 		List<SimpleFeature> gemeindeFeatures = Arrays.asList((SimpleFeature[]) (gemeindeSimpleFeatureCollection.toArray()));
 		SimpleFeature gemeindeFeature = gemeindeFeatures.get(0);
 
