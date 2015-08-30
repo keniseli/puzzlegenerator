@@ -3,7 +3,6 @@ package com.flurnamenpuzzle.generator.service;
 import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.Point;
-import java.awt.Rectangle;
 import java.awt.geom.Path2D;
 import java.awt.image.BufferedImage;
 import java.awt.image.ColorModel;
@@ -36,6 +35,8 @@ import com.vividsolutions.jts.geom.MultiPolygon;
  */
 public class PuzzleGeneratorService {
 
+	private static final int MINIMUM_SIZE_OF_PUZZLE_PIECE = 5;
+
 	/**
 	 * Generates the {@link Puzzle}. The shapes are identified and then used to
 	 * crop the tif file. <br />
@@ -63,7 +64,9 @@ public class PuzzleGeneratorService {
 			String tifFilePath, String destinationFilePath) {
 		Puzzle puzzle = new Puzzle();
 
-		List<File> images = getPieces(stateShapeFilePath, stateName, fieldShapeFilePath, tifFilePath, destinationFilePath);
+		List<File> images = getPieces(stateShapeFilePath, stateName, fieldShapeFilePath, tifFilePath,
+				destinationFilePath);
+		puzzle.setImages(images);
 		return puzzle;
 	}
 
@@ -114,8 +117,8 @@ public class PuzzleGeneratorService {
 		List<Path2D> res = getPathFromShapes(featuresInState, coverage);
 
 		int count = 1;
+		List<File> pieces = new ArrayList<>();
 		for (Path2D path : res) {
-
 			BufferedImage newImage = new BufferedImage(bufferedImage.getWidth(), bufferedImage.getHeight(),
 					BufferedImage.TYPE_INT_ARGB);
 			Graphics2D newGraphics = newImage.createGraphics();
@@ -128,16 +131,18 @@ public class PuzzleGeneratorService {
 
 			try {
 				BufferedImage trimmedImage = trim(newImage);
-				ImageIO.write(trimmedImage, "png", new File(destinationFilePath + "//shape-" + count + ".png"));
+				if (trimmedImage != null) {
+					String pathname = String.format("%s//shape-%d.png", destinationFilePath, count);
+					File puzzlePiece = new File(pathname);
+					ImageIO.write(trimmedImage, "png", puzzlePiece);
+					pieces.add(puzzlePiece);
+				}
 			} catch (ServiceException | IOException e) {
 				e.printStackTrace();
 			}
-
 			count++;
-
 		}
-
-		return null;
+		return pieces;
 	}
 
 	private List<Path2D> getPathFromShapes(List<SimpleFeature> featuresInState, GridCoverage2D coverage) {
@@ -222,8 +227,10 @@ public class PuzzleGeneratorService {
 			int y1 = Integer.MAX_VALUE;
 			int x2 = 0;
 			int y2 = 0;
-			for (int x = 0; x < image.getWidth(); x++) {
-				for (int y = 0; y < image.getHeight(); y++) {
+			int imageWidth = image.getWidth();
+			int imageHeight = image.getHeight();
+			for (int x = 0; x < imageWidth; x++) {
+				for (int y = 0; y < imageHeight; y++) {
 					int argb = image.getRGB(x, y);
 					if (argb != 0) {
 						x1 = Math.min(x1, x);
@@ -233,14 +240,18 @@ public class PuzzleGeneratorService {
 					}
 				}
 			}
-			WritableRaster r = image.getRaster();
-			ColorModel cm = image.getColorModel();
-			r = r.createWritableChild(x1, y1, x2 - x1, y2 - y1, 0, 0, null);
-			return new BufferedImage(cm, r, cm.isAlphaPremultiplied(), null);
+			WritableRaster raster = image.getRaster();
+			ColorModel colorModel = image.getColorModel();
+			int newWidth = x2 - x1;
+			int newHeight = y2 - y1;
+			if (newWidth >= MINIMUM_SIZE_OF_PUZZLE_PIECE && newHeight >= MINIMUM_SIZE_OF_PUZZLE_PIECE) {
+				raster = raster.createWritableChild(x1, y1, newWidth, newHeight, 0, 0, null);
+				return new BufferedImage(colorModel, raster, colorModel.isAlphaPremultiplied(), null);
+			}
 		} catch (Exception e) {
 			throw new ServiceException("Could not crop image.");
 		}
-
+		return null;
 	}
 
 }

@@ -24,7 +24,8 @@ import com.vividsolutions.jts.geom.MultiPolygon;
  * shapes).
  */
 public class ShapeService {
-	private static final int NAME_OF_SHAPE_ATTRIBUTE_INDEX = 3;
+	private static final int NAME_OF_SHAPE_ATTRIBUTE_INDEX = 2;
+	private static final String NAME_ATTRIBUTE_NAME = "MapSheetNa";
 
 	/**
 	 * This method reads the names of all shapes in a shape file.
@@ -41,33 +42,34 @@ public class ShapeService {
 		SimpleFeatureIterator featuresIterator = featuresCollection.features();
 		while (featuresIterator.hasNext()) {
 			SimpleFeature feature = featuresIterator.next();
-			int numberOfAttributes = feature.getAttributeCount();
-			if (numberOfAttributes >= NAME_OF_SHAPE_ATTRIBUTE_INDEX) {
-				Object nameAttribute = feature.getAttribute(NAME_OF_SHAPE_ATTRIBUTE_INDEX);
-				String shapeName = nameAttribute.toString();
-				names.add(shapeName);
-			}
+			String shapeName = getNameOfFeature(feature);
+			names.add(shapeName);
 		}
 		return names;
 	}
-	
+
 	public SimpleFeature getFeatureOfShapeFileByName(String shapeFilePath, String shapeName) {
 		File shapeFile = new File(shapeFilePath);
 		SimpleFeatureCollection featuresCollection = getFeaturesOfShapeFile(shapeFile);
-		
+
 		SimpleFeatureIterator featuresIterator = featuresCollection.features();
 		while (featuresIterator.hasNext()) {
 			SimpleFeature feature = featuresIterator.next();
-			int numberOfAttributes = feature.getAttributeCount();
-			if (numberOfAttributes >= NAME_OF_SHAPE_ATTRIBUTE_INDEX) {
-				Object nameAttribute = feature.getAttribute(NAME_OF_SHAPE_ATTRIBUTE_INDEX);
-				String foundShapeName = nameAttribute.toString();
-				if (foundShapeName.equals(shapeName)) {
-					return feature;
-				}
+			String foundShapeName = getNameOfFeature(feature);
+			if (foundShapeName.equals(shapeName)) {
+				return feature;
 			}
 		}
 		throw new ServiceException("No feature found with the given name.");
+	}
+
+	private String getNameOfFeature(SimpleFeature feature) {
+		Object nameAttribute = feature.getAttribute(NAME_ATTRIBUTE_NAME);
+		String foundShapeName = "";
+		if (nameAttribute != null) {
+			foundShapeName = nameAttribute.toString();
+		}
+		return foundShapeName;
 	}
 
 	/**
@@ -226,5 +228,5 @@ public class ShapeService {
 			throw new ServiceException(e, "There was an error reading the file to get features of.");
 		}
 	}
-	
+
 }
