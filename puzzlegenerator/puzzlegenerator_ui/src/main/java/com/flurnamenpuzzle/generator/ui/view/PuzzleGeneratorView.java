@@ -47,7 +47,7 @@ public class PuzzleGeneratorView extends JFrame implements Observer {
 		this.controller = controller;
 		initializeComponents(cardMap);
 		addEvents();
-
+		cardLayout.show(cards, "5");
 		layoutComponents();
 
 		setTitle(PUZZLE_GENERATOR_VIEW_TITLE);
@@ -115,7 +115,8 @@ public class PuzzleGeneratorView extends JFrame implements Observer {
 		PuzzleGeneratorModel model = (PuzzleGeneratorModel) observable;
 		Steps currentStep = model.getCurrentStep();
 		String currentStepId = currentStep.getId();
-		cardLayout.show(cards, currentStepId);
+		//cardLayout.show(cards, currentStepId);
+		cardLayout.show(cards, "4");
 	}
 
 }

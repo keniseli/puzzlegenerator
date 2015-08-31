@@ -6,7 +6,7 @@ package com.flurnamenpuzzle.generator.ui;
  * 
  */
 public enum Steps {
-	STEP_1("stateSelection"), STEP_2("fieldNameMapSelection"), STEP_3("verificationAndDecision");
+	STEP_1("stateSelection"), STEP_2("fieldNameMapSelection"), STEP_3("verificationAndDecision"), STEP_4("progressPanel");
 
 	private String id;
 
