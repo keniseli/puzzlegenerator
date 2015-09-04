@@ -12,6 +12,7 @@ import com.flurnamenpuzzle.generator.ui.model.PuzzleGeneratorModel;
 import com.flurnamenpuzzle.generator.ui.view.ConfirmCardGeneration;
 import com.flurnamenpuzzle.generator.ui.view.FieldNameMapSelectionCard;
 import com.flurnamenpuzzle.generator.ui.view.PuzzleGeneratorView;
+import com.flurnamenpuzzle.generator.ui.view.SaveTargetCard;
 import com.flurnamenpuzzle.generator.ui.view.StateSelectionCard;
 
 /**
@@ -52,6 +53,10 @@ public class PuzzleGeneratorController {
 		ConfirmCardGeneration confirmCardGeneration = new ConfirmCardGeneration(this);
 		cardMap.put(idOfStep3, confirmCardGeneration);
 		puzzleGeneratorModel.addObserver(confirmCardGeneration);
+		String idOfStep4 = Steps.STEP_4.getId();
+		SaveTargetCard targetSelectionCard = new SaveTargetCard(this);
+		cardMap.put(idOfStep4, targetSelectionCard);
+		puzzleGeneratorModel.addObserver(targetSelectionCard);
 		puzzleGeneratorModel.addObserver(puzzleGeneratorView);
 		puzzleGeneratorView.createAndShow(this, cardMap);
 		puzzleGeneratorModel.notifyObservers();
@@ -75,6 +80,7 @@ public class PuzzleGeneratorController {
 	}
 	
 	public void confirmCardGeneration() {
+		
 	}
 
 }
