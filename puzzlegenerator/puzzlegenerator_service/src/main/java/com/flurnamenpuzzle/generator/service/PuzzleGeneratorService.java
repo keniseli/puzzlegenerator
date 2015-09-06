@@ -20,6 +20,7 @@ import org.geotools.coverage.grid.GridCoverage2D;
 import org.geotools.coverage.grid.io.AbstractGridCoverage2DReader;
 import org.geotools.coverage.grid.io.AbstractGridFormat;
 import org.geotools.coverage.grid.io.GridFormatFinder;
+import org.geotools.coverage.grid.io.UnknownFormat;
 import org.geotools.data.simple.SimpleFeatureCollection;
 import org.opengis.feature.simple.SimpleFeature;
 import org.opengis.parameter.GeneralParameterValue;
@@ -60,12 +61,13 @@ public class PuzzleGeneratorService {
 	 * @return The created puzzle. Its images are saved as Files in a temp
 	 *         Folder and have to be moved!
 	 */
-	public Puzzle generatePuzzle(String stateShapeFilePath, String stateName, String fieldShapeFilePath,
-			String tifFilePath, String destinationFilePath) {
+	public Puzzle generatePuzzle(String stateShapeFilePath, String stateName,
+			String fieldShapeFilePath, String tifFilePath,
+			String destinationFilePath) {
 		Puzzle puzzle = new Puzzle();
 
-		List<File> images = getPieces(stateShapeFilePath, stateName, fieldShapeFilePath, tifFilePath,
-				destinationFilePath);
+		List<File> images = getPieces(stateShapeFilePath, stateName,
+				fieldShapeFilePath, tifFilePath, destinationFilePath);
 		puzzle.setImages(images);
 		return puzzle;
 	}
@@ -85,20 +87,27 @@ public class PuzzleGeneratorService {
 	 * @return A {@link List} of png {@link File Files}. Each of them represents
 	 *         a puzzle piece.
 	 */
-	private List<File> getPieces(String stateShapeFilePath, String stateName, String fieldShapeFilePath,
-			String tifFilePath, String destinationFilePath) {
+	private List<File> getPieces(String stateShapeFilePath, String stateName,
+			String fieldShapeFilePath, String tifFilePath,
+			String destinationFilePath) {
 
-		ShapeService shapeService = new ShapeService();
-		SimpleFeature featureOfState = shapeService.getFeatureOfShapeFileByName(stateShapeFilePath, stateName);
+		List<SimpleFeature> featuresInState = getFeaturesOfFieldsInState(
+				stateShapeFilePath, stateName, fieldShapeFilePath);
 
-		File fieldShapeFile = new File(fieldShapeFilePath);
-		SimpleFeatureCollection fieldFeaturesCollection = shapeService.getFeaturesOfShapeFile(fieldShapeFile);
-		SimpleFeature[] featuresArray = (SimpleFeature[]) fieldFeaturesCollection.toArray();
-		List<SimpleFeature> features = Arrays.asList(featuresArray);
-		List<SimpleFeature> featuresInState = shapeService.filterContainingFeaturesOfFeature(featureOfState, features);
+		GridCoverage2D coverage = getCoverageOfTifFile(tifFilePath);
 
+		List<File> pieces = generatePieceImages(destinationFilePath,
+				featuresInState, coverage);
+
+		return pieces;
+	}
+
+	private GridCoverage2D getCoverageOfTifFile(String tifFilePath) {
 		File tifFile = new File(tifFilePath);
 		AbstractGridFormat format = GridFormatFinder.findFormat(tifFile);
+		if (format instanceof UnknownFormat) {
+			throw new ServiceException("Could not find the GeoTIFF format.");
+		}
 		AbstractGridCoverage2DReader reader = format.getReader(tifFile);
 
 		String coverageName = reader.getGridCoverageNames()[0];
@@ -107,10 +116,15 @@ public class PuzzleGeneratorService {
 		try {
 			coverage = reader.read(coverageName, params);
 		} catch (IllegalArgumentException | IOException e) {
-			throw new ServiceException(e, "There was an error reading the coverage of the tif file.");
+			throw new ServiceException(e,
+					"There was an error reading the coverage of the tif file.");
 		}
 		reader.dispose();
+		return coverage;
+	}
 
+	private List<File> generatePieceImages(String destinationFilePath,
+			List<SimpleFeature> featuresInState, GridCoverage2D coverage) {
 		PlanarImage renderedImage = (PlanarImage) coverage.getRenderedImage();
 		BufferedImage bufferedImage = renderedImage.getAsBufferedImage();
 
@@ -119,11 +133,13 @@ public class PuzzleGeneratorService {
 		int count = 1;
 		List<File> pieces = new ArrayList<>();
 		for (Path2D path : res) {
-			BufferedImage newImage = new BufferedImage(bufferedImage.getWidth(), bufferedImage.getHeight(),
+			BufferedImage newImage = new BufferedImage(
+					bufferedImage.getWidth(), bufferedImage.getHeight(),
 					BufferedImage.TYPE_INT_ARGB);
 			Graphics2D newGraphics = newImage.createGraphics();
 			newGraphics.setColor(new Color(0, 0, 0, 0));
-			newGraphics.fillRect(0, 0, newImage.getWidth(), newImage.getHeight());
+			newGraphics.fillRect(0, 0, newImage.getWidth(),
+					newImage.getHeight());
 			newGraphics.setClip(path);
 			newGraphics.drawImage(bufferedImage, 0, 0, null);
 
@@ -132,7 +148,8 @@ public class PuzzleGeneratorService {
 			try {
 				BufferedImage trimmedImage = trim(newImage);
 				if (trimmedImage != null) {
-					String pathname = String.format("%s//shape-%d.png", destinationFilePath, count);
+					String pathname = String.format("%s//shape-%d.png",
+							destinationFilePath, count);
 					File puzzlePiece = new File(pathname);
 					ImageIO.write(trimmedImage, "png", puzzlePiece);
 					pieces.add(puzzlePiece);
@@ -145,7 +162,34 @@ public class PuzzleGeneratorService {
 		return pieces;
 	}
 
-	private List<Path2D> getPathFromShapes(List<SimpleFeature> featuresInState, GridCoverage2D coverage) {
+	private List<SimpleFeature> getFeaturesOfFieldsInState(String stateShapeFilePath,
+			String stateName, String fieldShapeFilePath) {
+		// get feature of the state
+		ShapeService shapeService = new ShapeService();
+		SimpleFeature featureOfState = shapeService
+				.getFeatureOfShapeFileByName(stateShapeFilePath, stateName);
+
+		// get features of the fields
+		File fieldShapeFile = new File(fieldShapeFilePath);
+		SimpleFeatureCollection fieldFeaturesCollection = shapeService
+				.getFeaturesOfShapeFile(fieldShapeFile);
+		SimpleFeature[] featuresArray = (SimpleFeature[]) fieldFeaturesCollection
+				.toArray();
+		List<SimpleFeature> features = Arrays.asList(featuresArray);
+		
+		// get features of the fields that are located in the state
+		List<SimpleFeature> featuresInState = shapeService
+				.filterContainingFeaturesOfFeature(featureOfState, features);
+
+		if (featuresInState.size() == 0) {
+			throw new ServiceException(
+					"No fields found that are located in the area of the state.");
+		}
+		return featuresInState;
+	}
+
+	private List<Path2D> getPathFromShapes(List<SimpleFeature> featuresInState,
+			GridCoverage2D coverage) {
 		ArrayList<Path2D> resultSet = new ArrayList<Path2D>();
 
 		for (SimpleFeature feature : featuresInState) {
@@ -160,7 +204,8 @@ public class PuzzleGeneratorService {
 				// get pixel position
 				Point firstPoint = new Point(-1, -1);
 				try {
-					firstPoint = getPointByCoordinates(coverage, firstCoordinate.x, firstCoordinate.y);
+					firstPoint = getPointByCoordinates(coverage,
+							firstCoordinate.x, firstCoordinate.y);
 				} catch (Exception e) {
 					e.printStackTrace();
 					continue;
@@ -172,7 +217,8 @@ public class PuzzleGeneratorService {
 
 					Point pixelPoint = new Point(-1, -1);
 					try {
-						pixelPoint = getPointByCoordinates(coverage, coordinate.x, coordinate.y);
+						pixelPoint = getPointByCoordinates(coverage,
+								coordinate.x, coordinate.y);
 					} catch (Exception e) {
 						e.printStackTrace();
 					}
@@ -188,7 +234,8 @@ public class PuzzleGeneratorService {
 		return resultSet;
 	}
 
-	private Point getPointByCoordinates(GridCoverage2D coverage, double longitude, double latitude) throws Exception {
+	private Point getPointByCoordinates(GridCoverage2D coverage,
+			double longitude, double latitude) throws Exception {
 		// read width and height of tiff image
 		int tHeight = coverage.getRenderedImage().getHeight();
 		int tWidth = coverage.getRenderedImage().getWidth();
@@ -202,8 +249,10 @@ public class PuzzleGeneratorService {
 		double xAxisMaxX = coverage.getEnvelope2D().getMaxX();
 
 		// check if provided coordinates are available
-		if (!(longitude >= xAxisOrigin && longitude <= xAxisMaxX && latitude >= yAxisOrigin && latitude <= yAxisMaxY)) {
-			throw new ServiceException("Provided coordinates not found within tiff file");
+		if (!(longitude >= xAxisOrigin && longitude <= xAxisMaxX
+				&& latitude >= yAxisOrigin && latitude <= yAxisMaxY)) {
+			throw new ServiceException(
+					"Provided coordinates not found within tiff file");
 		}
 
 		// calculate coordinate offset from origin
@@ -244,9 +293,12 @@ public class PuzzleGeneratorService {
 			ColorModel colorModel = image.getColorModel();
 			int newWidth = x2 - x1;
 			int newHeight = y2 - y1;
-			if (newWidth >= MINIMUM_SIZE_OF_PUZZLE_PIECE && newHeight >= MINIMUM_SIZE_OF_PUZZLE_PIECE) {
-				raster = raster.createWritableChild(x1, y1, newWidth, newHeight, 0, 0, null);
-				return new BufferedImage(colorModel, raster, colorModel.isAlphaPremultiplied(), null);
+			if (newWidth >= MINIMUM_SIZE_OF_PUZZLE_PIECE
+					&& newHeight >= MINIMUM_SIZE_OF_PUZZLE_PIECE) {
+				raster = raster.createWritableChild(x1, y1, newWidth,
+						newHeight, 0, 0, null);
+				return new BufferedImage(colorModel, raster,
+						colorModel.isAlphaPremultiplied(), null);
 			}
 		} catch (Exception e) {
 			throw new ServiceException("Could not crop image.");

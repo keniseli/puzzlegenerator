@@ -29,8 +29,9 @@ public class PuzzleGeneratorServiceTest {
 		String stateName = "Thun";
 		String fieldShapeFilePath = getFilePathFromResource("/No_Flurname_A.shp");
 		String tifFilePath = getFilePathFromResource("/SRM25_LV03_KREL_10L_Mosaic_2015.tif");
-		Puzzle puzzle = puzzleGeneratorService.generatePuzzle(stateShapeFilePath, stateName, fieldShapeFilePath,
-				tifFilePath, "C://Temp//schnitzel");
+		Puzzle puzzle = puzzleGeneratorService.generatePuzzle(
+				stateShapeFilePath, stateName, fieldShapeFilePath, tifFilePath,
+				"C://Temp//schnitzel");
 
 		List<File> images = puzzle.getImages();
 		int numberOfShapesInPuzzle = images.size();
@@ -38,8 +39,25 @@ public class PuzzleGeneratorServiceTest {
 	}
 
 	@Test(expected = ServiceException.class)
-	public void testPuzzleGenerationWithInvalidStateShapeFile() {
-		// TODO: für hutschi: gemeinde nicht valid: ungültiges file oder keine überlappungen
+	public void testPuzzleGenerationWithNotOverlappingStateShapeFile() {
+		String stateShapeFilePath = getFilePathFromResource("/stateShapeNotOverlapping.shp");
+		String stateName = "Thun";
+		String fieldShapeFilePath = getFilePathFromResource("/No_Flurname_A.shp");
+		String tifFilePath = getFilePathFromResource("/SRM25_LV03_KREL_10L_Mosaic_2015.tif");
+		puzzleGeneratorService.generatePuzzle(stateShapeFilePath, stateName,
+				fieldShapeFilePath, tifFilePath, "C://Temp//schnitzel");
+		Assert.fail("ServiceException expected but not thrown");
+	}
+
+	@Test(expected = ServiceException.class)
+	public void testPuzzleGenerationWithNotOverlappingFieldShapeFile() {
+		String stateShapeFilePath = getFilePathFromResource("/ExportPerimeter.shp");
+		String stateName = "Thun";
+		String fieldShapeFilePath = getFilePathFromResource("/fieldShapeNotOverlapping.shp");
+		String tifFilePath = getFilePathFromResource("/SRM25_LV03_KREL_10L_Mosaic_2015.tif");
+		puzzleGeneratorService.generatePuzzle(stateShapeFilePath, stateName,
+				fieldShapeFilePath, tifFilePath, "C://Temp//schnitzel");
+		Assert.fail("ServiceException expected but not thrown");
 	}
 
 	@Test(expected = ServiceException.class)
@@ -50,6 +68,17 @@ public class PuzzleGeneratorServiceTest {
 	@Test(expected = ServiceException.class)
 	public void testPuzzleGenerationWithInvalidTiffFile() {
 		// TODO: für hutschi: ohne geo referenz
+		String stateShapeFilePath = getFilePathFromResource("/ExportPerimeter.shp");
+		String stateName = "Thun";
+		String fieldShapeFilePath = getFilePathFromResource("/No_Flurname_A.shp");
+		String tifFilePath = getFilePathFromResource("/tifFileWithoutGeoRefs.tif");
+		Puzzle puzzle = puzzleGeneratorService.generatePuzzle(
+				stateShapeFilePath, stateName, fieldShapeFilePath, tifFilePath,
+				"C://Temp//schnitzel");
+
+		List<File> images = puzzle.getImages();
+		int numberOfShapesInPuzzle = images.size();
+		Assert.assertEquals(301, numberOfShapesInPuzzle);
 	}
 
 	@Test(expected = ServiceException.class)
