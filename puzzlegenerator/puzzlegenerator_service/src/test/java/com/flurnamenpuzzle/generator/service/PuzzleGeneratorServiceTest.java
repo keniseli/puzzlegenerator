@@ -67,7 +67,6 @@ public class PuzzleGeneratorServiceTest {
 
 	@Test(expected = ServiceException.class)
 	public void testPuzzleGenerationWithInvalidTiffFile() {
-		// TODO: für hutschi: ohne geo referenz
 		String stateShapeFilePath = getFilePathFromResource("/ExportPerimeter.shp");
 		String stateName = "Thun";
 		String fieldShapeFilePath = getFilePathFromResource("/No_Flurname_A.shp");
