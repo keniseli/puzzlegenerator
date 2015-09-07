@@ -17,6 +17,7 @@ public class PuzzleGeneratorModel implements Observable {
 	private String fieldNameFilePath;
 	private String mapFilePath;
 	private String stateFilePath;
+	private String targetFolderPath;
 
 	public PuzzleGeneratorModel() {
 		observers = new ArrayList<Observer>();
@@ -89,6 +90,15 @@ public class PuzzleGeneratorModel implements Observable {
 	
 	public String getStateFilePath() {
 		return stateFilePath;
+	}
+
+	public void setTargetFolderPath(String targetPath) {
+		this.targetFolderPath = targetPath;
+		notifyObservers();
+	}
+	
+	public String getTargetFolderPath() {
+		return this.targetFolderPath;
 	}
 	
 }

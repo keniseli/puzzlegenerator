@@ -31,7 +31,7 @@ public class PuzzleGeneratorController {
 	public PuzzleGeneratorController(PuzzleGeneratorModel puzzleGeneratorModel) {
 		puzzleGeneratorView = new PuzzleGeneratorView();
 		this.puzzleGeneratorModel = puzzleGeneratorModel;
-		puzzleGeneratorModel.setCurrentStep(Steps.STEP_1);
+		puzzleGeneratorModel.setCurrentStep(Steps.STEP_3);
 		shapeService = new ShapeService();
 	}
 
@@ -81,6 +81,13 @@ public class PuzzleGeneratorController {
 	
 	public void confirmCardGeneration() {
 		
+	}
+	
+	public boolean setTargetAndSavePuzzle(String targetPath) {
+		puzzleGeneratorModel.setTargetFolderPath(targetPath);
+		//TODO: save puzzle and get back if anything went wrong
+		
+		return true;
 	}
 
 }
