@@ -72,23 +72,32 @@ public class ConfirmCardGeneration extends JPanel implements Observer{
 		setLayout(new MigLayout());
 		setBorder(new EmptyBorder(20, 200, 20, 200));
 		setSize(new Dimension(600, 600));
+		this.setBackground(PuzzleGeneratorConfig.BACKGROUND_COLOR);
 		
 		stateLabel = new JLabel("Gemeinde");
 		stateLabel.setFont(PuzzleGeneratorConfig.FONT_BOLD);
+		
 		stateNameLabel = new JLabel(stateName);
 		stateNameLabel.setFont(PuzzleGeneratorConfig.FONT_NORMAL);
+		
 		stateShapefileLabel = new JLabel("Gemeinde-Shapefile");
 		stateShapefileLabel.setFont(PuzzleGeneratorConfig.FONT_BOLD);
+		
 		stateShapefilePathLabel = new JLabel(stateShapefilePath);
 		stateShapefilePathLabel.setFont(PuzzleGeneratorConfig.FONT_NORMAL);
+		
 		fieldnameShapefileLabel = new JLabel("Flurnamen-Shapefile");
 		fieldnameShapefileLabel.setFont(PuzzleGeneratorConfig.FONT_BOLD);
+		
 		fieldnameShapefilePathLabel = new JLabel(fieldnameShapefilePath);
 		fieldnameShapefilePathLabel.setFont(PuzzleGeneratorConfig.FONT_NORMAL);
+		
 		cardTiffLabel = new JLabel("Karten-Tiff");
 		cardTiffLabel.setFont(PuzzleGeneratorConfig.FONT_BOLD);
+		
 		cardTiffPathLabel = new JLabel(cardTiffPath);
 		cardTiffPathLabel.setFont(PuzzleGeneratorConfig.FONT_NORMAL);
+		
 		generateButton = new JButton("Generieren");
 		generateButton.setFont(PuzzleGeneratorConfig.FONT_BOLD);
 	}
@@ -115,7 +124,6 @@ public class ConfirmCardGeneration extends JPanel implements Observer{
 		fieldnameShapefilePathLabel.setText(fieldnameShapefilePath);
 		cardTiffPath = model.getMapFilePath();
 		cardTiffPathLabel.setText(cardTiffPath);
-		
 	}
 
 }

@@ -3,14 +3,11 @@ package com.flurnamenpuzzle.generator.ui.view;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.io.File;
 
 import javax.swing.JButton;
-import javax.swing.JFileChooser;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JProgressBar;
-import javax.swing.JTextField;
 import javax.swing.border.EmptyBorder;
 
 import net.miginfocom.swing.MigLayout;
@@ -64,6 +61,7 @@ public class ProgressCard extends JPanel implements Observer {
 		this.setLayout(new MigLayout());
 		this.setBorder(new EmptyBorder(20, 200, 20, 200));
 		this.setSize(new Dimension(600, 600));
+		this.setBackground(PuzzleGeneratorConfig.BACKGROUND_COLOR);
 		
 		this.progressLabel = new JLabel("Die Puzzleteile werden in diesem Moment erstellt.");
 		this.progressLabel.setFont(PuzzleGeneratorConfig.FONT_NORMAL);

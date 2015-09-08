@@ -13,6 +13,7 @@ import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.border.EmptyBorder;
 
 import com.flurnamenpuzzle.generator.ui.Observable;
 import com.flurnamenpuzzle.generator.ui.Observer;
@@ -29,12 +30,12 @@ public class PuzzleGeneratorView extends JFrame implements Observer {
 			+ "Ein Projekt der Fachhochschule Nordwestschweiz für Technik, Windisch AG";
 	private static final String LOGO_FHNW = "/images/logoFHNW.png";
 	private static final String LOGO_PUZZLE = "/images/logoPuzzle.png";
-	private static final String STEPS_IMAGE = "/images/steps.png";
 
 	private CardLayout cardLayout;
 	private JPanel cards;
 	private JPanel headerPanel;
 	private JPanel footerPanel;
+	private JLabel steps;
 
 	private PuzzleGeneratorController controller;
 
@@ -47,7 +48,6 @@ public class PuzzleGeneratorView extends JFrame implements Observer {
 		this.controller = controller;
 		initializeComponents(cardMap);
 		addEvents();
-		cardLayout.show(cards, "5");
 		layoutComponents();
 
 		setTitle(PUZZLE_GENERATOR_VIEW_TITLE);
@@ -79,7 +79,7 @@ public class PuzzleGeneratorView extends JFrame implements Observer {
 
 	private void layoutComponents() {
 		Container contentPane = getContentPane();
-		contentPane.setBackground(Color.WHITE);
+		contentPane.setBackground(PuzzleGeneratorConfig.BACKGROUND_COLOR);
 		setLayout(new BorderLayout());
 		add(cards, BorderLayout.CENTER);
 		add(headerPanel, BorderLayout.NORTH);
@@ -88,13 +88,13 @@ public class PuzzleGeneratorView extends JFrame implements Observer {
 
 	private JPanel createHeaderPanel() {
 		JPanel headerPanel = new JPanel();
+		headerPanel.setOpaque(false);
 		headerPanel.setLayout(new BorderLayout());
 		JLabel logoFHNW = new JLabel();
 		JLabel logoPuzzle = new JLabel();
-		JLabel steps = new JLabel();
+		steps = new JLabel();
 		logoFHNW.setIcon(new ImageIcon(this.getClass().getResource(LOGO_FHNW)));
 		logoPuzzle.setIcon(new ImageIcon(this.getClass().getResource(LOGO_PUZZLE)));
-		steps.setIcon(new ImageIcon(this.getClass().getResource(STEPS_IMAGE)));
 		headerPanel.add(logoFHNW, BorderLayout.WEST);
 		headerPanel.add(steps, BorderLayout.CENTER);
 		headerPanel.add(logoPuzzle, BorderLayout.EAST);
@@ -103,6 +103,7 @@ public class PuzzleGeneratorView extends JFrame implements Observer {
 
 	private JPanel createFooterPanel() {
 		JPanel footerPanel = new JPanel();
+		footerPanel.setOpaque(false);
 		JLabel footerText = new JLabel();
 		footerText.setFont(PuzzleGeneratorConfig.FONT_NORMAL);
 		footerText.setText(FOOTER_TEXT);
@@ -115,8 +116,9 @@ public class PuzzleGeneratorView extends JFrame implements Observer {
 		PuzzleGeneratorModel model = (PuzzleGeneratorModel) observable;
 		Steps currentStep = model.getCurrentStep();
 		String currentStepId = currentStep.getId();
-		//cardLayout.show(cards, currentStepId);
-		cardLayout.show(cards, "4");
+		String imagePath = currentStep.getImagePath();
+		this.steps.setIcon(new ImageIcon(this.getClass().getResource(imagePath)));
+		cardLayout.show(cards, currentStepId);
 	}
 
 }
