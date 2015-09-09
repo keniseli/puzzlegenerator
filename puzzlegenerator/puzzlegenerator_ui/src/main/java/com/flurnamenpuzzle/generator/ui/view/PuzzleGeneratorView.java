@@ -28,8 +28,8 @@ public class PuzzleGeneratorView extends JFrame implements Observer {
 	private static final Dimension PREF_SIZE = new Dimension(1024, 768);
 	private static final String FOOTER_TEXT = "\u00A9 2015 Daniel Mohler-Schmid | Puzzlegenerator - "
 			+ "Ein Projekt der Fachhochschule Nordwestschweiz für Technik, Windisch AG";
-	private static final String LOGO_FHNW = "/images/logoFHNW.png";
-	private static final String LOGO_PUZZLE = "/images/logoPuzzle.png";
+	private static final String LOGO_FHNW = "/logoFHNW.png";
+	private static final String LOGO_PUZZLE = "/logoPuzzle.png";
 
 	private CardLayout cardLayout;
 	private JPanel cards;

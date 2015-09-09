@@ -23,8 +23,8 @@ public class Main {
 	
 	public static void setSystemLookAndFeel(){
 		try {
-			// Set System L&F
-			UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+			String LookAndFeel = UIManager.getSystemLookAndFeelClassName();
+			UIManager.setLookAndFeel(LookAndFeel);
 		} catch (Exception e) {
 		}
 	}

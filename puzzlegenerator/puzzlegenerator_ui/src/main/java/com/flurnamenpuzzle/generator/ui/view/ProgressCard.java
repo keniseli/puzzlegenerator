@@ -6,6 +6,7 @@ import java.awt.event.ActionListener;
 
 import javax.swing.JButton;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JProgressBar;
 import javax.swing.border.EmptyBorder;
@@ -84,15 +85,16 @@ public class ProgressCard extends JPanel implements Observer {
 		stopButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				//TODO: abbrechen
-				/*
-				 * 
-				 * Confirmation Dialog aufmachen
-    			Allenfalls generierte Objektreferenzen löschen (xy = null; )
-    			Allenfalls erstellte Files löschen (im targetPath)
-    			Man landet dann auf dem FileChooserPanel
-
-				 * */
+				int dialogButton = JOptionPane.YES_NO_OPTION;
+				int dialogResult = JOptionPane.showConfirmDialog (null,
+						"Wollen Sie den Vorgang wirklich abbrechen?",
+						"Warning",
+						dialogButton,
+						JOptionPane.PLAIN_MESSAGE);
+				
+				if(dialogResult == JOptionPane.YES_OPTION){
+					controller.abortGenerationProcess();
+				}
 			}
 		});
 	}

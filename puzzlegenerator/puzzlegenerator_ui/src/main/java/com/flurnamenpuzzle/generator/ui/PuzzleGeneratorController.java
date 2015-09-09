@@ -81,5 +81,15 @@ public class PuzzleGeneratorController {
 	
 	public void confirmCardGeneration() {
 	}
+	
+	public void abortGenerationProcess(){
+		System.out.println("Abort process!");
+		//TODO: abbrechen
+		/*
+		Allenfalls generierte Objektreferenzen löschen (xy = null; )
+		Allenfalls erstellte Files löschen (im targetPath)
+		*/
+		puzzleGeneratorModel.setCurrentStep(Steps.STEP_1);
+	}
 
 }
