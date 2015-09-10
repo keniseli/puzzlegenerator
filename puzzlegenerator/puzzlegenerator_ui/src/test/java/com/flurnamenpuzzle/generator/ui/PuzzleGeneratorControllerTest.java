@@ -18,7 +18,7 @@ import com.flurnamenpuzzle.generator.ui.model.PuzzleGeneratorModel;
 import com.flurnamenpuzzle.generator.ui.view.ConfirmCardGeneration;
 import com.flurnamenpuzzle.generator.ui.view.FieldNameMapSelectionCard;
 import com.flurnamenpuzzle.generator.ui.view.PuzzleGeneratorView;
-import com.flurnamenpuzzle.generator.ui.view.StateSelectionCard;
+import com.flurnamenpuzzle.generator.ui.view.TargetPathSelectionCard;
 
 @RunWith(JMockit.class)
 public class PuzzleGeneratorControllerTest {
@@ -34,7 +34,7 @@ public class PuzzleGeneratorControllerTest {
 				new PuzzleGeneratorView();
 				times = 1;
 
-				new StateSelectionCard(controller);
+				new TargetPathSelectionCard(controller);
 				times = 1;
 
 				new FieldNameMapSelectionCard(controller);

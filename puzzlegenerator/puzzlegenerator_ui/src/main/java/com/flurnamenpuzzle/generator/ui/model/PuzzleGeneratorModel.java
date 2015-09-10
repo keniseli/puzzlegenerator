@@ -16,9 +16,11 @@ public class PuzzleGeneratorModel implements Observable {
 	private String fieldNameFilePath;
 	private String mapFilePath;
 	private String stateFilePath;
+
+	private String targetFolderPath;
 	private int percentageGenerated;
 	private String statusMessage;
-	
+
 	public PuzzleGeneratorModel() {
 		observers = new ArrayList<Observer>();
 	}
@@ -90,6 +92,15 @@ public class PuzzleGeneratorModel implements Observable {
 	
 	public String getStateFilePath() {
 		return stateFilePath;
+	}
+
+	public void setTargetFolderPath(String targetPath) {
+		this.targetFolderPath = targetPath;
+		notifyObservers();
+	}
+	
+	public String getTargetFolderPath() {
+		return this.targetFolderPath;
 	}
 	
 	public void setPercentageGenerated(int percentageValue) {
