@@ -23,7 +23,7 @@ import com.flurnamenpuzzle.generator.ui.PuzzleGeneratorController;
  * Class for the state selection panel
  * 
  */
-public class StateSelectionCard extends JPanel implements Observer {
+public class TargetPathSelectionCard extends JPanel implements Observer {
 	private static final long serialVersionUID = 1L;
 
 	private PuzzleGeneratorController controller;
@@ -39,7 +39,7 @@ public class StateSelectionCard extends JPanel implements Observer {
 	 * @param controller
 	 *            the instance to control this class' behaviour.
 	 */
-	public StateSelectionCard(PuzzleGeneratorController controller) {
+	public TargetPathSelectionCard(PuzzleGeneratorController controller) {
 		this.controller = controller;
 		initializeComponents();
 		addEvents();

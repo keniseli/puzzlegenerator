@@ -56,7 +56,7 @@ public class SaveTargetCard extends JPanel implements Observer{
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				String path = pathField.getText();
-				//TODO: controller save path for folder func saveTargetFolderPath
+				controller.setTargetAndSavePuzzle(path);
 			}
 		});
 	}

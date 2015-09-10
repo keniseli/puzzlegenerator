@@ -13,7 +13,7 @@ import com.flurnamenpuzzle.generator.ui.view.ConfirmCardGeneration;
 import com.flurnamenpuzzle.generator.ui.view.FieldNameMapSelectionCard;
 import com.flurnamenpuzzle.generator.ui.view.PuzzleGeneratorView;
 import com.flurnamenpuzzle.generator.ui.view.SaveTargetCard;
-import com.flurnamenpuzzle.generator.ui.view.StateSelectionCard;
+import com.flurnamenpuzzle.generator.ui.view.TargetPathSelectionCard;
 
 /**
  * The {@link PuzzleGeneratorController} is the controller (MVC Design Pattern)
@@ -31,7 +31,7 @@ public class PuzzleGeneratorController {
 	public PuzzleGeneratorController(PuzzleGeneratorModel puzzleGeneratorModel) {
 		puzzleGeneratorView = new PuzzleGeneratorView();
 		this.puzzleGeneratorModel = puzzleGeneratorModel;
-		puzzleGeneratorModel.setCurrentStep(Steps.STEP_3);
+		puzzleGeneratorModel.setCurrentStep(Steps.STEP_1);
 		shapeService = new ShapeService();
 	}
 
@@ -42,7 +42,7 @@ public class PuzzleGeneratorController {
 	public void initializeView() {
 		Map<String, JPanel> cardMap = new HashMap<>();
 		String idOfStep1 = Steps.STEP_1.getId();
-		StateSelectionCard stateSelectionCard = new StateSelectionCard(this);
+		TargetPathSelectionCard stateSelectionCard = new TargetPathSelectionCard(this);
 		cardMap.put(idOfStep1, stateSelectionCard);
 		puzzleGeneratorModel.addObserver(stateSelectionCard);
 		String idOfStep2 = Steps.STEP_2.getId();
@@ -80,14 +80,12 @@ public class PuzzleGeneratorController {
 	}
 	
 	public void confirmCardGeneration() {
-		
+		puzzleGeneratorModel.setCurrentStep(Steps.STEP_4);
 	}
 	
-	public boolean setTargetAndSavePuzzle(String targetPath) {
+	public void setTargetAndSavePuzzle(String targetPath) {
 		puzzleGeneratorModel.setTargetFolderPath(targetPath);
 		//TODO: save puzzle and get back if anything went wrong
-		
-		return true;
 	}
 
 }
