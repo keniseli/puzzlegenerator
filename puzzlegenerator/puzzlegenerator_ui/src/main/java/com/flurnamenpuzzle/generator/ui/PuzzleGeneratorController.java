@@ -13,8 +13,8 @@ import com.flurnamenpuzzle.generator.ui.view.ConfirmCardGeneration;
 import com.flurnamenpuzzle.generator.ui.view.FieldNameMapSelectionCard;
 import com.flurnamenpuzzle.generator.ui.view.ProgressCard;
 import com.flurnamenpuzzle.generator.ui.view.PuzzleGeneratorView;
-import com.flurnamenpuzzle.generator.ui.view.SaveTargetCard;
 import com.flurnamenpuzzle.generator.ui.view.TargetPathSelectionCard;
+import com.flurnamenpuzzle.generator.ui.view.StateSelectionCard;
 
 /**
  * The {@link PuzzleGeneratorController} is the controller (MVC Design Pattern)
@@ -43,7 +43,7 @@ public class PuzzleGeneratorController {
 	public void initializeView() {
 		Map<String, JPanel> cardMap = new HashMap<>();
 		String idOfStep1 = Steps.STEP_1.getId();
-		TargetPathSelectionCard stateSelectionCard = new TargetPathSelectionCard(this);
+		StateSelectionCard stateSelectionCard = new StateSelectionCard(this);
 		cardMap.put(idOfStep1, stateSelectionCard);
 		puzzleGeneratorModel.addObserver(stateSelectionCard);
 		String idOfStep2 = Steps.STEP_2.getId();
@@ -58,7 +58,7 @@ public class PuzzleGeneratorController {
 		ProgressCard progressCard = new ProgressCard(this);
 		cardMap.put(idOfStep4, progressCard);
 		String idOfStep5 = Steps.STEP_5.getId();
-		SaveTargetCard targetSelectionCard = new SaveTargetCard(this);
+		TargetPathSelectionCard targetSelectionCard = new TargetPathSelectionCard(this);
 		cardMap.put(idOfStep5, targetSelectionCard);
 		puzzleGeneratorModel.addObserver(targetSelectionCard);
 		puzzleGeneratorModel.addObserver(progressCard);
@@ -86,6 +86,13 @@ public class PuzzleGeneratorController {
 	
 	public void confirmCardGeneration() {
 		puzzleGeneratorModel.setCurrentStep(Steps.STEP_4);
+		try {
+			Thread.sleep(10_000);
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
+		puzzleGeneratorModel.setCurrentStep(Steps.STEP_5);
+		
 	}
 	
 	public void setTargetAndSavePuzzle(String targetPath) {
