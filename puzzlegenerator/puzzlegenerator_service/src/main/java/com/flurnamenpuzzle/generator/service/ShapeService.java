@@ -39,6 +39,7 @@ public class ShapeService {
 			String shapeName = getNameOfFeature(feature);
 			names.add(shapeName);
 		}
+		featuresIterator.close();
 		return names;
 	}
 
@@ -102,15 +103,21 @@ public class ShapeService {
 	 * @return the {@link SimpleFeatureCollection} of the given file.
 	 */
 	public SimpleFeatureCollection getFeaturesOfShapeFile(File flurnamenShapeFile) {
+		SimpleFeatureCollection flurnamenSimpleFeatureCollection = null;
+		FileDataStore dataStoreFlurnamen = null;
 		try {
-			FileDataStore dataStoreFlurnamen = FileDataStoreFinder.getDataStore(flurnamenShapeFile);
+			dataStoreFlurnamen = FileDataStoreFinder.getDataStore(flurnamenShapeFile);
 			SimpleFeatureSource shapeFileSourceFlurnamen = dataStoreFlurnamen.getFeatureSource();
 			dataStoreFlurnamen.dispose();
-			SimpleFeatureCollection flurnamenSimpleFeatureCollection = shapeFileSourceFlurnamen.getFeatures();
-			return flurnamenSimpleFeatureCollection;
-		} catch (IOException e) {
+			flurnamenSimpleFeatureCollection = shapeFileSourceFlurnamen.getFeatures();
+		} catch (IOException | RuntimeException e) {
+			// FIXME: Actually this should be a java.io.IOException but for
+			// magical reasons it does not work. Go for java.lang.Exception
+			// instead.
+			dataStoreFlurnamen.dispose();
 			throw new ServiceException(e, "There was an error reading the file to get features of.");
 		}
+		return flurnamenSimpleFeatureCollection;
 	}
 
 }

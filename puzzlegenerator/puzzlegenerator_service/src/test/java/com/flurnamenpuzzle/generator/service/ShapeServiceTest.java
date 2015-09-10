@@ -159,9 +159,21 @@ public class ShapeServiceTest {
 		String pathToShapeFile = url.getFile();
 		File shapeFile = new File(pathToShapeFile);
 		List<String> namesOfShapeFile = shapeService.getNamesOfShapeFile(shapeFile);
-		namesOfShapeFile.forEach(name -> {
-			Assert.assertTrue(expectedNames.contains(name));
-		});
+		Assert.assertTrue(expectedNames.containsAll(namesOfShapeFile));
+	}
+	
+
+	@Test(expected = ServiceException.class)
+	public void testGetFeaturesOfInvalidShapeFile() {
+		String shapeFilePath = getFilePathFromResource("/invalidShapeFile.shp");
+		File invalidShapeFile = new File(shapeFilePath);
+		shapeService.getFeaturesOfShapeFile(invalidShapeFile);
+	}
+	
+	private String getFilePathFromResource(String resource) {
+		URL tifFileUrl = PuzzleGeneratorServiceTest.class.getResource(resource);
+		String tifFilePath = tifFileUrl.getPath();
+		return tifFilePath;
 	}
 
 }

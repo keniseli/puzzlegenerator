@@ -10,6 +10,7 @@ import java.util.List;
 
 import mockit.integration.junit4.JMockit;
 
+import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Ignore;
@@ -21,22 +22,30 @@ import com.flurnamenpuzzle.generator.domain.Puzzle;
 @RunWith(JMockit.class)
 public class PuzzleGeneratorServiceTest {
 	private PuzzleGeneratorService puzzleGeneratorService;
+	private File temporaryDirectory;
 
 	@Before
-	public void setUp() {
+	public void setUp() throws IOException {
 		puzzleGeneratorService = new PuzzleGeneratorService();
-		new ShapeService();
+		Path temporaryDirectoryPath = Files.createTempDirectory("testDirectoryOfThePuzzleGenerationTest",
+				new FileAttribute<?>[0]);
+		temporaryDirectory = temporaryDirectoryPath.toFile();
 	}
 
+	@After
+	public void breakDown() {
+		for (File file : temporaryDirectory.listFiles()) {
+			file.deleteOnExit();
+		}
+		temporaryDirectory.deleteOnExit();
+	}
+	
 	@Test
 	public void testPuzzleGenerationWithValidData() throws IOException {
 		String stateShapeFilePath = getFilePathFromResource("/ExportPerimeter.shp");
 		String stateName = "Thun";
 		String fieldShapeFilePath = getFilePathFromResource("/No_Flurname_A.shp");
 		String tifFilePath = getFilePathFromResource("/SRM25_LV03_KREL_10L_Mosaic_2015.tif");
-		Path temporaryDirectoryPath = Files.createTempDirectory("testDirectoryOfThePuzzleGenerationTest",
-				new FileAttribute<?>[0]);
-		File temporaryDirectory = temporaryDirectoryPath.toFile();
 		String temporaryDirectoryName = temporaryDirectory.getAbsolutePath();
 		Puzzle puzzle = puzzleGeneratorService.generatePuzzle(stateShapeFilePath, stateName, fieldShapeFilePath,
 				tifFilePath, temporaryDirectoryName);
@@ -44,15 +53,6 @@ public class PuzzleGeneratorServiceTest {
 		List<File> images = puzzle.getImages();
 		int numberOfShapesInPuzzle = images.size();
 		Assert.assertEquals(301, numberOfShapesInPuzzle);
-		
-		tearDown(puzzle.getImages());
-		temporaryDirectory.deleteOnExit();
-	}
-
-	private void tearDown(List<File> files) {
-		for (File puzzlePiece : files) {
-			puzzlePiece.delete();
-		}
 	}
 
 	@Test(expected = ServiceException.class)
@@ -61,8 +61,9 @@ public class PuzzleGeneratorServiceTest {
 		String stateName = "Thun";
 		String fieldShapeFilePath = getFilePathFromResource("/No_Flurname_A.shp");
 		String tifFilePath = getFilePathFromResource("/SRM25_LV03_KREL_10L_Mosaic_2015.tif");
+		String temporaryDirectoryPath = temporaryDirectory.getAbsolutePath();
 		puzzleGeneratorService.generatePuzzle(stateShapeFilePath, stateName, fieldShapeFilePath, tifFilePath,
-				"C://Temp//schnitzel");
+				temporaryDirectoryPath);
 		Assert.fail("ServiceException expected but not thrown");
 	}
 
@@ -72,15 +73,10 @@ public class PuzzleGeneratorServiceTest {
 		String stateName = "Thun";
 		String fieldShapeFilePath = getFilePathFromResource("/fieldShapeNotOverlapping.shp");
 		String tifFilePath = getFilePathFromResource("/SRM25_LV03_KREL_10L_Mosaic_2015.tif");
+		String temporaryDirectoryPath = temporaryDirectory.getAbsolutePath();
 		puzzleGeneratorService.generatePuzzle(stateShapeFilePath, stateName, fieldShapeFilePath, tifFilePath,
-				"C://Temp//schnitzel");
+				temporaryDirectoryPath);
 		Assert.fail("ServiceException expected but not thrown");
-	}
-
-	@Test(expected = ServiceException.class)
-	@Ignore
-	public void testPuzzleGenerationWithInvalidFieldShapeFile() {
-
 	}
 
 	@Test(expected = ServiceException.class)
@@ -89,8 +85,9 @@ public class PuzzleGeneratorServiceTest {
 		String stateName = "Thun";
 		String fieldShapeFilePath = getFilePathFromResource("/No_Flurname_A.shp");
 		String tifFilePath = getFilePathFromResource("/tifFileWithoutGeoRefs.tif");
+		String temporaryDirectoryPath = temporaryDirectory.getAbsolutePath();
 		Puzzle puzzle = puzzleGeneratorService.generatePuzzle(stateShapeFilePath, stateName, fieldShapeFilePath,
-				tifFilePath, "C://Temp//schnitzel");
+				tifFilePath, temporaryDirectoryPath);
 
 		List<File> images = puzzle.getImages();
 		int numberOfShapesInPuzzle = images.size();
