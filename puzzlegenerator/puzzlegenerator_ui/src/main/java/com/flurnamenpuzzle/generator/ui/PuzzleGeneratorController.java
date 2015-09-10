@@ -11,6 +11,7 @@ import com.flurnamenpuzzle.generator.service.ShapeService;
 import com.flurnamenpuzzle.generator.ui.model.PuzzleGeneratorModel;
 import com.flurnamenpuzzle.generator.ui.view.ConfirmCardGeneration;
 import com.flurnamenpuzzle.generator.ui.view.FieldNameMapSelectionCard;
+import com.flurnamenpuzzle.generator.ui.view.ProgressCard;
 import com.flurnamenpuzzle.generator.ui.view.PuzzleGeneratorView;
 import com.flurnamenpuzzle.generator.ui.view.SaveTargetCard;
 import com.flurnamenpuzzle.generator.ui.view.TargetPathSelectionCard;
@@ -54,9 +55,13 @@ public class PuzzleGeneratorController {
 		cardMap.put(idOfStep3, confirmCardGeneration);
 		puzzleGeneratorModel.addObserver(confirmCardGeneration);
 		String idOfStep4 = Steps.STEP_4.getId();
+		ProgressCard progressCard = new ProgressCard(this);
+		cardMap.put(idOfStep4, progressCard);
+		String idOfStep5 = Steps.STEP_5.getId();
 		SaveTargetCard targetSelectionCard = new SaveTargetCard(this);
-		cardMap.put(idOfStep4, targetSelectionCard);
+		cardMap.put(idOfStep5, targetSelectionCard);
 		puzzleGeneratorModel.addObserver(targetSelectionCard);
+		puzzleGeneratorModel.addObserver(progressCard);
 		puzzleGeneratorModel.addObserver(puzzleGeneratorView);
 		puzzleGeneratorView.createAndShow(this, cardMap);
 		puzzleGeneratorModel.notifyObservers();
@@ -86,6 +91,16 @@ public class PuzzleGeneratorController {
 	public void setTargetAndSavePuzzle(String targetPath) {
 		puzzleGeneratorModel.setTargetFolderPath(targetPath);
 		//TODO: save puzzle and get back if anything went wrong
+	}
+	
+	public void abortGenerationProcess(){
+		System.out.println("Abort process!");
+		//TODO: abbrechen
+		/*
+		Allenfalls generierte Objektreferenzen löschen (xy = null; )
+		Allenfalls erstellte Files löschen (im targetPath)
+		*/
+		puzzleGeneratorModel.setCurrentStep(Steps.STEP_1);
 	}
 
 }
