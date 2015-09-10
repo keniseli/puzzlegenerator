@@ -26,6 +26,12 @@
 			<scope>test</scope>
 		</dependency>
 		<dependency>
+			<groupId>org.jmockit</groupId>
+			<artifactId>jmockit</artifactId>
+			<version>1.16</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
 			<groupId>org.geotools</groupId>
 			<artifactId>gt-shapefile</artifactId>
 			<version>${geotools.version}</version>
@@ -34,6 +40,11 @@
 			<groupId>org.geotools</groupId>
 			<artifactId>gt-geotiff</artifactId>
 			<version>${geotools.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>com.flurnamenpuzzle.generator</groupId>
+			<artifactId>puzzlegenerator_domain</artifactId>
+			<version>1.00.00</version>
 		</dependency>
 	</dependencies>
 

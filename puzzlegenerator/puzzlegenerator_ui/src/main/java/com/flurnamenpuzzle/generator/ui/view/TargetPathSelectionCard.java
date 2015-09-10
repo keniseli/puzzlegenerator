@@ -19,26 +19,16 @@ import com.flurnamenpuzzle.generator.ui.Observer;
 import com.flurnamenpuzzle.generator.ui.PuzzleGeneratorConfig;
 import com.flurnamenpuzzle.generator.ui.PuzzleGeneratorController;
 
-/**
- * Class for the state selection panel
- * 
- */
 public class TargetPathSelectionCard extends JPanel implements Observer {
 	private static final long serialVersionUID = 1L;
 
 	private PuzzleGeneratorController controller;
 	private JFileChooser fileChooser;
-	private JLabel stateLabel;
 	private JButton chooseButton;
+	private JLabel savePathLabel;
 	private JButton nextButton;
 	private JTextField pathField;
 
-	/**
-	 * Constructs a new instance
-	 * 
-	 * @param controller
-	 *            the instance to control this class' behaviour.
-	 */
 	public TargetPathSelectionCard(PuzzleGeneratorController controller) {
 		this.controller = controller;
 		initializeComponents();
@@ -46,38 +36,6 @@ public class TargetPathSelectionCard extends JPanel implements Observer {
 		layoutComponents();
 	}
 
-	/**
-	 * working with gridBag to set the components in place
-	 */
-	private void layoutComponents() {
-		add(stateLabel, "span, gapbottom 5");
-		add(pathField, "height :30:, pushx, growx");
-		add(chooseButton, "height :30:, wrap");
-		add(nextButton, "right, span, gaptop 40");
-	}
-
-	/**
-	 * initialize all components needed for the panel
-	 */
-	private void initializeComponents() {
-		this.setLayout(new MigLayout());
-		this.setBorder(new EmptyBorder(20, 200, 20, 200));
-		this.setSize(new Dimension(600, 600));
-
-		this.fileChooser = new JFileChooser();
-		this.pathField = new JTextField();
-		this.pathField.setFont(PuzzleGeneratorConfig.FONT_NORMAL);
-		this.stateLabel = new JLabel("Bitte wählen Sie ein Gemeinde-Shape aus");
-		this.stateLabel.setFont(PuzzleGeneratorConfig.FONT_NORMAL);
-		this.chooseButton = new JButton("Durchsuchen");
-		this.chooseButton.setFont(PuzzleGeneratorConfig.FONT_NORMAL);
-		this.nextButton = new JButton("Weiter");
-		this.nextButton.setFont(PuzzleGeneratorConfig.FONT_BOLD);
-	}
-
-	/**
-	 * add all actionlistener to the buttons
-	 */
 	private void addEvents() {
 		chooseButton.addActionListener(new ActionListener() {
 			@Override
@@ -85,9 +43,9 @@ public class TargetPathSelectionCard extends JPanel implements Observer {
 				int returnVal = fileChooser.showOpenDialog(null);
 				// check if user has selected a file
 				if (returnVal == JFileChooser.APPROVE_OPTION) {
-					File selectedFile = fileChooser.getSelectedFile();
-					String pathOfSelectedFile = selectedFile.getPath();
-					pathField.setText(pathOfSelectedFile);
+					File selectedFodler = fileChooser.getCurrentDirectory();
+					String pathOfSelectedFolder = selectedFodler.getPath();
+					pathField.setText(pathOfSelectedFolder);
 				}
 			}
 		});
@@ -96,12 +54,37 @@ public class TargetPathSelectionCard extends JPanel implements Observer {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				String path = pathField.getText();
-				controller.saveStateFilePath(path);
+				controller.setTargetAndSavePuzzle(path);
 			}
 		});
+	}
+
+	private void layoutComponents() {
+		add(this.savePathLabel, "span, gapbottom 5");
+		add(this.pathField, "height :30:, pushx, growx");
+		add(this.chooseButton, "height :30:, wrap");
+		add(this.nextButton, "right, span, gaptop 40");
+	}
+
+	private void initializeComponents() {
+		this.setLayout(new MigLayout());
+		this.setBorder(new EmptyBorder(20, 200, 20, 200));
+		this.setSize(new Dimension(600, 600));
+
+		this.fileChooser = new JFileChooser();
+		this.fileChooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
+		this.chooseButton = new JButton("Durchsuchen");
+		this.chooseButton.setFont(PuzzleGeneratorConfig.FONT_NORMAL);
+		this.savePathLabel = new JLabel("Bitte wählen Sie den Speicherort für das Puzzle aus:");
+		this.savePathLabel.setFont(PuzzleGeneratorConfig.FONT_NORMAL);
+		this.nextButton = new JButton("Weiter");
+		this.nextButton.setFont(PuzzleGeneratorConfig.FONT_BOLD);
+		this.pathField = new JTextField();
+		this.pathField.setFont(PuzzleGeneratorConfig.FONT_NORMAL);
 	}
 
 	@Override
 	public void update(Observable observable) {
 	}
+
 }
