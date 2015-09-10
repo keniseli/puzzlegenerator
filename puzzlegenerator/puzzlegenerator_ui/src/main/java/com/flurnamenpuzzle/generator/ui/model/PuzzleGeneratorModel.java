@@ -1,6 +1,5 @@
 package com.flurnamenpuzzle.generator.ui.model;
 
-import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -17,7 +16,9 @@ public class PuzzleGeneratorModel implements Observable {
 	private String fieldNameFilePath;
 	private String mapFilePath;
 	private String stateFilePath;
-
+	private int percentageGenerated;
+	private String statusMessage;
+	
 	public PuzzleGeneratorModel() {
 		observers = new ArrayList<Observer>();
 	}
@@ -91,4 +92,21 @@ public class PuzzleGeneratorModel implements Observable {
 		return stateFilePath;
 	}
 	
+	public void setPercentageGenerated(int percentageValue) {
+		this.percentageGenerated = percentageValue;
+		notifyObservers();
+	}
+	
+	public int getPercentageGenerated() {
+		return percentageGenerated;
+	}
+	
+	public void setStatusMessage(String statusMessage) {
+		this.statusMessage = statusMessage;
+		notifyObservers();
+	}
+	
+	public String getStatusMessage() {
+		return statusMessage;
+	}
 }

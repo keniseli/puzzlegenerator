@@ -74,6 +74,7 @@ public class FieldNameMapSelectionCard extends JPanel implements Observer {
 		setLayout(new MigLayout());
 		setBorder(new EmptyBorder(20, 200, 20, 200));
 		setSize(new Dimension(600, 600));
+		this.setBackground(PuzzleGeneratorConfig.BACKGROUND_COLOR);
 
 		fileChooser = new JFileChooser();
 		mapPath = new JTextField();

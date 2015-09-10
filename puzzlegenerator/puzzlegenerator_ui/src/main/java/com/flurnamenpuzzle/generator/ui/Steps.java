@@ -6,15 +6,25 @@ package com.flurnamenpuzzle.generator.ui;
  * 
  */
 public enum Steps {
-	STEP_1("stateSelection"), STEP_2("fieldNameMapSelection"), STEP_3("verificationAndDecision");
+	STEP_1("stateSelection", PuzzleGeneratorConfig.STEPS_1_IMAGE),
+	STEP_2("fieldNameMapSelection", PuzzleGeneratorConfig.STEPS_2_IMAGE),
+	STEP_3("verificationAndDecision", PuzzleGeneratorConfig.STEPS_3_IMAGE),
+	STEP_4("progressPanel", PuzzleGeneratorConfig.STEPS_4_IMAGE);
 
 	private String id;
+	
+	private String imagePath;
 
-	private Steps(String id) {
+	private Steps(String id, String imagePath) {
 		this.id = id;
+		this.imagePath = imagePath;
 	}
 
 	public String getId() {
 		return id;
+	}
+	
+	public String getImagePath(){
+		return imagePath;
 	}
 }
