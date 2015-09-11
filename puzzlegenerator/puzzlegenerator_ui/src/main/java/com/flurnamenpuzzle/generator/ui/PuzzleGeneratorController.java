@@ -92,7 +92,6 @@ public class PuzzleGeneratorController {
 			e.printStackTrace();
 		}
 		puzzleGeneratorModel.setCurrentStep(Steps.STEP_5);
-		
 	}
 	
 	public void setTargetAndSavePuzzle(String targetPath) {
