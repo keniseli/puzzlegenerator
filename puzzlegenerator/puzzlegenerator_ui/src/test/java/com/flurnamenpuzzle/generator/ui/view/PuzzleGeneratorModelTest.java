@@ -7,8 +7,8 @@ import mockit.integration.junit4.JMockit;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
-import com.flurnamenpuzzle.generator.ui.Observer;
-import com.flurnamenpuzzle.generator.ui.model.PuzzleGeneratorModel;
+import com.flurnamenpuzzle.generator.Observer;
+import com.flurnamenpuzzle.generator.domain.PuzzleGeneratorModel;
 
 @RunWith(JMockit.class)
 public class PuzzleGeneratorModelTest {

@@ -18,6 +18,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import com.flurnamenpuzzle.generator.domain.Puzzle;
+import com.flurnamenpuzzle.generator.domain.PuzzleGeneratorModel;
 
 @RunWith(JMockit.class)
 public class PuzzleGeneratorServiceTest {
@@ -26,7 +27,9 @@ public class PuzzleGeneratorServiceTest {
 
 	@Before
 	public void setUp() throws IOException {
-		puzzleGeneratorService = new PuzzleGeneratorService();
+		PuzzleGeneratorModel puzzleGeneratorModel = new PuzzleGeneratorModel();
+		puzzleGeneratorModel.setAbortGeneration(false);
+		puzzleGeneratorService = new PuzzleGeneratorService(puzzleGeneratorModel);
 		Path temporaryDirectoryPath = Files.createTempDirectory("testDirectoryOfThePuzzleGenerationTest",
 				new FileAttribute<?>[0]);
 		temporaryDirectory = temporaryDirectoryPath.toFile();

@@ -1,4 +1,5 @@
-package com.flurnamenpuzzle.generator.ui;
+package com.flurnamenpuzzle.generator;
+
 
 /**
  * This class holds all steps that can occur in the application. Every step

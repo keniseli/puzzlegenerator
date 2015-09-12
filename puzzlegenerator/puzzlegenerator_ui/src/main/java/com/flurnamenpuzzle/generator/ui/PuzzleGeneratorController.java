@@ -1,20 +1,27 @@
 package com.flurnamenpuzzle.generator.ui;
 
 import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.attribute.FileAttribute;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import javax.swing.JPanel;
 
+import com.flurnamenpuzzle.generator.Observer;
+import com.flurnamenpuzzle.generator.Steps;
+import com.flurnamenpuzzle.generator.domain.Puzzle;
+import com.flurnamenpuzzle.generator.domain.PuzzleGeneratorModel;
+import com.flurnamenpuzzle.generator.service.PuzzleGeneratorService;
 import com.flurnamenpuzzle.generator.service.ShapeService;
-import com.flurnamenpuzzle.generator.ui.model.PuzzleGeneratorModel;
 import com.flurnamenpuzzle.generator.ui.view.ConfirmCardGeneration;
 import com.flurnamenpuzzle.generator.ui.view.FieldNameMapSelectionCard;
 import com.flurnamenpuzzle.generator.ui.view.ProgressCard;
 import com.flurnamenpuzzle.generator.ui.view.PuzzleGeneratorView;
-import com.flurnamenpuzzle.generator.ui.view.TargetPathSelectionCard;
 import com.flurnamenpuzzle.generator.ui.view.StateSelectionCard;
+import com.flurnamenpuzzle.generator.ui.view.TargetPathSelectionCard;
 
 /**
  * The {@link PuzzleGeneratorController} is the controller (MVC Design Pattern)
@@ -25,15 +32,18 @@ import com.flurnamenpuzzle.generator.ui.view.StateSelectionCard;
  *
  */
 public class PuzzleGeneratorController {
+	protected static final String TEMPORARY_DIRECTORY_NAME = "temporaryPuzzleGeneratorDirectory";
 	private PuzzleGeneratorView puzzleGeneratorView;
 	private PuzzleGeneratorModel puzzleGeneratorModel;
 	private ShapeService shapeService;
+	private PuzzleGeneratorService puzzleGeneratorService;
 
 	public PuzzleGeneratorController(PuzzleGeneratorModel puzzleGeneratorModel) {
 		puzzleGeneratorView = new PuzzleGeneratorView();
 		this.puzzleGeneratorModel = puzzleGeneratorModel;
-		puzzleGeneratorModel.setCurrentStep(Steps.STEP_1);
+		puzzleGeneratorModel.setCurrentStep(Steps.STEP_3);
 		shapeService = new ShapeService();
+		puzzleGeneratorService = new PuzzleGeneratorService(puzzleGeneratorModel);
 	}
 
 	/**
@@ -78,35 +88,84 @@ public class PuzzleGeneratorController {
 		puzzleGeneratorModel.setCurrentStep(Steps.STEP_2);
 	}
 
-	public void saveFieldNameFilePathAndCardMaterialFilePath(String fieldNameFilePath, String mapFilePath) {
+	public void saveFieldNameFilePathAndCardMaterialFilePath(String fieldNameFilePath, String mapFilePath,
+			String stateName) {
 		puzzleGeneratorModel.setFieldNameFilePath(fieldNameFilePath);
 		puzzleGeneratorModel.setMapFilePath(mapFilePath);
+		puzzleGeneratorModel.setStateName(stateName);
 		puzzleGeneratorModel.setCurrentStep(Steps.STEP_3);
 	}
-	
-	public void confirmCardGeneration() {
-		puzzleGeneratorModel.setCurrentStep(Steps.STEP_4);
-		try {
-			Thread.sleep(10_000);
-		} catch (InterruptedException e) {
-			e.printStackTrace();
+
+	public void confirmGeneration() {
+		puzzleGeneratorModel.setAbortGeneration(false);
+		File temporaryDirectory = createTemporaryDirectory();
+		if (temporaryDirectory != null) {
+			puzzleGeneratorModel.setTemporaryDirectory(temporaryDirectory);
+			Thread puzzleGenerationThread = initializePuzzleGenerationThread();
+			puzzleGeneratorModel.setCurrentStep(Steps.STEP_4);
+			puzzleGenerationThread.start();
 		}
-		puzzleGeneratorModel.setCurrentStep(Steps.STEP_5);
 	}
-	
+
+	public void abortGenerationProcess() {
+		puzzleGeneratorModel.setAbortGeneration(true);
+		puzzleGeneratorModel.setCurrentStep(Steps.STEP_3);
+	}
+
+	/**
+	 * This method will be called from the puzzle generation thread when the
+	 * generation is complete.
+	 */
+	public void generationComplete() {
+		Puzzle puzzle = puzzleGeneratorModel.getPuzzle();
+		if (puzzle != null) {
+			puzzleGeneratorModel.setCurrentStep(Steps.STEP_5);
+		} else {
+			puzzleGeneratorModel.setCurrentStep(Steps.STEP_3);
+		}
+	}
+
 	public void setTargetAndSavePuzzle(String targetPath) {
 		puzzleGeneratorModel.setTargetFolderPath(targetPath);
-		//TODO: save puzzle and get back if anything went wrong
+		File targetDirectory = new File(targetPath);
+		File temporaryDirectory = puzzleGeneratorModel.getTemporaryDirectory();
+		for (File puzzleFile : temporaryDirectory.listFiles()) {
+			String simpleFileName = puzzleFile.getName();
+			String newPathToFile = String.format("%s%s%s", targetDirectory, File.separatorChar, simpleFileName);
+			File newFile = new File(newPathToFile);
+			puzzleFile.renameTo(newFile);
+		}
 	}
-	
-	public void abortGenerationProcess(){
-		System.out.println("Abort process!");
-		//TODO: abbrechen
-		/*
-		Allenfalls generierte Objektreferenzen löschen (xy = null; )
-		Allenfalls erstellte Files löschen (im targetPath)
-		*/
-		puzzleGeneratorModel.setCurrentStep(Steps.STEP_1);
+
+	private File createTemporaryDirectory() {
+		File temporaryDirectory = null;
+		try {
+			FileAttribute<?>[] fileAttributes = {};
+			temporaryDirectory = Files.createTempDirectory(TEMPORARY_DIRECTORY_NAME, fileAttributes).toFile();
+		} catch (IOException e) {
+			puzzleGeneratorModel
+					.setNotification("Ein temporäres Verzeichnis zum Zwischenspeichern konnte nicht erstellt werden. Es kann nicht fortgefahren werden.");
+		}
+		return temporaryDirectory;
+	}
+
+	private Thread initializePuzzleGenerationThread() {
+		Thread puzzleGenerationThread = new Thread(new Runnable() {
+
+			@Override
+			public void run() {
+				String stateFilePath = puzzleGeneratorModel.getStateFilePath();
+				String stateName = puzzleGeneratorModel.getStateName();
+				String fieldNameFilePath = puzzleGeneratorModel.getFieldNameFilePath();
+				String mapFilePath = puzzleGeneratorModel.getMapFilePath();
+				String pathToTemporaryDirectory = puzzleGeneratorModel.getTemporaryDirectory().getAbsolutePath();
+				Puzzle puzzle = puzzleGeneratorService.generatePuzzle(stateFilePath, stateName, fieldNameFilePath,
+						mapFilePath, pathToTemporaryDirectory);
+				puzzleGeneratorModel.setPuzzle(puzzle);
+				generationComplete();
+			}
+		});
+		return puzzleGenerationThread;
 	}
 
 }

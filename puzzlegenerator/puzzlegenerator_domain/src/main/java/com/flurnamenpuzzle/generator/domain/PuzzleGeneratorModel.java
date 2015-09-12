@@ -1,13 +1,15 @@
-package com.flurnamenpuzzle.generator.ui.model;
+package com.flurnamenpuzzle.generator.domain;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.flurnamenpuzzle.generator.ui.Observable;
-import com.flurnamenpuzzle.generator.ui.Observer;
-import com.flurnamenpuzzle.generator.ui.Steps;
+import com.flurnamenpuzzle.generator.Observable;
+import com.flurnamenpuzzle.generator.Observer;
+import com.flurnamenpuzzle.generator.PuzzleGenerationProgressStructure;
+import com.flurnamenpuzzle.generator.Steps;
 
-public class PuzzleGeneratorModel implements Observable {
+public class PuzzleGeneratorModel implements Observable, PuzzleGenerationProgressStructure {
 	private List<Observer> observers;
 
 	private String notification;
@@ -16,10 +18,13 @@ public class PuzzleGeneratorModel implements Observable {
 	private String fieldNameFilePath;
 	private String mapFilePath;
 	private String stateFilePath;
-
+	private String stateName;
 	private String targetFolderPath;
 	private int percentageGenerated;
 	private String statusMessage;
+	private Puzzle puzzle;
+	private boolean abortGeneration;
+	private File temporaryDirectory;
 
 	public PuzzleGeneratorModel() {
 		observers = new ArrayList<Observer>();
@@ -84,12 +89,12 @@ public class PuzzleGeneratorModel implements Observable {
 		this.mapFilePath = mapFilePath;
 		notifyObservers();
 	}
-	
+
 	public void setStateFilePath(String stateFilePath) {
 		this.stateFilePath = stateFilePath;
 		notifyObservers();
 	}
-	
+
 	public String getStateFilePath() {
 		return stateFilePath;
 	}
@@ -98,26 +103,62 @@ public class PuzzleGeneratorModel implements Observable {
 		this.targetFolderPath = targetPath;
 		notifyObservers();
 	}
-	
+
 	public String getTargetFolderPath() {
 		return this.targetFolderPath;
 	}
-	
+
 	public void setPercentageGenerated(int percentageValue) {
 		this.percentageGenerated = percentageValue;
 		notifyObservers();
 	}
-	
+
 	public int getPercentageGenerated() {
 		return percentageGenerated;
 	}
-	
+
 	public void setStatusMessage(String statusMessage) {
 		this.statusMessage = statusMessage;
 		notifyObservers();
 	}
-	
+
 	public String getStatusMessage() {
 		return statusMessage;
 	}
+
+	public String getStateName() {
+		return stateName;
+	}
+
+	public void setStateName(String stateName) {
+		this.stateName = stateName;
+		notifyObservers();
+	}
+
+	public Puzzle getPuzzle() {
+		return puzzle;
+	}
+
+	public void setPuzzle(Puzzle puzzle) {
+		this.puzzle = puzzle;
+		notifyObservers();
+	}
+
+	public boolean isAbortGeneration() {
+		return abortGeneration;
+	}
+
+	public void setAbortGeneration(boolean abortGeneration) {
+		this.abortGeneration = abortGeneration;
+		notifyObservers();
+	}
+
+	public File getTemporaryDirectory() {
+		return temporaryDirectory;
+	}
+
+	public void setTemporaryDirectory(File temporaryDirectory) {
+		this.temporaryDirectory = temporaryDirectory;
+	}
+
 }

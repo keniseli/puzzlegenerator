@@ -1,4 +1,4 @@
-package com.flurnamenpuzzle.generator.ui;
+package com.flurnamenpuzzle.generator;
 
 import java.awt.Color;
 import java.awt.Font;

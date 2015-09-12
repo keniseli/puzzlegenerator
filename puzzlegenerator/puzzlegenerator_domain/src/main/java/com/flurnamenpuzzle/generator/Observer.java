@@ -1,4 +1,4 @@
-package com.flurnamenpuzzle.generator.ui;
+package com.flurnamenpuzzle.generator;
 
 /**
  * This interface should be implemented by classes whose objects are dependent
