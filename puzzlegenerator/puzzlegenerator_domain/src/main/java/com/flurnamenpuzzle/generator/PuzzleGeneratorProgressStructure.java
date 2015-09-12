@@ -1,6 +1,6 @@
 package com.flurnamenpuzzle.generator;
 
-public interface PuzzleGenerationProgressStructure {
+public interface PuzzleGeneratorProgressStructure {
 
 	/**
 	 * @return the percentage of the current puzzle generation.

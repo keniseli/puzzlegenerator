@@ -25,9 +25,8 @@ import org.geotools.data.simple.SimpleFeatureCollection;
 import org.opengis.feature.simple.SimpleFeature;
 import org.opengis.parameter.GeneralParameterValue;
 
-import com.flurnamenpuzzle.generator.PuzzleGenerationProgressStructure;
+import com.flurnamenpuzzle.generator.PuzzleGeneratorProgressStructure;
 import com.flurnamenpuzzle.generator.domain.Puzzle;
-import com.flurnamenpuzzle.generator.domain.PuzzleGeneratorModel;
 import com.vividsolutions.jts.geom.Coordinate;
 import com.vividsolutions.jts.geom.MultiPolygon;
 
@@ -42,10 +41,10 @@ public class PuzzleGeneratorService {
 	private final static String PUZZLE_PIECE_FILE_TYPE = "png";
 	private static final int POLYGON_SHAPE_FEATURE_ATTRIBUTE_INDEX = 0;
 
-	private final PuzzleGenerationProgressStructure puzzleGeneratorModel;
+	private final PuzzleGeneratorProgressStructure puzzleGeneratorProgressStructure;
 
-	public PuzzleGeneratorService(PuzzleGeneratorModel puzzleGeneratorModel) {
-		this.puzzleGeneratorModel = puzzleGeneratorModel;
+	public PuzzleGeneratorService(PuzzleGeneratorProgressStructure puzzleGeneratorProgressStructure) {
+		this.puzzleGeneratorProgressStructure = puzzleGeneratorProgressStructure;
 	}
 
 	/**
@@ -75,11 +74,11 @@ public class PuzzleGeneratorService {
 	public Puzzle generatePuzzle(String stateShapeFilePath, String stateName, String fieldShapeFilePath,
 			String tifFilePath, String destinationFilePath) {
 		Puzzle puzzle = new Puzzle();
-		puzzleGeneratorModel.setPercentageGenerated(0);
+		updateProgress(0);
 
 		List<SimpleFeature> featuresInState = getFeaturesOfFieldsInState(stateShapeFilePath, stateName,
 				fieldShapeFilePath);
-		if (puzzleGeneratorModel.isAbortGeneration()) {
+		if (puzzleGeneratorProgressStructure.isAbortGeneration()) {
 			return null;
 		}
 
@@ -87,10 +86,10 @@ public class PuzzleGeneratorService {
 
 		List<File> pieces = savePiecesImages(destinationFilePath, featuresInState, coverage);
 		puzzle.setImages(pieces);
-		if (puzzleGeneratorModel.isAbortGeneration()) {
+		if (puzzleGeneratorProgressStructure.isAbortGeneration()) {
 			return null;
 		}
-		puzzleGeneratorModel.setPercentageGenerated(100);
+		puzzleGeneratorProgressStructure.setPercentageGenerated(100);
 		return puzzle;
 	}
 
@@ -112,7 +111,7 @@ public class PuzzleGeneratorService {
 		// get feature of the state
 		ShapeService shapeService = new ShapeService();
 		SimpleFeature featureOfState = shapeService.getFeatureOfShapeFileByName(stateShapeFilePath, stateName);
-		if (puzzleGeneratorModel.isAbortGeneration()) {
+		if (puzzleGeneratorProgressStructure.isAbortGeneration()) {
 			return null;
 		}
 
@@ -124,7 +123,7 @@ public class PuzzleGeneratorService {
 
 		// get features of the fields that are located in the state
 		List<SimpleFeature> featuresInState = shapeService.filterContainingFeaturesOfFeature(featureOfState, features);
-		if (puzzleGeneratorModel.isAbortGeneration()) {
+		if (puzzleGeneratorProgressStructure.isAbortGeneration()) {
 			return null;
 		}
 
@@ -187,11 +186,11 @@ public class PuzzleGeneratorService {
 			if (puzzlePiece != null) {
 				puzzlePieces.add(puzzlePiece);
 			}
-			if (puzzleGeneratorModel.isAbortGeneration()) {
+			if (puzzleGeneratorProgressStructure.isAbortGeneration()) {
 				return null;
 			}
 			double percentageValue = ((double) i / numberOfShapes) * 100;
-			puzzleGeneratorModel.setPercentageGenerated((int) percentageValue);
+			updateProgress(((int) percentageValue));
 		}
 		return puzzlePieces;
 	}
@@ -215,7 +214,7 @@ public class PuzzleGeneratorService {
 			if (path != null) {
 				pathsFromShapes.add(path);
 			}
-			if (puzzleGeneratorModel.isAbortGeneration()) {
+			if (puzzleGeneratorProgressStructure.isAbortGeneration()) {
 				return null;
 			}
 		}
@@ -250,7 +249,7 @@ public class PuzzleGeneratorService {
 				Point pixelPoint = new Point(-1, -1);
 				pixelPoint = getPointByCoordinates(coverage, coordinate.x, coordinate.y);
 				path.lineTo(pixelPoint.x, pixelPoint.y);
-				if (puzzleGeneratorModel.isAbortGeneration()) {
+				if (puzzleGeneratorProgressStructure.isAbortGeneration()) {
 					return null;
 				}
 			}
@@ -388,6 +387,10 @@ public class PuzzleGeneratorService {
 			throw new ServiceException("Could not crop image.");
 		}
 		return null;
+	}
+
+	private void updateProgress(int percentage) {
+		puzzleGeneratorProgressStructure.setPercentageGenerated(percentage);
 	}
 
 }

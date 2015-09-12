@@ -6,10 +6,10 @@ import java.util.List;
 
 import com.flurnamenpuzzle.generator.Observable;
 import com.flurnamenpuzzle.generator.Observer;
-import com.flurnamenpuzzle.generator.PuzzleGenerationProgressStructure;
+import com.flurnamenpuzzle.generator.PuzzleGeneratorProgressStructure;
 import com.flurnamenpuzzle.generator.Steps;
 
-public class PuzzleGeneratorModel implements Observable, PuzzleGenerationProgressStructure {
+public class PuzzleGeneratorModel implements Observable, PuzzleGeneratorProgressStructure {
 	private List<Observer> observers;
 
 	private String notification;

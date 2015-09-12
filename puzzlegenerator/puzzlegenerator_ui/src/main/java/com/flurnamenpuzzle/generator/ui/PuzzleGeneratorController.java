@@ -41,7 +41,7 @@ public class PuzzleGeneratorController {
 	public PuzzleGeneratorController(PuzzleGeneratorModel puzzleGeneratorModel) {
 		puzzleGeneratorView = new PuzzleGeneratorView();
 		this.puzzleGeneratorModel = puzzleGeneratorModel;
-		puzzleGeneratorModel.setCurrentStep(Steps.STEP_3);
+		puzzleGeneratorModel.setCurrentStep(Steps.STEP_1);
 		shapeService = new ShapeService();
 		puzzleGeneratorService = new PuzzleGeneratorService(puzzleGeneratorModel);
 	}
