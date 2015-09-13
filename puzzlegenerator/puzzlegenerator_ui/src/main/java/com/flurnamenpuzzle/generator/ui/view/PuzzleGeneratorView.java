@@ -10,6 +10,7 @@ import java.util.Map.Entry;
 import java.util.Set;
 
 import javax.swing.ImageIcon;
+import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -113,7 +114,7 @@ public class PuzzleGeneratorView extends JFrame implements Observer {
 
 	@Override
 	public void update(Observable observable) {
-		PuzzleGeneratorModel model = (PuzzleGeneratorModel) observable;
+		PuzzleGeneratorModel model = (PuzzleGeneratorModel) observable;		
 		Steps currentStep = model.getCurrentStep();
 		String currentStepId = currentStep.getId();
 		String imagePath = currentStep.getImagePath();

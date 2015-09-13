@@ -11,6 +11,7 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.border.EmptyBorder;
+import javax.swing.filechooser.FileNameExtensionFilter;
 
 import net.miginfocom.swing.MigLayout;
 
@@ -24,7 +25,8 @@ public class FieldNameMapSelectionCard extends JPanel implements Observer {
 	private static final long serialVersionUID = 1L;
 
 	private PuzzleGeneratorController controller;
-	private JFileChooser fileChooser;
+	private JFileChooser shapeFileChooser;
+	private JFileChooser tifFileChooser;
 
 	private JLabel stateDropdownLabel;
 	private JLabel chooseFieldNameLabel;
@@ -76,7 +78,14 @@ public class FieldNameMapSelectionCard extends JPanel implements Observer {
 		setSize(new Dimension(600, 600));
 		this.setBackground(PuzzleGeneratorConfig.BACKGROUND_COLOR);
 
-		fileChooser = new JFileChooser();
+		shapeFileChooser = new JFileChooser();
+		FileNameExtensionFilter shapeFileFilter = new FileNameExtensionFilter("Shape-Datei", "shp", "shx", "dbf");
+		shapeFileChooser.setFileFilter(shapeFileFilter);
+		shapeFileChooser.setAcceptAllFileFilterUsed(false);
+		tifFileChooser = new JFileChooser();
+		FileNameExtensionFilter tifFileFilter = new FileNameExtensionFilter("TIFF-Datei", "tif", "tiff");
+		tifFileChooser.setFileFilter(tifFileFilter);
+		tifFileChooser.setAcceptAllFileFilterUsed(false);
 		mapPath = new JTextField();
 		mapPath.setFont(PuzzleGeneratorConfig.FONT_NORMAL);
 		fieldNamePath = new JTextField();
@@ -114,16 +123,16 @@ public class FieldNameMapSelectionCard extends JPanel implements Observer {
 		chooseFieldNameButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				fileChooser.showOpenDialog(null);
-				fieldNamePath.setText(fileChooser.getSelectedFile().getPath());
+				shapeFileChooser.showOpenDialog(null);
+				fieldNamePath.setText(shapeFileChooser.getSelectedFile().getPath());
 			}
 		});
 
 		chooseMapButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				fileChooser.showOpenDialog(null);
-				mapPath.setText(fileChooser.getSelectedFile().getPath());
+				tifFileChooser.showOpenDialog(null);
+				mapPath.setText(tifFileChooser.getSelectedFile().getPath());
 			}
 		});
 	}

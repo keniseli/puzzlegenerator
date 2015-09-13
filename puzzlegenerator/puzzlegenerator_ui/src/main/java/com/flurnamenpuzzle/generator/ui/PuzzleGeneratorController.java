@@ -15,6 +15,7 @@ import com.flurnamenpuzzle.generator.Steps;
 import com.flurnamenpuzzle.generator.domain.Puzzle;
 import com.flurnamenpuzzle.generator.domain.PuzzleGeneratorModel;
 import com.flurnamenpuzzle.generator.service.PuzzleGeneratorService;
+import com.flurnamenpuzzle.generator.service.ServiceException;
 import com.flurnamenpuzzle.generator.service.ShapeService;
 import com.flurnamenpuzzle.generator.ui.view.ConfirmCardGeneration;
 import com.flurnamenpuzzle.generator.ui.view.FieldNameMapSelectionCard;
@@ -78,8 +79,16 @@ public class PuzzleGeneratorController {
 	}
 
 	public void saveStateFilePath(String stateFilePath) {
-		puzzleGeneratorModel.setStateFilePath(stateFilePath);
-		File stateFile = new File(stateFilePath);
+		File stateFile = null;
+		try {
+			stateFile = shapeService.getMainShapeFile(stateFilePath);
+		} catch (ServiceException e) {
+			puzzleGeneratorModel
+					.setNotification("Es wurden nicht alle drei benötigten Shape-Dateien gefunden. "
+							+ "Stellen Sie sicher, dass sich alle drei Shape-Dateien mit den Dateiformaten \".shp\", \".shx\" und \".dbf\" im selben Verzeichnis befinden.");
+			return;
+		}
+		puzzleGeneratorModel.setStateFilePath(stateFile.getAbsolutePath());
 		List<String> namesOfShapesInFile = shapeService.getNamesOfShapeFile(stateFile);
 		int numberOfStates = namesOfShapesInFile.size();
 		String[] states = new String[numberOfStates];
@@ -90,10 +99,20 @@ public class PuzzleGeneratorController {
 
 	public void saveFieldNameFilePathAndCardMaterialFilePath(String fieldNameFilePath, String mapFilePath,
 			String stateName) {
-		puzzleGeneratorModel.setFieldNameFilePath(fieldNameFilePath);
+		try {
+			File fieldNameFile = shapeService.getMainShapeFile(fieldNameFilePath);
+			puzzleGeneratorModel.setFieldNameFilePath(fieldNameFile.getAbsolutePath());
+		} catch (ServiceException e) {
+			puzzleGeneratorModel
+					.setNotification("Es wurden nicht alle drei benötigten Shape-Dateien gefunden. "
+							+ "Stellen Sie sicher, dass sich alle drei Shape-Dateien mit den Dateiformaten \".shp\", \".shx\" und \".dbf\" im selben Verzeichnis befinden.");
+			return;
+		}
+		
 		puzzleGeneratorModel.setMapFilePath(mapFilePath);
 		puzzleGeneratorModel.setStateName(stateName);
 		puzzleGeneratorModel.setCurrentStep(Steps.STEP_3);
+		
 	}
 
 	public void confirmGeneration() {

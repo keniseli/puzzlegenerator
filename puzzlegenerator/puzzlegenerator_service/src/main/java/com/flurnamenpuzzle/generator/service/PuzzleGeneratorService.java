@@ -203,7 +203,7 @@ public class PuzzleGeneratorService {
 			double percentageValue = ((double) i / numberOfShapes) * 100;
 			updateProgress(((int) percentageValue));
 			if (puzzlePiece != null) {
-				xmlService.updatePiece(i, null, puzzlePiece.getAbsolutePath(), "", "", "", "");
+				xmlService.updatePiece(i, null, puzzlePiece.getName(), "", "", "", "");
 			}
 		}
 		return puzzlePieces;
