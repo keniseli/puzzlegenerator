@@ -2,7 +2,6 @@ package com.flurnamenpuzzle.generator.ui.view;
 
 import java.awt.BorderLayout;
 import java.awt.CardLayout;
-import java.awt.Color;
 import java.awt.Container;
 import java.awt.Dimension;
 import java.util.Map;
@@ -10,11 +9,9 @@ import java.util.Map.Entry;
 import java.util.Set;
 
 import javax.swing.ImageIcon;
-import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
-import javax.swing.border.EmptyBorder;
 
 import com.flurnamenpuzzle.generator.Observable;
 import com.flurnamenpuzzle.generator.Observer;
