@@ -26,5 +26,9 @@ public final class PuzzleGeneratorConfig {
 	public static final String STEPS_4_IMAGE = "/Step4.png";
 	public static final String STEPS_5_IMAGE = "/Step5.png";
 	
+	public static final String SUCCESS_IMAGE = "/success.png";
+	public static final String FAIL_IMAGE = "/failed.png";
+
+	
 	public static final Color BACKGROUND_COLOR = Color.WHITE;
 }

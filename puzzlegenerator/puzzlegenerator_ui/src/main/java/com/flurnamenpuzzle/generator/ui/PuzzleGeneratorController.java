@@ -13,6 +13,7 @@ import com.flurnamenpuzzle.generator.ui.view.ConfirmCardGeneration;
 import com.flurnamenpuzzle.generator.ui.view.FieldNameMapSelectionCard;
 import com.flurnamenpuzzle.generator.ui.view.ProgressCard;
 import com.flurnamenpuzzle.generator.ui.view.PuzzleGeneratorView;
+import com.flurnamenpuzzle.generator.ui.view.ResultCard;
 import com.flurnamenpuzzle.generator.ui.view.TargetPathSelectionCard;
 import com.flurnamenpuzzle.generator.ui.view.StateSelectionCard;
 
@@ -60,8 +61,12 @@ public class PuzzleGeneratorController {
 		String idOfStep5 = Steps.STEP_5.getId();
 		TargetPathSelectionCard targetSelectionCard = new TargetPathSelectionCard(this);
 		cardMap.put(idOfStep5, targetSelectionCard);
+		String idOfStep6 = Steps.STEP_6.getId();
+		ResultCard resultCard = new ResultCard(this);
+		cardMap.put(idOfStep6, resultCard);
 		puzzleGeneratorModel.addObserver(targetSelectionCard);
 		puzzleGeneratorModel.addObserver(progressCard);
+		puzzleGeneratorModel.addObserver(resultCard);
 		puzzleGeneratorModel.addObserver(puzzleGeneratorView);
 		puzzleGeneratorView.createAndShow(this, cardMap);
 		puzzleGeneratorModel.notifyObservers();
@@ -108,6 +113,10 @@ public class PuzzleGeneratorController {
 		Allenfalls erstellte Files löschen (im targetPath)
 		*/
 		puzzleGeneratorModel.setCurrentStep(Steps.STEP_1);
+	}
+	
+	public void finish(){
+		puzzleGeneratorView.dispose();
 	}
 
 }

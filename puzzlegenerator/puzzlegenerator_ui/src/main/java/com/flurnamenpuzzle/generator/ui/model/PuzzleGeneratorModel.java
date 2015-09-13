@@ -16,6 +16,7 @@ public class PuzzleGeneratorModel implements Observable {
 	private String fieldNameFilePath;
 	private String mapFilePath;
 	private String stateFilePath;
+	private boolean generationSuccess = true;
 
 	private String targetFolderPath;
 	private int percentageGenerated;
@@ -119,5 +120,13 @@ public class PuzzleGeneratorModel implements Observable {
 	
 	public String getStatusMessage() {
 		return statusMessage;
+	}
+
+	public boolean getGenerationSuccess() {
+		return generationSuccess;
+	}
+
+	public void setGenerationSuccess(boolean generationSuccess) {
+		this.generationSuccess = generationSuccess;
 	}
 }
