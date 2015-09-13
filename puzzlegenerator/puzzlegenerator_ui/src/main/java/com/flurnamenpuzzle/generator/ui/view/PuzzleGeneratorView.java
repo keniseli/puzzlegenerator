@@ -111,7 +111,7 @@ public class PuzzleGeneratorView extends JFrame implements Observer {
 
 	@Override
 	public void update(Observable observable) {
-		PuzzleGeneratorModel model = (PuzzleGeneratorModel) observable;		
+		PuzzleGeneratorModel model = (PuzzleGeneratorModel) observable;
 		Steps currentStep = model.getCurrentStep();
 		String currentStepId = currentStep.getId();
 		String imagePath = currentStep.getImagePath();
