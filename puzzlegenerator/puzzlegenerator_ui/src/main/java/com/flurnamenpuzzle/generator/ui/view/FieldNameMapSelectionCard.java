@@ -14,11 +14,11 @@ import javax.swing.border.EmptyBorder;
 
 import net.miginfocom.swing.MigLayout;
 
-import com.flurnamenpuzzle.generator.ui.Observable;
-import com.flurnamenpuzzle.generator.ui.Observer;
-import com.flurnamenpuzzle.generator.ui.PuzzleGeneratorConfig;
+import com.flurnamenpuzzle.generator.Observable;
+import com.flurnamenpuzzle.generator.Observer;
+import com.flurnamenpuzzle.generator.PuzzleGeneratorConfig;
+import com.flurnamenpuzzle.generator.domain.PuzzleGeneratorModel;
 import com.flurnamenpuzzle.generator.ui.PuzzleGeneratorController;
-import com.flurnamenpuzzle.generator.ui.model.PuzzleGeneratorModel;
 
 public class FieldNameMapSelectionCard extends JPanel implements Observer {
 	private static final long serialVersionUID = 1L;
@@ -106,7 +106,8 @@ public class FieldNameMapSelectionCard extends JPanel implements Observer {
 			public void actionPerformed(ActionEvent e) {
 				String fieldNamePathText = fieldNamePath.getText();
 				String mapPathText = mapPath.getText();
-				controller.saveFieldNameFilePathAndCardMaterialFilePath(fieldNamePathText, mapPathText);
+				String stateName = stateDropdown.getSelectedItem().toString();
+				controller.saveFieldNameFilePathAndCardMaterialFilePath(fieldNamePathText, mapPathText, stateName);
 			}
 		});
 

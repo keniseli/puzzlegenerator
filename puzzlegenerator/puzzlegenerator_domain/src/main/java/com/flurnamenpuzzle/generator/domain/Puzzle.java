@@ -12,6 +12,7 @@ import java.util.List;
 public class Puzzle {
 	private String stateName;
 	private List<File> images;
+	private File xmlFile;
 
 	public String getStateName() {
 		return stateName;
@@ -27,6 +28,14 @@ public class Puzzle {
 
 	public void setImages(List<File> images) {
 		this.images = images;
+	}
+
+	public File getXmlFile() {
+		return xmlFile;
+	}
+
+	public void setXmlFile(File xmlFile) {
+		this.xmlFile = xmlFile;
 	}
 
 }

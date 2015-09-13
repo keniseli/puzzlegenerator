@@ -14,9 +14,9 @@ import javax.swing.border.EmptyBorder;
 
 import net.miginfocom.swing.MigLayout;
 
-import com.flurnamenpuzzle.generator.ui.Observable;
-import com.flurnamenpuzzle.generator.ui.Observer;
-import com.flurnamenpuzzle.generator.ui.PuzzleGeneratorConfig;
+import com.flurnamenpuzzle.generator.Observable;
+import com.flurnamenpuzzle.generator.Observer;
+import com.flurnamenpuzzle.generator.PuzzleGeneratorConfig;
 import com.flurnamenpuzzle.generator.ui.PuzzleGeneratorController;
 
 /**

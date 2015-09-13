@@ -13,8 +13,10 @@ import mockit.integration.junit4.JMockit;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
+import com.flurnamenpuzzle.generator.Observer;
+import com.flurnamenpuzzle.generator.Steps;
+import com.flurnamenpuzzle.generator.domain.PuzzleGeneratorModel;
 import com.flurnamenpuzzle.generator.service.ShapeService;
-import com.flurnamenpuzzle.generator.ui.model.PuzzleGeneratorModel;
 import com.flurnamenpuzzle.generator.ui.view.ConfirmCardGeneration;
 import com.flurnamenpuzzle.generator.ui.view.FieldNameMapSelectionCard;
 import com.flurnamenpuzzle.generator.ui.view.PuzzleGeneratorView;
@@ -44,7 +46,7 @@ public class PuzzleGeneratorControllerTest {
 				times = 1;
 
 				puzzleGeneratorModelMock.addObserver((Observer) any);
-				times = 4;
+				times = 6;
 			}
 		};
 	}

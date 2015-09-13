@@ -15,12 +15,12 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 
-import com.flurnamenpuzzle.generator.ui.Observable;
-import com.flurnamenpuzzle.generator.ui.Observer;
-import com.flurnamenpuzzle.generator.ui.PuzzleGeneratorConfig;
+import com.flurnamenpuzzle.generator.Observable;
+import com.flurnamenpuzzle.generator.Observer;
+import com.flurnamenpuzzle.generator.PuzzleGeneratorConfig;
+import com.flurnamenpuzzle.generator.Steps;
+import com.flurnamenpuzzle.generator.domain.PuzzleGeneratorModel;
 import com.flurnamenpuzzle.generator.ui.PuzzleGeneratorController;
-import com.flurnamenpuzzle.generator.ui.Steps;
-import com.flurnamenpuzzle.generator.ui.model.PuzzleGeneratorModel;
 
 public class PuzzleGeneratorView extends JFrame implements Observer {
 	private static final long serialVersionUID = 1L;
