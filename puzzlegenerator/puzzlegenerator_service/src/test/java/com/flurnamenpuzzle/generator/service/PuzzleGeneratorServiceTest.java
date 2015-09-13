@@ -38,9 +38,9 @@ public class PuzzleGeneratorServiceTest {
 	@After
 	public void breakDown() {
 		for (File file : temporaryDirectory.listFiles()) {
-			file.deleteOnExit();
+			file.delete();
 		}
-		temporaryDirectory.deleteOnExit();
+		temporaryDirectory.delete();
 	}
 	
 	@Test

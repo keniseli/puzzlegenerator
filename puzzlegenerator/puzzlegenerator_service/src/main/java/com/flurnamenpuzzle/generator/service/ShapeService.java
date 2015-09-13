@@ -28,7 +28,7 @@ public class ShapeService {
 	 * them.
 	 */
 	private static final String MAP_SHEET_NAME_ATTRIBUTE_KEY = "mapSheetNa";
-	
+
 	/**
 	 * The team specified possible attribute keys of a shapeFile which may
 	 * represent the name of the shapes (features) inside. This key is one of
@@ -134,6 +134,15 @@ public class ShapeService {
 		}
 		featuresIterator.close();
 		return feature;
+	}
+
+	/**
+	 * Determines the name of the given {@link SimpleFeature} and returns it.
+	 */
+	public String getNameOfFeature(SimpleFeature feature) {
+		String nameAttributeKey = determineNameAttributeKeyOfFeature(feature);
+		String name = getAttributeValueOfFeature(feature, nameAttributeKey);
+		return name;
 	}
 
 	/**

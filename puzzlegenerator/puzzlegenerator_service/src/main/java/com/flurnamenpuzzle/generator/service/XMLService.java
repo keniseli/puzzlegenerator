@@ -1,9 +1,12 @@
 package com.flurnamenpuzzle.generator.service;
 
+import java.io.File;
+
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.Transformer;
+import javax.xml.transform.TransformerException;
 import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
@@ -11,7 +14,6 @@ import javax.xml.transform.stream.StreamResult;
 import org.w3c.dom.Attr;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
-import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.NodeList;
 
 /**
@@ -19,29 +21,24 @@ import org.w3c.dom.NodeList;
  */
 public class XMLService {
 
-	private Document _document;
-	private Element _rootElement;
-	
-	
-	public XMLService(){
-		
-		// init base document, root element
+	private Document document;
+	private Element rootElement;
+
+	public XMLService() {
 		try {
-			
+
 			DocumentBuilderFactory docFactory = DocumentBuilderFactory.newInstance();
 			DocumentBuilder docBuilder = docFactory.newDocumentBuilder();
-			
-			// root element
-			_document = docBuilder.newDocument();
-			_rootElement = _document.createElement("puzzle");
-			_document.appendChild(_rootElement);
-			
+
+			document = docBuilder.newDocument();
+			rootElement = document.createElement("puzzle");
+			document.appendChild(rootElement);
+
 		} catch (ParserConfigurationException e) {
 			e.printStackTrace();
 		}
-		
 	}
-	
+
 	/**
 	 * This method creates a new piece/node within the xml document
 	 * 
@@ -52,57 +49,57 @@ public class XMLService {
 	 * @param image
 	 *            The image representing the shape
 	 * @param xpos
-	 *            The x-axis position   
+	 *            The x-axis position
 	 * @param ypos
-	 *            The y-axis position 
+	 *            The y-axis position
 	 * @param text
 	 *            The custom text for this shape
 	 * @param bild
-	 *            The custom image/photo for this shape 
+	 *            The custom image/photo for this shape
 	 */
-	public void addPiece(Integer id, String name, String image, String xpos, String ypos, String text, String bild){
-			
+	public void addPiece(Integer id, String name, String image, String xpos, String ypos, String text, String bild) {
+
 		// staff elements
-		Element piece = _document.createElement("teil");
-		_rootElement.appendChild(piece);
-			
+		Element piece = document.createElement("teil");
+		rootElement.appendChild(piece);
+
 		// set attribute to staff element
-		Attr attr = _document.createAttribute("id");
+		Attr attr = document.createAttribute("id");
 		attr.setValue(id.toString());
 		piece.setAttributeNode(attr);
-			
+
 		// name element
-		Element nameElement = _document.createElement("name");
-		nameElement.appendChild(_document.createTextNode(name));
+		Element nameElement = document.createElement("name");
+		nameElement.appendChild(document.createTextNode(name));
 		piece.appendChild(nameElement);
-						
+
 		// image element
-		Element imageElement = _document.createElement("img");
-		imageElement.appendChild(_document.createTextNode(image));
+		Element imageElement = document.createElement("img");
+		imageElement.appendChild(document.createTextNode(image));
 		piece.appendChild(imageElement);
-						
+
 		// xpos element
-		Element xposElement = _document.createElement("xpos");
-		xposElement.appendChild(_document.createTextNode(xpos));
+		Element xposElement = document.createElement("xpos");
+		xposElement.appendChild(document.createTextNode(xpos));
 		piece.appendChild(xposElement);
-						
+
 		// ypos element
-		Element yposElement = _document.createElement("ypos");
-		yposElement.appendChild(_document.createTextNode(ypos));
+		Element yposElement = document.createElement("ypos");
+		yposElement.appendChild(document.createTextNode(ypos));
 		piece.appendChild(yposElement);
-						
+
 		// text element
-		Element textElement = _document.createElement("text");
-		textElement.appendChild(_document.createTextNode(text));
+		Element textElement = document.createElement("text");
+		textElement.appendChild(document.createTextNode(text));
 		piece.appendChild(textElement);
-									
+
 		// bild element
-		Element bildElement = _document.createElement("bild");
-		bildElement.appendChild(_document.createTextNode(bild));
-		piece.appendChild(bildElement);		
-			
-	}	
-	
+		Element bildElement = document.createElement("bild");
+		bildElement.appendChild(document.createTextNode(bild));
+		piece.appendChild(bildElement);
+
+	}
+
 	/**
 	 * This method updates a existing piece/node within the xml document
 	 * 
@@ -113,79 +110,76 @@ public class XMLService {
 	 * @param image
 	 *            The image representing the shape
 	 * @param xpos
-	 *            The x-axis position   
+	 *            The x-axis position
 	 * @param ypos
-	 *            The y-axis position 
+	 *            The y-axis position
 	 * @param text
 	 *            The custom text for this shape
 	 * @param bild
-	 *            The custom image/photo for this shape 
+	 *            The custom image/photo for this shape
 	 */
-	public void updatePiece(Integer id, String name, String image, String xpos, String ypos, String text, String bild){
-		
-		NodeList pieces = _rootElement.getChildNodes(); // all pieces
-				
-		for(int i = 0; i < pieces.getLength(); i++){
-			
+	public void updatePiece(Integer id, String name, String image, String xpos, String ypos, String text, String bild) {
+
+		NodeList pieces = rootElement.getChildNodes(); // all pieces
+
+		for (int i = 0; i < pieces.getLength(); i++) {
+
 			// get element object
-			Element el = (Element)pieces.item(i);
+			Element el = (Element) pieces.item(i);
 			int elementID = Integer.parseInt(el.getAttribute("id"));
-			
-			if(elementID == id) // found element!
+
+			if (elementID == id) // found element!
 			{
 				// update name
-				if(name != null)
+				if (name != null)
 					el.getChildNodes().item(0).setTextContent(name);
-				
+
 				// update image
-				if(image != null)
+				if (image != null)
 					el.getChildNodes().item(1).setTextContent(image);
-				
+
 				// update xpos
-				if(xpos != null)
+				if (xpos != null)
 					el.getChildNodes().item(2).setTextContent(xpos);
-				
+
 				// update ypos
-				if(ypos != null)
+				if (ypos != null)
 					el.getChildNodes().item(3).setTextContent(ypos);
-				
+
 				// update text
-				if(text != null)
+				if (text != null)
 					el.getChildNodes().item(4).setTextContent(text);
-				
+
 				// update bild
-				if(bild != null)
+				if (bild != null)
 					el.getChildNodes().item(5).setTextContent(bild);
-				
+
 			}
-			
+
 		}
 	}
-	
+
 	/**
 	 * This method saves the xml to the given path
 	 * 
 	 * @param path
 	 *            The path where to save the xml data
 	 */
-	public void saveXML(String path){
-		
+	public void saveXML(String path) {
+
 		try {
-			
 			// write the content into xml file
 			TransformerFactory transformerFactory = TransformerFactory.newInstance();
 			Transformer transformer = transformerFactory.newTransformer();
-			DOMSource source = new DOMSource(_document);
+			DOMSource source = new DOMSource(document);
 			StreamResult result = new StreamResult(new File(path));
-			
+
 			transformer.transform(source, result);
-			
-		} catch (ParserConfigurationException pce) {
-			pce.printStackTrace();
+
 		} catch (TransformerException tfe) {
 			tfe.printStackTrace();
 		}
-		
+
 	}
-	
+
 }

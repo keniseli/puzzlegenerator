@@ -42,9 +42,12 @@ public class PuzzleGeneratorService {
 	private static final int POLYGON_SHAPE_FEATURE_ATTRIBUTE_INDEX = 0;
 
 	private final PuzzleGeneratorProgressStructure puzzleGeneratorProgressStructure;
+	private final XMLService xmlService;
+	ShapeService shapeService;
 
 	public PuzzleGeneratorService(PuzzleGeneratorProgressStructure puzzleGeneratorProgressStructure) {
 		this.puzzleGeneratorProgressStructure = puzzleGeneratorProgressStructure;
+		xmlService = new XMLService();
 	}
 
 	/**
@@ -90,6 +93,10 @@ public class PuzzleGeneratorService {
 			return null;
 		}
 		puzzleGeneratorProgressStructure.setPercentageGenerated(100);
+		String pathToXmlFile = String.format("%s%s%s", destinationFilePath, File.separatorChar, "puzzle.xml");
+		File temporaryXmlFile = new File(pathToXmlFile);
+		xmlService.saveXML(pathToXmlFile);
+		puzzle.setXmlFile(temporaryXmlFile);
 		return puzzle;
 	}
 
@@ -109,7 +116,7 @@ public class PuzzleGeneratorService {
 	private List<SimpleFeature> getFeaturesOfFieldsInState(String stateShapeFilePath, String stateName,
 			String fieldShapeFilePath) {
 		// get feature of the state
-		ShapeService shapeService = new ShapeService();
+		shapeService = new ShapeService();
 		SimpleFeature featureOfState = shapeService.getFeatureOfShapeFileByName(stateShapeFilePath, stateName);
 		if (puzzleGeneratorProgressStructure.isAbortGeneration()) {
 			return null;
@@ -173,6 +180,10 @@ public class PuzzleGeneratorService {
 		PlanarImage renderedMapImage = (PlanarImage) mapCoverage.getRenderedImage();
 		BufferedImage mapImage = renderedMapImage.getAsBufferedImage();
 
+		for (int i = 0; i < featuresInState.size(); i++) {
+			xmlService.addPiece(i, shapeService.getNameOfFeature(featuresInState.get(i)), "", "", "", "", "");
+		}
+
 		List<Path2D> piecesShapes = getPathsFromShapes(featuresInState, mapCoverage);
 
 		int numberOfShapes = piecesShapes.size();
@@ -191,6 +202,9 @@ public class PuzzleGeneratorService {
 			}
 			double percentageValue = ((double) i / numberOfShapes) * 100;
 			updateProgress(((int) percentageValue));
+			if (puzzlePiece != null) {
+				xmlService.updatePiece(i, null, puzzlePiece.getAbsolutePath(), "", "", "", "");
+			}
 		}
 		return puzzlePieces;
 	}

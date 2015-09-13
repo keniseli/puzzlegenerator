@@ -15,12 +15,11 @@ public class Main {
 	public static void main(String[] args) {
 		setSystemLookAndFeel();
 		PuzzleGeneratorModel puzzleGeneratorModel = new PuzzleGeneratorModel();
-		PuzzleGeneratorController puzzleGeneratorController = new PuzzleGeneratorController(
-				puzzleGeneratorModel);
+		PuzzleGeneratorController puzzleGeneratorController = new PuzzleGeneratorController(puzzleGeneratorModel);
 		SwingUtilities.invokeLater(puzzleGeneratorController::initializeView);
 	}
-	
-	public static void setSystemLookAndFeel(){
+
+	public static void setSystemLookAndFeel() {
 		try {
 			String LookAndFeel = UIManager.getSystemLookAndFeelClassName();
 			UIManager.setLookAndFeel(LookAndFeel);

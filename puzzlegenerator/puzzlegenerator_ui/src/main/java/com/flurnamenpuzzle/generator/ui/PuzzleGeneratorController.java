@@ -128,13 +128,19 @@ public class PuzzleGeneratorController {
 	public void setTargetAndSavePuzzle(String targetPath) {
 		puzzleGeneratorModel.setTargetFolderPath(targetPath);
 		File targetDirectory = new File(targetPath);
-		File temporaryDirectory = puzzleGeneratorModel.getTemporaryDirectory();
-		for (File puzzleFile : temporaryDirectory.listFiles()) {
-			String simpleFileName = puzzleFile.getName();
-			String newPathToFile = String.format("%s%s%s", targetDirectory, File.separatorChar, simpleFileName);
-			File newFile = new File(newPathToFile);
-			puzzleFile.renameTo(newFile);
+		Puzzle puzzle = puzzleGeneratorModel.getPuzzle();
+		for (File puzzleFile : puzzle.getImages()) {
+			moveFile(puzzleFile, targetDirectory);
 		}
+		File xmlFile = puzzle.getXmlFile();
+		moveFile(xmlFile, targetDirectory);
+	}
+
+	private void moveFile(File file, File targetDestination) {
+		String simpleFileName = file.getName();
+		String newPathToFile = String.format("%s%s%s", targetDestination, File.separatorChar, simpleFileName);
+		File newFile = new File(newPathToFile);
+		file.renameTo(newFile);
 	}
 
 	private File createTemporaryDirectory() {
