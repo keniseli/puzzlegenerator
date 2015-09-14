@@ -162,7 +162,7 @@ public class ShapeService {
 
 	/**
 	 * Checks if all three required Shape files are available (".shp", ".shx",
-	 * ".dbf") and returns the ".shp" file. If at least of the three files is
+	 * ".dbf") and returns the ".shp" file. If at least one of the three files is
 	 * missing a {@link ServiceException} will be thrown.
 	 * 
 	 * @param filePath
