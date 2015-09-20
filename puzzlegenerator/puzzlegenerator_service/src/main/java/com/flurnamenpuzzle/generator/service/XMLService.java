@@ -175,7 +175,6 @@ public class XMLService {
 			StreamResult result = new StreamResult(new File(path));
 
 			transformer.transform(source, result);
-
 		} catch (TransformerException tfe) {
 			tfe.printStackTrace();
 		}

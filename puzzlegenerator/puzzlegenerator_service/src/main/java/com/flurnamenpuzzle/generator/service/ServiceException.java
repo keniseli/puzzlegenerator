@@ -4,6 +4,7 @@ package com.flurnamenpuzzle.generator.service;
  * This class represents an error that occurred in a service instance.
  */
 public class ServiceException extends RuntimeException {
+	private static final long serialVersionUID = 1L;
 
 	/**
 	 * Creates a new instance.

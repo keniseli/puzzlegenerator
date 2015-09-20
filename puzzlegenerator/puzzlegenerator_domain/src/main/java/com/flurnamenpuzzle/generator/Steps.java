@@ -1,6 +1,5 @@
 package com.flurnamenpuzzle.generator;
 
-
 /**
  * This class holds all steps that can occur in the application. Every step
  * provides an id so that it can be identified and differentiated.
@@ -11,7 +10,8 @@ public enum Steps {
 			"fieldNameMapSelection", PuzzleGeneratorConfig.STEPS_2_IMAGE), STEP_3(
 			"verificationAndDecision", PuzzleGeneratorConfig.STEPS_3_IMAGE), STEP_4(
 			"progressPanel", PuzzleGeneratorConfig.STEPS_4_IMAGE), STEP_5(
-			"targetPathPanel", PuzzleGeneratorConfig.STEPS_5_IMAGE);
+			"targetPathPanel", PuzzleGeneratorConfig.STEPS_5_IMAGE), STEP_6(
+			"resultPanel", PuzzleGeneratorConfig.STEPS_5_IMAGE);
 
 	private String id;
 
