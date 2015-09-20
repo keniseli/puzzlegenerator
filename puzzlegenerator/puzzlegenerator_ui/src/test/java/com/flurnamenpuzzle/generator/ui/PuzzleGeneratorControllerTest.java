@@ -47,6 +47,7 @@ public class PuzzleGeneratorControllerTest {
 
 				puzzleGeneratorModelMock.addObserver((Observer) any);
 				times = 7;
+
 			}
 		};
 	}
