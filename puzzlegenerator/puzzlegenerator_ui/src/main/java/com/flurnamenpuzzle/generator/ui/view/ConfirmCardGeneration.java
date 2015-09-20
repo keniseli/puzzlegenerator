@@ -11,11 +11,11 @@ import javax.swing.border.EmptyBorder;
 
 import net.miginfocom.swing.MigLayout;
 
-import com.flurnamenpuzzle.generator.ui.Observable;
-import com.flurnamenpuzzle.generator.ui.Observer;
-import com.flurnamenpuzzle.generator.ui.PuzzleGeneratorConfig;
+import com.flurnamenpuzzle.generator.Observable;
+import com.flurnamenpuzzle.generator.Observer;
+import com.flurnamenpuzzle.generator.PuzzleGeneratorConfig;
+import com.flurnamenpuzzle.generator.domain.PuzzleGeneratorModel;
 import com.flurnamenpuzzle.generator.ui.PuzzleGeneratorController;
-import com.flurnamenpuzzle.generator.ui.model.PuzzleGeneratorModel;
 
 public class ConfirmCardGeneration extends JPanel implements Observer{
 	private static final long serialVersionUID = 1L;
@@ -108,7 +108,7 @@ public class ConfirmCardGeneration extends JPanel implements Observer{
 		generateButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				controller.confirmCardGeneration();
+				controller.confirmGeneration();
 			}
 		});
 	}
@@ -116,7 +116,7 @@ public class ConfirmCardGeneration extends JPanel implements Observer{
 	@Override
 	public void update(Observable observable) {
 		PuzzleGeneratorModel model = (PuzzleGeneratorModel) observable;
-		stateName = model.getStateFilePath();
+		stateName = model.getStateName();
 		stateNameLabel.setText(stateName);
 		stateShapefilePath = model.getStateFilePath();
 		stateShapefilePathLabel.setText(stateShapefilePath);

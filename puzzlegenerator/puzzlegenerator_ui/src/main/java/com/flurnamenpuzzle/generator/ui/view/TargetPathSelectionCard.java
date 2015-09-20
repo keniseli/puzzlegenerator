@@ -14,9 +14,9 @@ import javax.swing.border.EmptyBorder;
 
 import net.miginfocom.swing.MigLayout;
 
-import com.flurnamenpuzzle.generator.ui.Observable;
-import com.flurnamenpuzzle.generator.ui.Observer;
-import com.flurnamenpuzzle.generator.ui.PuzzleGeneratorConfig;
+import com.flurnamenpuzzle.generator.Observable;
+import com.flurnamenpuzzle.generator.Observer;
+import com.flurnamenpuzzle.generator.PuzzleGeneratorConfig;
 import com.flurnamenpuzzle.generator.ui.PuzzleGeneratorController;
 
 public class TargetPathSelectionCard extends JPanel implements Observer {
@@ -43,8 +43,8 @@ public class TargetPathSelectionCard extends JPanel implements Observer {
 				int returnVal = fileChooser.showOpenDialog(null);
 				// check if user has selected a file
 				if (returnVal == JFileChooser.APPROVE_OPTION) {
-					File selectedFodler = fileChooser.getCurrentDirectory();
-					String pathOfSelectedFolder = selectedFodler.getPath();
+					File selectedFolder = fileChooser.getSelectedFile();
+					String pathOfSelectedFolder = selectedFolder.getPath();
 					pathField.setText(pathOfSelectedFolder);
 				}
 			}

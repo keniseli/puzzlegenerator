@@ -11,12 +11,13 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.border.EmptyBorder;
+import javax.swing.filechooser.FileNameExtensionFilter;
 
 import net.miginfocom.swing.MigLayout;
 
-import com.flurnamenpuzzle.generator.ui.Observable;
-import com.flurnamenpuzzle.generator.ui.Observer;
-import com.flurnamenpuzzle.generator.ui.PuzzleGeneratorConfig;
+import com.flurnamenpuzzle.generator.Observable;
+import com.flurnamenpuzzle.generator.Observer;
+import com.flurnamenpuzzle.generator.PuzzleGeneratorConfig;
 import com.flurnamenpuzzle.generator.ui.PuzzleGeneratorController;
 
 /**
@@ -66,6 +67,9 @@ public class StateSelectionCard extends JPanel implements Observer {
 		this.setBackground(PuzzleGeneratorConfig.BACKGROUND_COLOR);
 
 		this.fileChooser = new JFileChooser();
+		this.fileChooser.setAcceptAllFileFilterUsed(false);
+		FileNameExtensionFilter shapeFileFilter = new FileNameExtensionFilter("Shape-Datei", "shp", "shx", "dbf");
+		this.fileChooser.setFileFilter(shapeFileFilter);
 		this.pathField = new JTextField();
 		this.pathField.setFont(PuzzleGeneratorConfig.FONT_NORMAL);
 		this.stateLabel = new JLabel("Bitte wählen Sie ein Gemeinde-Shape aus");

@@ -3,9 +3,9 @@ package com.flurnamenpuzzle.generator.ui.model;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.flurnamenpuzzle.generator.ui.Observable;
-import com.flurnamenpuzzle.generator.ui.Observer;
-import com.flurnamenpuzzle.generator.ui.Steps;
+import com.flurnamenpuzzle.generator.Observable;
+import com.flurnamenpuzzle.generator.Observer;
+import com.flurnamenpuzzle.generator.Steps;
 
 public class PuzzleGeneratorModel implements Observable {
 	private List<Observer> observers;
