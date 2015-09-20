@@ -43,8 +43,8 @@ public class TargetPathSelectionCard extends JPanel implements Observer {
 				int returnVal = fileChooser.showOpenDialog(null);
 				// check if user has selected a file
 				if (returnVal == JFileChooser.APPROVE_OPTION) {
-					File selectedFodler = fileChooser.getCurrentDirectory();
-					String pathOfSelectedFolder = selectedFodler.getPath();
+					File selectedFolder = fileChooser.getSelectedFile();
+					String pathOfSelectedFolder = selectedFolder.getPath();
 					pathField.setText(pathOfSelectedFolder);
 				}
 			}

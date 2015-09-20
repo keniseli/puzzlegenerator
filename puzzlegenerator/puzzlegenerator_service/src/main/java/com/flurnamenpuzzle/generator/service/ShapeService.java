@@ -37,6 +37,21 @@ public class ShapeService {
 	private static final String NAME_ATTRIBUTE_KEY = "Name";
 
 	/**
+	 * Three shape files are required. One of them must be a ".shp" file.
+	 */
+	private static final String SHAPE_FILE_EXTENSION_SHP = ".shp";
+
+	/**
+	 * Three shape files are required. One of them must be a ".shx" file.
+	 */
+	private static final String SHAPE_FILE_EXTENSION_SHX = ".shx";
+
+	/**
+	 * Three shape files are required. One of them must be a ".dbf" file.
+	 */
+	private static final String SHAPE_FILE_EXTENSION_DBF = ".dbf";
+
+	/**
 	 * Returns a {@link List}<{@link SimpleFeature}> where all SimpleFeatures
 	 * are in the area of the parentFeature.
 	 *
@@ -143,6 +158,43 @@ public class ShapeService {
 		String nameAttributeKey = determineNameAttributeKeyOfFeature(feature);
 		String name = getAttributeValueOfFeature(feature, nameAttributeKey);
 		return name;
+	}
+
+	/**
+	 * Checks if all three required Shape files are available (".shp", ".shx",
+	 * ".dbf") and returns the ".shp" file. If at least one of the three files is
+	 * missing a {@link ServiceException} will be thrown.
+	 * 
+	 * @param filePath
+	 *            Path of one of the three shape files.
+	 * @return the ".shp" file
+	 */
+	public File getMainShapeFile(String filePath) {
+		// remove file extension from file path
+		String filePathWithoutExtension = filePath.substring(0, filePath.lastIndexOf('.'));
+
+		String shpFilePath = filePathWithoutExtension + SHAPE_FILE_EXTENSION_SHP;
+		File shpFile = new File(shpFilePath);
+		if (!shpFile.exists()) {
+			throw new ServiceException(shpFile.getName()
+					+ " does not exist. All three shape files (.shp, .shx, .dbf) are required.");
+		}
+
+		String shxFilePath = filePathWithoutExtension + SHAPE_FILE_EXTENSION_SHX;
+		File shxFile = new File(shxFilePath);
+		if (!shxFile.exists()) {
+			throw new ServiceException(shxFile.getName()
+					+ " does not exist. All three shape files (.shp, .shx, .dbf) are required.");
+		}
+
+		String dbfFilePath = filePathWithoutExtension + SHAPE_FILE_EXTENSION_DBF;
+		File dbfFile = new File(dbfFilePath);
+		if (!dbfFile.exists()) {
+			throw new ServiceException(dbfFile.getName()
+					+ " does not exist. All three shape files (.shp, .shx, .dbf) are required.");
+		}
+
+		return shpFile;
 	}
 
 	/**

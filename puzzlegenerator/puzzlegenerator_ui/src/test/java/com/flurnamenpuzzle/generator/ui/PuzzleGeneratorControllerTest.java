@@ -52,18 +52,25 @@ public class PuzzleGeneratorControllerTest {
 	}
 
 	@Test
-	public void testSaveStateFilePath(@Mocked ShapeService shapeService,
+	public void testSaveStateFilePath(@Mocked ShapeService shapeService, @Injectable File shapeFile, 
 			@Injectable PuzzleGeneratorModel puzzleGeneratorModelMock) {
 		String pathname = "path/to/shape/file.shp";
 		List<String> returnedNames = new ArrayList<>();
 		returnedNames.add("first shape name");
 		returnedNames.add("second shape name");
 		returnedNames.add("third shape name");
-		File shapeFile = new File(pathname);
 		new Expectations() {
 			{
 				shapeService.getNamesOfShapeFile(shapeFile);
 				returns(returnedNames);
+				times = 1;
+				
+				shapeFile.getAbsolutePath();
+				returns(pathname);
+				times = 1;
+				
+				shapeService.getMainShapeFile(pathname);
+				returns(shapeFile);
 				times = 1;
 			}
 			

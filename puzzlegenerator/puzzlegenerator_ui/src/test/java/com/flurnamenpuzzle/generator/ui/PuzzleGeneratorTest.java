@@ -8,12 +8,14 @@ import java.nio.file.attribute.FileAttribute;
 
 import javax.swing.SwingUtilities;
 
+import org.junit.Ignore;
 import org.junit.Test;
 
 import com.flurnamenpuzzle.generator.domain.PuzzleGeneratorModel;
 
 public class PuzzleGeneratorTest {
 
+	@Ignore
 	@Test
 	public void testPuzzleGenerator() throws IOException {
 		PuzzleGeneratorModel puzzleGeneratorModel = new PuzzleGeneratorModel();
