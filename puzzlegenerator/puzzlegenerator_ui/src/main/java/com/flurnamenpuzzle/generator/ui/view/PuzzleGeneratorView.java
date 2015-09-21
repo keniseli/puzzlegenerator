@@ -4,6 +4,7 @@ import java.awt.BorderLayout;
 import java.awt.CardLayout;
 import java.awt.Container;
 import java.awt.Dimension;
+import java.net.URL;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
@@ -115,7 +116,9 @@ public class PuzzleGeneratorView extends JFrame implements Observer {
 		Steps currentStep = model.getCurrentStep();
 		String currentStepId = currentStep.getId();
 		String imagePath = currentStep.getImagePath();
-		this.steps.setIcon(new ImageIcon(this.getClass().getResource(imagePath)));
+		URL imageResource = this.getClass().getResource(imagePath);
+		ImageIcon icon = new ImageIcon(imageResource);
+		this.steps.setIcon(icon);
 		cardLayout.show(cards, currentStepId);
 	}
 
