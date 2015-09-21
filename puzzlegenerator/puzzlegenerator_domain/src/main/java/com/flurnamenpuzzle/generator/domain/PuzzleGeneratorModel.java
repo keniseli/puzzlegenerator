@@ -25,6 +25,7 @@ public class PuzzleGeneratorModel implements Observable, PuzzleGeneratorProgress
 	private Puzzle puzzle;
 	private boolean abortGeneration;
 	private File temporaryDirectory;
+	private boolean generationSuccess;
 
 	public PuzzleGeneratorModel() {
 		observers = new ArrayList<Observer>();
@@ -159,6 +160,14 @@ public class PuzzleGeneratorModel implements Observable, PuzzleGeneratorProgress
 
 	public void setTemporaryDirectory(File temporaryDirectory) {
 		this.temporaryDirectory = temporaryDirectory;
+	}
+
+	public boolean isGenerationSuccess() {
+		return generationSuccess;
+	}
+
+	public void setGenerationSuccess(boolean generationSuccess) {
+		this.generationSuccess = generationSuccess;
 	}
 
 }

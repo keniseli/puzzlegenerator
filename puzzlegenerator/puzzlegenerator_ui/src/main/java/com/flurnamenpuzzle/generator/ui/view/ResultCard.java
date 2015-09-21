@@ -14,9 +14,10 @@ import net.miginfocom.swing.MigLayout;
 
 import com.flurnamenpuzzle.generator.Observable;
 import com.flurnamenpuzzle.generator.Observer;
-import com.flurnamenpuzzle.generator.ui.PuzzleGeneratorConfig;
+import com.flurnamenpuzzle.generator.PuzzleGeneratorConfig;
+import com.flurnamenpuzzle.generator.domain.PuzzleGeneratorModel;
 import com.flurnamenpuzzle.generator.ui.PuzzleGeneratorController;
-import com.flurnamenpuzzle.generator.ui.model.PuzzleGeneratorModel;
+
 
 /**
  * Class for the state selection panel
@@ -89,7 +90,7 @@ public class ResultCard extends JPanel implements Observer {
 	@Override
 	public void update(Observable observable) {
 		PuzzleGeneratorModel model = (PuzzleGeneratorModel) observable;
-		boolean success = model.getGenerationSuccess();
+		boolean success = model.isGenerationSuccess();
 		if (success){
 			this.resultImage.setIcon(new ImageIcon(this.getClass().getResource(PuzzleGeneratorConfig.SUCCESS_IMAGE)));
 			this.resultLabel.setText("Das Puzzle wurde erfolgreich erstellt!");
