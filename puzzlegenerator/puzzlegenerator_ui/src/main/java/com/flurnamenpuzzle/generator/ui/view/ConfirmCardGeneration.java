@@ -3,11 +3,14 @@ package com.flurnamenpuzzle.generator.ui.view;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.File;
 
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
+
+import org.apache.commons.lang3.StringUtils;
 
 import net.miginfocom.swing.MigLayout;
 
@@ -19,6 +22,10 @@ import com.flurnamenpuzzle.generator.ui.PuzzleGeneratorController;
 
 public class ConfirmCardGeneration extends JPanel implements Observer{
 	private static final long serialVersionUID = 1L;
+	
+	private static final String FILE_PATH_SHORTENING_PATTERN = "(.*?/.*?/)(.*?/){%d}";
+
+	private static final String FILE_PATH_SHORTENING_REPLACEMENT_PATTERN = "$1...%s";
 
 	private PuzzleGeneratorController controller;
 	
@@ -118,12 +125,24 @@ public class ConfirmCardGeneration extends JPanel implements Observer{
 		PuzzleGeneratorModel model = (PuzzleGeneratorModel) observable;
 		stateName = model.getStateName();
 		stateNameLabel.setText(stateName);
-		stateShapefilePath = model.getStateFilePath();
+		stateShapefilePath = shortenFilePath(model.getStateFilePath());
 		stateShapefilePathLabel.setText(stateShapefilePath);
-		fieldnameShapefilePath = model.getFieldNameFilePath();
+		fieldnameShapefilePath = shortenFilePath(model.getFieldNameFilePath());
 		fieldnameShapefilePathLabel.setText(fieldnameShapefilePath);
-		cardTiffPath = model.getMapFilePath();
+		cardTiffPath = shortenFilePath(model.getMapFilePath());
 		cardTiffPathLabel.setText(cardTiffPath);
+	}
+	
+	private String shortenFilePath(String filePathToShorten) {
+		int countMatches = StringUtils.countMatches(filePathToShorten, File.separator);
+
+		if (filePathToShorten!= null && filePathToShorten.length() > 50 || countMatches > 4) {
+				String filePathShorteningRegularExpression = String.format(FILE_PATH_SHORTENING_PATTERN, countMatches - 3);
+				String replacement = String.format(FILE_PATH_SHORTENING_REPLACEMENT_PATTERN, File.separator);
+				filePathToShorten = filePathToShorten.replaceAll(filePathShorteningRegularExpression, replacement);
+			}
+
+		return filePathToShorten;
 	}
 
 }
