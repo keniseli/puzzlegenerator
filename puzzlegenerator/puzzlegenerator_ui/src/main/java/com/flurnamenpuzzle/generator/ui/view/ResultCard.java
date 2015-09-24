@@ -59,7 +59,7 @@ public class ResultCard extends JPanel implements Observer {
 	 * initialize all components needed for the panel
 	 */
 	private void initializeComponents() {
-		this.setLayout(new MigLayout("debug"));
+		this.setLayout(new MigLayout());
 		this.setBorder(new EmptyBorder(20, 200, 20, 200));
 		this.setSize(new Dimension(600, 600));
 		this.setBackground(PuzzleGeneratorConfig.BACKGROUND_COLOR);
