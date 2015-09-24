@@ -35,7 +35,8 @@ public class FieldNameMapSelectionCard extends JPanel implements Observer {
 	private JButton chooseFieldNameButton;
 	private JButton chooseMapButton;
 	private JButton nextButton;
-
+	private JButton backButton;
+	
 	private JTextField fieldNamePath;
 	private JTextField mapPath;
 
@@ -66,7 +67,8 @@ public class FieldNameMapSelectionCard extends JPanel implements Observer {
 		add(chooseMapLabel, "span");
 		add(mapPath, "height :30:, pushx, growx");
 		add(chooseMapButton, "height :30:, wrap");
-		add(nextButton, "right, span, gaptop 40");
+		add(backButton, "left, gaptop 40");
+		add(nextButton, "right, gaptop 40");
 	}
 
 	/**
@@ -90,11 +92,11 @@ public class FieldNameMapSelectionCard extends JPanel implements Observer {
 		mapPath.setFont(PuzzleGeneratorConfig.FONT_NORMAL);
 		fieldNamePath = new JTextField();
 		fieldNamePath.setFont(PuzzleGeneratorConfig.FONT_NORMAL);
-		stateDropdownLabel = new JLabel("Bitte wÃ¤hlen Sie eine Gemeinde aus:");
+		stateDropdownLabel = new JLabel("Bitte wählen Sie eine Gemeinde aus:");
 		stateDropdownLabel.setFont(PuzzleGeneratorConfig.FONT_NORMAL);
-		chooseFieldNameLabel = new JLabel("WÃ¤hlen Sie das Shapefile der Flurnamen:");
+		chooseFieldNameLabel = new JLabel("Wählen Sie das Shapefile der Flurnamen:");
 		chooseFieldNameLabel.setFont(PuzzleGeneratorConfig.FONT_NORMAL);
-		chooseMapLabel = new JLabel("WÃ¤hlen Sie das Tiff-File mit dem Kartenmaterial:");
+		chooseMapLabel = new JLabel("Wählen Sie das Tiff-File mit dem Kartenmaterial:");
 		chooseMapLabel.setFont(PuzzleGeneratorConfig.FONT_NORMAL);
 		chooseFieldNameButton = new JButton("Durchsuchen");
 		chooseFieldNameButton.setFont(PuzzleGeneratorConfig.FONT_NORMAL);
@@ -102,12 +104,14 @@ public class FieldNameMapSelectionCard extends JPanel implements Observer {
 		chooseMapButton.setFont(PuzzleGeneratorConfig.FONT_NORMAL);
 		nextButton = new JButton("Weiter");
 		nextButton.setFont(PuzzleGeneratorConfig.FONT_BOLD);
+		backButton = new JButton("Zurück");
+		backButton.setFont(PuzzleGeneratorConfig.FONT_BOLD);
 		stateDropdown = new JComboBox<>(selectableStates);
 		stateDropdown.setFont(PuzzleGeneratorConfig.FONT_NORMAL);
 	}
 
 	/**
-	 * add all actionlistener to the buttons
+	 * add all action listener to the buttons
 	 */
 	private void addEvents() {
 		nextButton.addActionListener(new ActionListener() {
@@ -133,6 +137,13 @@ public class FieldNameMapSelectionCard extends JPanel implements Observer {
 			public void actionPerformed(ActionEvent e) {
 				tifFileChooser.showOpenDialog(null);
 				mapPath.setText(tifFileChooser.getSelectedFile().getPath());
+			}
+		});
+		
+		backButton.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				controller.showPreviousCard();
 			}
 		});
 	}

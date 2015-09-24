@@ -59,7 +59,7 @@ public class ResultCard extends JPanel implements Observer {
 	 * initialize all components needed for the panel
 	 */
 	private void initializeComponents() {
-		this.setLayout(new MigLayout("debug"));
+		setLayout(new MigLayout());
 		this.setBorder(new EmptyBorder(20, 200, 20, 200));
 		this.setSize(new Dimension(600, 600));
 		this.setBackground(PuzzleGeneratorConfig.BACKGROUND_COLOR);
@@ -97,7 +97,6 @@ public class ResultCard extends JPanel implements Observer {
 		} else {
 			this.resultImage.setIcon(new ImageIcon(this.getClass().getResource(PuzzleGeneratorConfig.FAIL_IMAGE)));
 			this.resultLabel.setText("Das Puzzle konnte nicht erstellt werden.");
-			this.resultList.setText("…Fehlerliste…");
 		}
 	}
 }

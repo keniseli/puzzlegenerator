@@ -32,6 +32,7 @@ public class ConfirmCardGeneration extends JPanel implements Observer{
 	private JLabel cardTiffPathLabel;
 	
 	private JButton generateButton;
+	private JButton backButton;
 	
 	private String stateName;
 	private String stateShapefilePath;
@@ -63,7 +64,8 @@ public class ConfirmCardGeneration extends JPanel implements Observer{
 		add(fieldnameShapefilePathLabel, "gap :40:, gapbottom 10, wrap");
 		add(cardTiffLabel);
 		add(cardTiffPathLabel, "gap :40:, gapbottom 10, wrap");
-		add(generateButton, "right, span, gaptop 40");
+		add(backButton, "left, gaptop 40");
+		add(generateButton, "right, gaptop 40");
 	}
 	/**
 	 * initialize all components needed for the panel
@@ -98,17 +100,26 @@ public class ConfirmCardGeneration extends JPanel implements Observer{
 		cardTiffPathLabel = new JLabel(cardTiffPath);
 		cardTiffPathLabel.setFont(PuzzleGeneratorConfig.FONT_NORMAL);
 		
+		backButton = new JButton("Zurück");
+		backButton.setFont(PuzzleGeneratorConfig.FONT_BOLD);
+		
 		generateButton = new JButton("Generieren");
 		generateButton.setFont(PuzzleGeneratorConfig.FONT_BOLD);
 	}
 	/**
-	 * add all actionlistener to the buttons
+	 * add all action listener to the buttons
 	 */	
 	private void addEvents() {
 		generateButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				controller.confirmGeneration();
+			}
+		});
+		backButton.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				controller.showPreviousCard();
 			}
 		});
 	}

@@ -133,7 +133,7 @@ public class PuzzleGeneratorController {
 
 	public void abortGenerationProcess() {
 		puzzleGeneratorModel.setAbortGeneration(true);
-		puzzleGeneratorModel.setCurrentStep(Steps.STEP_3);
+		puzzleGeneratorModel.setCurrentStep(Steps.STEP_2);
 	}
 
 	/**
@@ -145,7 +145,7 @@ public class PuzzleGeneratorController {
 		if (puzzle != null) {
 			puzzleGeneratorModel.setCurrentStep(Steps.STEP_5);
 		} else {
-			puzzleGeneratorModel.setCurrentStep(Steps.STEP_3);
+			puzzleGeneratorModel.setCurrentStep(Steps.STEP_2);
 		}
 	}
 
@@ -207,6 +207,24 @@ public class PuzzleGeneratorController {
 			}
 		});
 		return puzzleGenerationThread;
+	}
+	
+	public void showPreviousCard() {
+		Steps currentStep = puzzleGeneratorModel.getCurrentStep();
+		Steps previousStep = this.getPreviousStep(currentStep);
+		puzzleGeneratorModel.setCurrentStep(previousStep);
+	}
+	
+	private Steps getPreviousStep(Steps currentStep){
+		Steps previousStep = null;
+		Steps[] steps = Steps.values();
+		for(int i = 0; i < steps.length; i++){
+			if(steps[i].equals(currentStep)){
+				previousStep = steps[i-1];
+				break;
+			}
+		}
+		return previousStep;
 	}
 
 }

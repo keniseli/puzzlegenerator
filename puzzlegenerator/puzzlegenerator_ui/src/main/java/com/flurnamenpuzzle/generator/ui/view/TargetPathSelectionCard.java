@@ -70,6 +70,7 @@ public class TargetPathSelectionCard extends JPanel implements Observer {
 		this.setLayout(new MigLayout());
 		this.setBorder(new EmptyBorder(20, 200, 20, 200));
 		this.setSize(new Dimension(600, 600));
+		this.setBackground(PuzzleGeneratorConfig.BACKGROUND_COLOR);
 
 		this.fileChooser = new JFileChooser();
 		this.fileChooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);

@@ -72,7 +72,7 @@ public class StateSelectionCard extends JPanel implements Observer {
 		this.fileChooser.setFileFilter(shapeFileFilter);
 		this.pathField = new JTextField();
 		this.pathField.setFont(PuzzleGeneratorConfig.FONT_NORMAL);
-		this.stateLabel = new JLabel("Bitte w√§hlen Sie ein Gemeinde-Shape aus");
+		this.stateLabel = new JLabel("Bitte w‰hlen Sie ein Gemeinde-Shape aus");
 		this.stateLabel.setFont(PuzzleGeneratorConfig.FONT_NORMAL);
 		this.chooseButton = new JButton("Durchsuchen");
 		this.chooseButton.setFont(PuzzleGeneratorConfig.FONT_NORMAL);
