@@ -29,9 +29,13 @@ public class StateSelectionCard extends JPanel implements Observer {
 
 	private PuzzleGeneratorController controller;
 	private JFileChooser fileChooser;
+	
 	private JLabel stateLabel;
+	private JLabel notificationLabel;
+	
 	private JButton chooseButton;
 	private JButton nextButton;
+	
 	private JTextField pathField;
 
 	/**
@@ -54,6 +58,7 @@ public class StateSelectionCard extends JPanel implements Observer {
 		add(stateLabel, "span, gapbottom 5");
 		add(pathField, "height :30:, pushx, growx");
 		add(chooseButton, "height :30:, wrap");
+		add(notificationLabel, "span, gaptop 20");
 		add(nextButton, "right, span, gaptop 40");
 	}
 
@@ -70,12 +75,19 @@ public class StateSelectionCard extends JPanel implements Observer {
 		this.fileChooser.setAcceptAllFileFilterUsed(false);
 		FileNameExtensionFilter shapeFileFilter = new FileNameExtensionFilter("Shape-Datei", "shp", "shx", "dbf");
 		this.fileChooser.setFileFilter(shapeFileFilter);
+		
 		this.pathField = new JTextField();
 		this.pathField.setFont(PuzzleGeneratorConfig.FONT_NORMAL);
-		this.stateLabel = new JLabel("Bitte w�hlen Sie ein Gemeinde-Shape aus");
+		
+		this.stateLabel = new JLabel("Bitte wählen Sie ein Gemeinde-Shape aus:");
 		this.stateLabel.setFont(PuzzleGeneratorConfig.FONT_NORMAL);
+		
+		this.notificationLabel = new JLabel();
+		this.notificationLabel.setFont(PuzzleGeneratorConfig.FONT_NORMAL);
+		
 		this.chooseButton = new JButton("Durchsuchen");
 		this.chooseButton.setFont(PuzzleGeneratorConfig.FONT_NORMAL);
+		
 		this.nextButton = new JButton("Weiter");
 		this.nextButton.setFont(PuzzleGeneratorConfig.FONT_BOLD);
 	}
@@ -93,6 +105,14 @@ public class StateSelectionCard extends JPanel implements Observer {
 					File selectedFile = fileChooser.getSelectedFile();
 					String pathOfSelectedFile = selectedFile.getPath();
 					pathField.setText(pathOfSelectedFile);
+					String extension = controller.getFileExtension(selectedFile);
+					if(extension.equals("shp")){
+						notificationLabel.setForeground(PuzzleGeneratorConfig.SUCCESS_COLOR);
+						notificationLabel.setText("Shape Datei ausgewählt.");
+					}else{
+						notificationLabel.setForeground(PuzzleGeneratorConfig.FAIL_COLOR);
+						notificationLabel.setText("Es wurde keine Shape Datei ausgewählt.");
+					}
 				}
 			}
 		});

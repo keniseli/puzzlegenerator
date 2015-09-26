@@ -226,5 +226,16 @@ public class PuzzleGeneratorController {
 		}
 		return previousStep;
 	}
+	
+	public String getFileExtension(File file){
+		String ext = "";
+		String fileName = file.getName();
+		int index = fileName.lastIndexOf('.');
+
+	    if (index > 0 &&  index < fileName.length() - 1) {
+	        ext = fileName.substring(index+1).toLowerCase();
+	    }
+	    return ext;
+	}
 
 }

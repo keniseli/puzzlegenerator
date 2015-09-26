@@ -100,7 +100,7 @@ public class ConfirmCardGeneration extends JPanel implements Observer{
 		cardTiffPathLabel = new JLabel(cardTiffPath);
 		cardTiffPathLabel.setFont(PuzzleGeneratorConfig.FONT_NORMAL);
 		
-		backButton = new JButton("Zurück");
+		backButton = new JButton("ZurÃ¼ck");
 		backButton.setFont(PuzzleGeneratorConfig.FONT_BOLD);
 		
 		generateButton = new JButton("Generieren");
