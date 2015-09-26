@@ -63,12 +63,13 @@ public class ProgressCard extends JPanel implements Observer {
 		this.setBorder(new EmptyBorder(20, 200, 20, 200));
 		this.setSize(new Dimension(600, 600));
 		this.setBackground(PuzzleGeneratorConfig.BACKGROUND_COLOR);
+
+		this.progressTitleLabel = new JLabel("Status");
+		this.progressTitleLabel.setFont(PuzzleGeneratorConfig.FONT_BOLD);
 		
 		this.progressLabel = new JLabel("Die Puzzleteile werden in diesem Moment erstellt.");
 		this.progressLabel.setFont(PuzzleGeneratorConfig.FONT_NORMAL);
 		
-		this.progressTitleLabel = new JLabel("Status");
-		this.progressTitleLabel.setFont(PuzzleGeneratorConfig.FONT_BOLD);
 		
 		this.stopButton = new JButton("Abbrechen");
 		this.stopButton.setFont(PuzzleGeneratorConfig.FONT_NORMAL);
@@ -104,8 +105,10 @@ public class ProgressCard extends JPanel implements Observer {
 		PuzzleGeneratorModel model = (PuzzleGeneratorModel) observable;
 		int percentage = model.getPercentageGenerated();
 		String statusMessage = model.getStatusMessage();
-		this.progressLabel.setText(statusMessage);
-		
+		if(statusMessage != null){
+			this.progressLabel.setText(statusMessage);
+		}
+		System.out.println(statusMessage);
 		this.progressBar.setValue(percentage);
 		this.progressBar.setString(progressBar.getValue()+"%");
 	}
