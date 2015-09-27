@@ -18,7 +18,6 @@ import com.flurnamenpuzzle.generator.PuzzleGeneratorConfig;
 import com.flurnamenpuzzle.generator.domain.PuzzleGeneratorModel;
 import com.flurnamenpuzzle.generator.ui.PuzzleGeneratorController;
 
-
 /**
  * Class for the state selection panel
  * 
@@ -59,19 +58,19 @@ public class ResultCard extends JPanel implements Observer {
 	 * initialize all components needed for the panel
 	 */
 	private void initializeComponents() {
-		this.setLayout(new MigLayout());
-		this.setBorder(new EmptyBorder(20, 200, 20, 200));
-		this.setSize(new Dimension(600, 600));
-		this.setBackground(PuzzleGeneratorConfig.BACKGROUND_COLOR);
+		setLayout(new MigLayout());
+		setBorder(new EmptyBorder(20, 200, 20, 200));
+		setSize(new Dimension(600, 600));
+		setBackground(PuzzleGeneratorConfig.BACKGROUND_COLOR);
 
-		this.resultList = new JLabel("");
-		this.resultList.setFont(PuzzleGeneratorConfig.FONT_NORMAL);
-		this.resultImage = new JLabel("");
-		this.resultImage.setFont(PuzzleGeneratorConfig.FONT_NORMAL);
-		this.resultLabel = new JLabel("");
-		this.resultLabel.setFont(PuzzleGeneratorConfig.FONT_BOLD);
-		this.finishButton = new JButton("Beenden");
-		this.finishButton.setFont(PuzzleGeneratorConfig.FONT_BOLD);
+		resultList = new JLabel("");
+		resultList.setFont(PuzzleGeneratorConfig.FONT_NORMAL);
+		resultImage = new JLabel("");
+		resultImage.setFont(PuzzleGeneratorConfig.FONT_NORMAL);
+		resultLabel = new JLabel("");
+		resultLabel.setFont(PuzzleGeneratorConfig.FONT_BOLD);
+		finishButton = new JButton("Beenden");
+		finishButton.setFont(PuzzleGeneratorConfig.FONT_BOLD);
 	}
 
 	/**
@@ -91,13 +90,15 @@ public class ResultCard extends JPanel implements Observer {
 	public void update(Observable observable) {
 		PuzzleGeneratorModel model = (PuzzleGeneratorModel) observable;
 		boolean success = model.isGenerationSuccess();
-		if (success){
-			this.resultImage.setIcon(new ImageIcon(this.getClass().getResource(PuzzleGeneratorConfig.SUCCESS_IMAGE)));
-			this.resultLabel.setText("Das Puzzle wurde erfolgreich erstellt!");
+		if (success) {
+			resultImage.setIcon(new ImageIcon(this.getClass().getResource(
+					PuzzleGeneratorConfig.SUCCESS_IMAGE)));
+			resultLabel.setText("Das Puzzle wurde erfolgreich erstellt!");
 		} else {
-			this.resultImage.setIcon(new ImageIcon(this.getClass().getResource(PuzzleGeneratorConfig.FAIL_IMAGE)));
-			this.resultLabel.setText("Das Puzzle konnte nicht erstellt werden.");
-			this.resultList.setText("");
+			resultImage.setIcon(new ImageIcon(this.getClass().getResource(
+					PuzzleGeneratorConfig.FAIL_IMAGE)));
+			resultLabel.setText("Das Puzzle konnte nicht erstellt werden.");
+			resultList.setText("");
 		}
 	}
 }

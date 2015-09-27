@@ -60,27 +60,29 @@ public class TargetPathSelectionCard extends JPanel implements Observer {
 	}
 
 	private void layoutComponents() {
-		add(this.savePathLabel, "span, gapbottom 5");
-		add(this.pathField, "height :30:, pushx, growx");
-		add(this.chooseButton, "height :30:, wrap");
-		add(this.nextButton, "right, span, gaptop 40");
+		add(savePathLabel, "span, gapbottom 5");
+		add(pathField, "height :30:, pushx, growx");
+		add(chooseButton, "height :30:, wrap");
+		add(nextButton, "right, span, gaptop 40");
 	}
 
 	private void initializeComponents() {
-		this.setLayout(new MigLayout());
-		this.setBorder(new EmptyBorder(20, 200, 20, 200));
-		this.setSize(new Dimension(600, 600));
+		setLayout(new MigLayout());
+		setBorder(new EmptyBorder(20, 200, 20, 200));
+		setSize(new Dimension(600, 600));
+		setBackground(PuzzleGeneratorConfig.BACKGROUND_COLOR);
 
-		this.fileChooser = new JFileChooser();
-		this.fileChooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
-		this.chooseButton = new JButton("Durchsuchen");
-		this.chooseButton.setFont(PuzzleGeneratorConfig.FONT_NORMAL);
-		this.savePathLabel = new JLabel("Bitte wählen Sie den Speicherort für das Puzzle aus:");
-		this.savePathLabel.setFont(PuzzleGeneratorConfig.FONT_NORMAL);
-		this.nextButton = new JButton("Weiter");
-		this.nextButton.setFont(PuzzleGeneratorConfig.FONT_BOLD);
-		this.pathField = new JTextField();
-		this.pathField.setFont(PuzzleGeneratorConfig.FONT_NORMAL);
+		fileChooser = new JFileChooser();
+		fileChooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
+		chooseButton = new JButton("Durchsuchen");
+		chooseButton.setFont(PuzzleGeneratorConfig.FONT_NORMAL);
+		savePathLabel = new JLabel(
+				"Bitte wählen Sie den Speicherort für das Puzzle aus:");
+		savePathLabel.setFont(PuzzleGeneratorConfig.FONT_NORMAL);
+		nextButton = new JButton("Weiter");
+		nextButton.setFont(PuzzleGeneratorConfig.FONT_BOLD);
+		pathField = new JTextField();
+		pathField.setFont(PuzzleGeneratorConfig.FONT_NORMAL);
 	}
 
 	@Override

@@ -13,6 +13,8 @@ import javax.swing.JTextField;
 import javax.swing.border.EmptyBorder;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
+import org.apache.commons.io.FilenameUtils;
+
 import net.miginfocom.swing.MigLayout;
 
 import com.flurnamenpuzzle.generator.Observable;
@@ -26,12 +28,17 @@ import com.flurnamenpuzzle.generator.ui.PuzzleGeneratorController;
  */
 public class StateSelectionCard extends JPanel implements Observer {
 	private static final long serialVersionUID = 1L;
+	private static final String SHAPE_FILE_EXTENSION = "shp";
 
 	private PuzzleGeneratorController controller;
 	private JFileChooser fileChooser;
+
 	private JLabel stateLabel;
+	private JLabel notificationLabel;
+
 	private JButton chooseButton;
 	private JButton nextButton;
+
 	private JTextField pathField;
 
 	/**
@@ -54,6 +61,7 @@ public class StateSelectionCard extends JPanel implements Observer {
 		add(stateLabel, "span, gapbottom 5");
 		add(pathField, "height :30:, pushx, growx");
 		add(chooseButton, "height :30:, wrap");
+		add(notificationLabel, "span, gaptop 20");
 		add(nextButton, "right, span, gaptop 40");
 	}
 
@@ -61,23 +69,31 @@ public class StateSelectionCard extends JPanel implements Observer {
 	 * initialize all components needed for the panel
 	 */
 	private void initializeComponents() {
-		this.setLayout(new MigLayout());
-		this.setBorder(new EmptyBorder(20, 200, 20, 200));
-		this.setSize(new Dimension(600, 600));
-		this.setBackground(PuzzleGeneratorConfig.BACKGROUND_COLOR);
+		setLayout(new MigLayout());
+		setBorder(new EmptyBorder(20, 200, 20, 200));
+		setSize(new Dimension(600, 600));
+		setBackground(PuzzleGeneratorConfig.BACKGROUND_COLOR);
 
-		this.fileChooser = new JFileChooser();
-		this.fileChooser.setAcceptAllFileFilterUsed(false);
-		FileNameExtensionFilter shapeFileFilter = new FileNameExtensionFilter("Shape-Datei", "shp", "shx", "dbf");
-		this.fileChooser.setFileFilter(shapeFileFilter);
-		this.pathField = new JTextField();
-		this.pathField.setFont(PuzzleGeneratorConfig.FONT_NORMAL);
-		this.stateLabel = new JLabel("Bitte wählen Sie ein Gemeinde-Shape aus");
-		this.stateLabel.setFont(PuzzleGeneratorConfig.FONT_NORMAL);
-		this.chooseButton = new JButton("Durchsuchen");
-		this.chooseButton.setFont(PuzzleGeneratorConfig.FONT_NORMAL);
-		this.nextButton = new JButton("Weiter");
-		this.nextButton.setFont(PuzzleGeneratorConfig.FONT_BOLD);
+		fileChooser = new JFileChooser();
+		fileChooser.setAcceptAllFileFilterUsed(false);
+		FileNameExtensionFilter shapeFileFilter = new FileNameExtensionFilter(
+				"Shape-Datei", "shp", "shx", "dbf");
+		fileChooser.setFileFilter(shapeFileFilter);
+
+		pathField = new JTextField();
+		pathField.setFont(PuzzleGeneratorConfig.FONT_NORMAL);
+
+		stateLabel = new JLabel("Bitte wählen Sie ein Gemeinde-Shape aus:");
+		stateLabel.setFont(PuzzleGeneratorConfig.FONT_NORMAL);
+
+		notificationLabel = new JLabel();
+		notificationLabel.setFont(PuzzleGeneratorConfig.FONT_NORMAL);
+
+		chooseButton = new JButton("Durchsuchen");
+		chooseButton.setFont(PuzzleGeneratorConfig.FONT_NORMAL);
+
+		nextButton = new JButton("Weiter");
+		nextButton.setFont(PuzzleGeneratorConfig.FONT_BOLD);
 	}
 
 	/**
@@ -93,6 +109,18 @@ public class StateSelectionCard extends JPanel implements Observer {
 					File selectedFile = fileChooser.getSelectedFile();
 					String pathOfSelectedFile = selectedFile.getPath();
 					pathField.setText(pathOfSelectedFile);
+					String extension = FilenameUtils
+							.getExtension(selectedFile.getName());
+					if (extension.equals(SHAPE_FILE_EXTENSION)) {
+						notificationLabel
+								.setForeground(PuzzleGeneratorConfig.SUCCESS_COLOR);
+						notificationLabel.setText("Shape Datei ausgewählt.");
+					} else {
+						notificationLabel
+								.setForeground(PuzzleGeneratorConfig.FAIL_COLOR);
+						notificationLabel
+								.setText("Es wurde keine Shape Datei ausgewählt.");
+					}
 				}
 			}
 		});
@@ -102,6 +130,7 @@ public class StateSelectionCard extends JPanel implements Observer {
 			public void actionPerformed(ActionEvent e) {
 				String path = pathField.getText();
 				controller.saveStateFilePath(path);
+				notificationLabel.setText("");
 			}
 		});
 	}
