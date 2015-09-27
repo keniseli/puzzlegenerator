@@ -113,14 +113,9 @@ public class StateSelectionCard extends JPanel implements Observer {
 					String extension = FilenameUtils
 							.getExtension(selectedFile.getName());
 					if (extension.equals(SHAPE_FILE_EXTENSION)) {
-						notificationLabel
-								.setForeground(PuzzleGeneratorConfig.SUCCESS_COLOR);
-						controller.setNotification("Shape Datei ausgewählt.");
+						controller.setNotification("Shape Datei ausgewählt.", PuzzleGeneratorConfig.SUCCESS_COLOR);
 					} else {
-						notificationLabel
-								.setForeground(PuzzleGeneratorConfig.FAIL_COLOR);
-						notificationLabel
-								.setText("Es wurde keine Shape Datei ausgewählt.");
+						controller.setNotification("Es wurde keine Shape Datei ausgewählt.", PuzzleGeneratorConfig.FAIL_COLOR);
 					}
 				}
 			}
@@ -131,7 +126,6 @@ public class StateSelectionCard extends JPanel implements Observer {
 			public void actionPerformed(ActionEvent e) {
 				String path = pathField.getText();
 				controller.saveStateFilePath(path);
-				notificationLabel.setText("");
 			}
 		});
 	}
@@ -140,8 +134,8 @@ public class StateSelectionCard extends JPanel implements Observer {
 	public void update(Observable observable) {
 		PuzzleGeneratorModel model = (PuzzleGeneratorModel) observable;
 		String notification = model.getNotification();
-		if(notification != null && !notification.isEmpty()){
-			notificationLabel.setForeground(PuzzleGeneratorConfig.FAIL_COLOR);
+		if(notification != null){
+			notificationLabel.setForeground(model.getNotificationColor());
 			notificationLabel.setText(notification);
 		}
 	}

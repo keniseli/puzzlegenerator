@@ -17,16 +17,22 @@ import net.miginfocom.swing.MigLayout;
 import com.flurnamenpuzzle.generator.Observable;
 import com.flurnamenpuzzle.generator.Observer;
 import com.flurnamenpuzzle.generator.PuzzleGeneratorConfig;
+import com.flurnamenpuzzle.generator.domain.PuzzleGeneratorModel;
 import com.flurnamenpuzzle.generator.ui.PuzzleGeneratorController;
 
 public class TargetPathSelectionCard extends JPanel implements Observer {
 	private static final long serialVersionUID = 1L;
 
 	private PuzzleGeneratorController controller;
+	
 	private JFileChooser fileChooser;
+	
 	private JButton chooseButton;
-	private JLabel savePathLabel;
 	private JButton nextButton;
+	
+	private JLabel savePathLabel;
+	private JLabel notificationLabel;
+	
 	private JTextField pathField;
 
 	public TargetPathSelectionCard(PuzzleGeneratorController controller) {
@@ -63,6 +69,7 @@ public class TargetPathSelectionCard extends JPanel implements Observer {
 		add(savePathLabel, "span, gapbottom 5");
 		add(pathField, "height :30:, pushx, growx");
 		add(chooseButton, "height :30:, wrap");
+		add(notificationLabel, "span, gaptop 20");
 		add(nextButton, "right, span, gaptop 40");
 	}
 
@@ -79,6 +86,8 @@ public class TargetPathSelectionCard extends JPanel implements Observer {
 		savePathLabel = new JLabel(
 				"Bitte wählen Sie den Speicherort für das Puzzle aus:");
 		savePathLabel.setFont(PuzzleGeneratorConfig.FONT_NORMAL);
+		notificationLabel = new JLabel();
+		notificationLabel.setFont(PuzzleGeneratorConfig.FONT_NORMAL);
 		nextButton = new JButton("Weiter");
 		nextButton.setFont(PuzzleGeneratorConfig.FONT_BOLD);
 		pathField = new JTextField();
@@ -87,6 +96,12 @@ public class TargetPathSelectionCard extends JPanel implements Observer {
 
 	@Override
 	public void update(Observable observable) {
+		PuzzleGeneratorModel model = (PuzzleGeneratorModel) observable;
+		String notification = model.getNotification();
+		if(notification != null){
+			notificationLabel.setForeground(model.getNotificationColor());
+			notificationLabel.setText(notification);
+		}
 	}
 
 }

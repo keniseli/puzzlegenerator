@@ -148,7 +148,6 @@ public class FieldNameMapSelectionCard extends JPanel implements Observer {
 				String stateName = stateDropdown.getSelectedItem().toString();
 				controller.saveFieldNameFilePathAndCardMaterialFilePath(
 						fieldNamePathText, mapPathText, stateName);
-				notificationLabel.setText("");
 			}
 		});
 
@@ -199,8 +198,8 @@ public class FieldNameMapSelectionCard extends JPanel implements Observer {
 				stateDropdown.addItem(selectableState);
 			}
 		}
-		if(notification != null && !notification.isEmpty()){
-			notificationLabel.setForeground(PuzzleGeneratorConfig.FAIL_COLOR);
+		if(notification != null){
+			notificationLabel.setForeground(model.getNotificationColor());
 			notificationLabel.setText(notification);
 		}
 	}
@@ -213,12 +212,9 @@ public class FieldNameMapSelectionCard extends JPanel implements Observer {
 		String extension = FilenameUtils
 				.getExtension(selectedFile.getName());;
 		if (extension.equals(ext)) {
-			notificationLabel
-					.setForeground(PuzzleGeneratorConfig.SUCCESS_COLOR);
-			notificationLabel.setText(success);
+			controller.setNotification(success, PuzzleGeneratorConfig.SUCCESS_COLOR);
 		} else {
-			notificationLabel.setForeground(PuzzleGeneratorConfig.FAIL_COLOR);
-			notificationLabel.setText(fail);
+			controller.setNotification(fail, PuzzleGeneratorConfig.FAIL_COLOR);
 		}
 	}
 }

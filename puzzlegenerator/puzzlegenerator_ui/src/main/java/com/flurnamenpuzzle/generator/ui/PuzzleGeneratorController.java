@@ -1,5 +1,6 @@
 package com.flurnamenpuzzle.generator.ui;
 
+import java.awt.Color;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
@@ -11,6 +12,7 @@ import java.util.Map;
 import javax.swing.JPanel;
 
 import com.flurnamenpuzzle.generator.Observer;
+import com.flurnamenpuzzle.generator.PuzzleGeneratorConfig;
 import com.flurnamenpuzzle.generator.Steps;
 import com.flurnamenpuzzle.generator.domain.Puzzle;
 import com.flurnamenpuzzle.generator.domain.PuzzleGeneratorModel;
@@ -93,17 +95,13 @@ public class PuzzleGeneratorController {
 		try {
 			stateFile = shapeService.getMainShapeFile(stateFilePath);
 		} catch (ServiceException e) {
-			puzzleGeneratorModel
-					.setNotification(e.getMessage());
+			puzzleGeneratorModel.setNotification(e.getMessage(),
+					PuzzleGeneratorConfig.FAIL_COLOR);
 			return;
 		}
 		puzzleGeneratorModel.setStateFilePath(stateFile.getAbsolutePath());
-		try {
-			namesOfShapesInFile = shapeService.getNamesOfShapeFile(stateFile);
-		} catch (ServiceException e){
-			puzzleGeneratorModel.setNotification("Es wurde keine valides Shape-File ausgewählt.");
-			return;
-		}
+		namesOfShapesInFile = shapeService.getNamesOfShapeFile(stateFile);
+
 		int numberOfStates = namesOfShapesInFile.size();
 		String[] states = new String[numberOfStates];
 		states = namesOfShapesInFile.toArray(states);
@@ -119,9 +117,8 @@ public class PuzzleGeneratorController {
 			puzzleGeneratorModel.setFieldNameFilePath(fieldNameFile
 					.getAbsolutePath());
 		} catch (ServiceException e) {
-			puzzleGeneratorModel
-					.setNotification("Es wurden nicht alle drei benötigten Shape-Dateien gefunden. "
-							+ "Stellen Sie sicher, dass sich alle drei Shape-Dateien mit den Dateiformaten \".shp\", \".shx\" und \".dbf\" im selben Verzeichnis befinden.");
+			puzzleGeneratorModel.setNotification(e.getMessage(),
+					PuzzleGeneratorConfig.FAIL_COLOR);
 			return;
 		}
 
@@ -184,9 +181,11 @@ public class PuzzleGeneratorController {
 			file.renameTo(newFile);
 		} catch (Exception e) {
 			puzzleGeneratorModel.setGenerationSuccess(false);
+			puzzleGeneratorModel.setNotification(
+					"Files konnten nicht verschoben werden.",
+					PuzzleGeneratorConfig.FAIL_COLOR);
 		}
 		puzzleGeneratorModel.setGenerationSuccess(true);
-
 	}
 
 	private File createTemporaryDirectory() {
@@ -197,7 +196,10 @@ public class PuzzleGeneratorController {
 					TEMPORARY_DIRECTORY_NAME, fileAttributes).toFile();
 		} catch (IOException e) {
 			puzzleGeneratorModel
-					.setNotification("Ein temporäres Verzeichnis zum Zwischenspeichern konnte nicht erstellt werden. Es kann nicht fortgefahren werden.");
+					.setNotification(
+							"Ein temporäres Verzeichnis zum Zwischenspeichern konnte nicht erstellt werden. Es kann nicht fortgefahren werden.",
+							PuzzleGeneratorConfig.FAIL_COLOR);
+			puzzleGeneratorModel.setCurrentStep(Steps.STEP_6);
 		}
 		return temporaryDirectory;
 	}
@@ -207,6 +209,7 @@ public class PuzzleGeneratorController {
 
 			@Override
 			public void run() {
+				Puzzle puzzle = null;
 				String stateFilePath = puzzleGeneratorModel.getStateFilePath();
 				String stateName = puzzleGeneratorModel.getStateName();
 				String fieldNameFilePath = puzzleGeneratorModel
@@ -214,9 +217,18 @@ public class PuzzleGeneratorController {
 				String mapFilePath = puzzleGeneratorModel.getMapFilePath();
 				String pathToTemporaryDirectory = puzzleGeneratorModel
 						.getTemporaryDirectory().getAbsolutePath();
-				Puzzle puzzle = puzzleGeneratorService.generatePuzzle(
-						stateFilePath, stateName, fieldNameFilePath,
-						mapFilePath, pathToTemporaryDirectory);
+				try {
+					puzzle = puzzleGeneratorService.generatePuzzle(
+							stateFilePath, stateName, fieldNameFilePath,
+							mapFilePath, pathToTemporaryDirectory);
+				} catch (Exception e) {
+					puzzleGeneratorModel
+							.setNotification(
+									"Beim Generieren der Puzzle-Teile ist ein Fehler aufgetreten.",
+									PuzzleGeneratorConfig.FAIL_COLOR);
+					puzzleGeneratorModel.setCurrentStep(Steps.STEP_6);
+				}
+
 				puzzleGeneratorModel.setPuzzle(puzzle);
 				generationComplete();
 			}
@@ -227,6 +239,7 @@ public class PuzzleGeneratorController {
 	public void showPreviousCard() {
 		Steps currentStep = puzzleGeneratorModel.getCurrentStep();
 		Steps previousStep = getPreviousStep(currentStep);
+		puzzleGeneratorModel.setNotification("");
 		puzzleGeneratorModel.setCurrentStep(previousStep);
 	}
 
@@ -241,14 +254,14 @@ public class PuzzleGeneratorController {
 		}
 		return previousStep;
 	}
-	
-	private void proceed(Steps step){
+
+	private void proceed(Steps step) {
 		puzzleGeneratorModel.setNotification("");
 		puzzleGeneratorModel.setCurrentStep(step);
 	}
-	
-	public void setNotification(String notification){
-		puzzleGeneratorModel.setNotification(notification);
+
+	public void setNotification(String notification, Color notificationColor) {
+		puzzleGeneratorModel.setNotification(notification, notificationColor);
 	}
 
 }
