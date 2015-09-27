@@ -20,6 +20,7 @@ import net.miginfocom.swing.MigLayout;
 import com.flurnamenpuzzle.generator.Observable;
 import com.flurnamenpuzzle.generator.Observer;
 import com.flurnamenpuzzle.generator.PuzzleGeneratorConfig;
+import com.flurnamenpuzzle.generator.domain.PuzzleGeneratorModel;
 import com.flurnamenpuzzle.generator.ui.PuzzleGeneratorController;
 
 /**
@@ -114,7 +115,7 @@ public class StateSelectionCard extends JPanel implements Observer {
 					if (extension.equals(SHAPE_FILE_EXTENSION)) {
 						notificationLabel
 								.setForeground(PuzzleGeneratorConfig.SUCCESS_COLOR);
-						notificationLabel.setText("Shape Datei ausgewählt.");
+						controller.setNotification("Shape Datei ausgewählt.");
 					} else {
 						notificationLabel
 								.setForeground(PuzzleGeneratorConfig.FAIL_COLOR);
@@ -137,5 +138,11 @@ public class StateSelectionCard extends JPanel implements Observer {
 
 	@Override
 	public void update(Observable observable) {
+		PuzzleGeneratorModel model = (PuzzleGeneratorModel) observable;
+		String notification = model.getNotification();
+		if(notification != null && !notification.isEmpty()){
+			notificationLabel.setForeground(PuzzleGeneratorConfig.FAIL_COLOR);
+			notificationLabel.setText(notification);
+		}
 	}
 }

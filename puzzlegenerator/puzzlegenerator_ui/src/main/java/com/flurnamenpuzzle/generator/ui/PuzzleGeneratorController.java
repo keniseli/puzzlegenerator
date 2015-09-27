@@ -89,22 +89,26 @@ public class PuzzleGeneratorController {
 
 	public void saveStateFilePath(String stateFilePath) {
 		File stateFile = null;
+		List<String> namesOfShapesInFile;
 		try {
 			stateFile = shapeService.getMainShapeFile(stateFilePath);
 		} catch (ServiceException e) {
 			puzzleGeneratorModel
-					.setNotification("Es wurden nicht alle drei benötigten Shape-Dateien gefunden. "
-							+ "Stellen Sie sicher, dass sich alle drei Shape-Dateien mit den Dateiformaten \".shp\", \".shx\" und \".dbf\" im selben Verzeichnis befinden.");
+					.setNotification(e.getMessage());
 			return;
 		}
 		puzzleGeneratorModel.setStateFilePath(stateFile.getAbsolutePath());
-		List<String> namesOfShapesInFile = shapeService
-				.getNamesOfShapeFile(stateFile);
+		try {
+			namesOfShapesInFile = shapeService.getNamesOfShapeFile(stateFile);
+		} catch (ServiceException e){
+			puzzleGeneratorModel.setNotification("Es wurde keine valides Shape-File ausgewählt.");
+			return;
+		}
 		int numberOfStates = namesOfShapesInFile.size();
 		String[] states = new String[numberOfStates];
 		states = namesOfShapesInFile.toArray(states);
 		puzzleGeneratorModel.setStates(states);
-		puzzleGeneratorModel.setCurrentStep(Steps.STEP_2);
+		proceed(Steps.STEP_2);
 	}
 
 	public void saveFieldNameFilePathAndCardMaterialFilePath(
@@ -123,8 +127,7 @@ public class PuzzleGeneratorController {
 
 		puzzleGeneratorModel.setMapFilePath(mapFilePath);
 		puzzleGeneratorModel.setStateName(stateName);
-		puzzleGeneratorModel.setCurrentStep(Steps.STEP_3);
-
+		proceed(Steps.STEP_3);
 	}
 
 	public void confirmGeneration() {
@@ -133,14 +136,14 @@ public class PuzzleGeneratorController {
 		if (temporaryDirectory != null) {
 			puzzleGeneratorModel.setTemporaryDirectory(temporaryDirectory);
 			Thread puzzleGenerationThread = initializePuzzleGenerationThread();
-			puzzleGeneratorModel.setCurrentStep(Steps.STEP_4);
+			proceed(Steps.STEP_4);
 			puzzleGenerationThread.start();
 		}
 	}
 
 	public void abortGenerationProcess() {
 		puzzleGeneratorModel.setAbortGeneration(true);
-		puzzleGeneratorModel.setCurrentStep(Steps.STEP_2);
+		proceed(Steps.STEP_2);
 	}
 
 	/**
@@ -150,9 +153,9 @@ public class PuzzleGeneratorController {
 	public void generationComplete() {
 		Puzzle puzzle = puzzleGeneratorModel.getPuzzle();
 		if (puzzle != null) {
-			puzzleGeneratorModel.setCurrentStep(Steps.STEP_5);
+			proceed(Steps.STEP_5);
 		} else {
-			puzzleGeneratorModel.setCurrentStep(Steps.STEP_2);
+			proceed(Steps.STEP_2);
 		}
 	}
 
@@ -165,7 +168,7 @@ public class PuzzleGeneratorController {
 		}
 		File xmlFile = puzzle.getXmlFile();
 		moveFile(xmlFile, targetDirectory);
-		puzzleGeneratorModel.setCurrentStep(Steps.STEP_6);
+		proceed(Steps.STEP_6);
 	}
 
 	public void finish() {
@@ -237,6 +240,15 @@ public class PuzzleGeneratorController {
 			}
 		}
 		return previousStep;
+	}
+	
+	private void proceed(Steps step){
+		puzzleGeneratorModel.setNotification("");
+		puzzleGeneratorModel.setCurrentStep(step);
+	}
+	
+	public void setNotification(String notification){
+		puzzleGeneratorModel.setNotification(notification);
 	}
 
 }

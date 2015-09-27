@@ -191,12 +191,17 @@ public class FieldNameMapSelectionCard extends JPanel implements Observer {
 	@Override
 	public void update(Observable observable) {
 		PuzzleGeneratorModel model = (PuzzleGeneratorModel) observable;
+		String notification = model.getNotification();
 		selectableStates = model.getStates();
 		stateDropdown.removeAllItems();
 		if (selectableStates != null) {
 			for (String selectableState : selectableStates) {
 				stateDropdown.addItem(selectableState);
 			}
+		}
+		if(notification != null && !notification.isEmpty()){
+			notificationLabel.setForeground(PuzzleGeneratorConfig.FAIL_COLOR);
+			notificationLabel.setText(notification);
 		}
 	}
 
