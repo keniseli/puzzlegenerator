@@ -45,7 +45,8 @@ public class PuzzleGeneratorController {
 		this.puzzleGeneratorModel = puzzleGeneratorModel;
 		puzzleGeneratorModel.setCurrentStep(Steps.STEP_1);
 		shapeService = new ShapeService();
-		puzzleGeneratorService = new PuzzleGeneratorService(puzzleGeneratorModel);
+		puzzleGeneratorService = new PuzzleGeneratorService(
+				puzzleGeneratorModel);
 	}
 
 	/**
@@ -59,18 +60,21 @@ public class PuzzleGeneratorController {
 		cardMap.put(idOfStep1, stateSelectionCard);
 		puzzleGeneratorModel.addObserver(stateSelectionCard);
 		String idOfStep2 = Steps.STEP_2.getId();
-		FieldNameMapSelectionCard fieldNameMapSelectionCard = new FieldNameMapSelectionCard(this);
+		FieldNameMapSelectionCard fieldNameMapSelectionCard = new FieldNameMapSelectionCard(
+				this);
 		cardMap.put(idOfStep2, fieldNameMapSelectionCard);
 		puzzleGeneratorModel.addObserver(fieldNameMapSelectionCard);
 		String idOfStep3 = Steps.STEP_3.getId();
-		ConfirmCardGeneration confirmCardGeneration = new ConfirmCardGeneration(this);
+		ConfirmCardGeneration confirmCardGeneration = new ConfirmCardGeneration(
+				this);
 		cardMap.put(idOfStep3, confirmCardGeneration);
 		puzzleGeneratorModel.addObserver(confirmCardGeneration);
 		String idOfStep4 = Steps.STEP_4.getId();
 		ProgressCard progressCard = new ProgressCard(this);
 		cardMap.put(idOfStep4, progressCard);
 		String idOfStep5 = Steps.STEP_5.getId();
-		TargetPathSelectionCard targetSelectionCard = new TargetPathSelectionCard(this);
+		TargetPathSelectionCard targetSelectionCard = new TargetPathSelectionCard(
+				this);
 		cardMap.put(idOfStep5, targetSelectionCard);
 		String idOfStep6 = Steps.STEP_6.getId();
 		ResultCard resultCard = new ResultCard(this);
@@ -94,7 +98,8 @@ public class PuzzleGeneratorController {
 			return;
 		}
 		puzzleGeneratorModel.setStateFilePath(stateFile.getAbsolutePath());
-		List<String> namesOfShapesInFile = shapeService.getNamesOfShapeFile(stateFile);
+		List<String> namesOfShapesInFile = shapeService
+				.getNamesOfShapeFile(stateFile);
 		int numberOfStates = namesOfShapesInFile.size();
 		String[] states = new String[numberOfStates];
 		states = namesOfShapesInFile.toArray(states);
@@ -102,11 +107,13 @@ public class PuzzleGeneratorController {
 		puzzleGeneratorModel.setCurrentStep(Steps.STEP_2);
 	}
 
-	public void saveFieldNameFilePathAndCardMaterialFilePath(String fieldNameFilePath, String mapFilePath,
-			String stateName) {
+	public void saveFieldNameFilePathAndCardMaterialFilePath(
+			String fieldNameFilePath, String mapFilePath, String stateName) {
 		try {
-			File fieldNameFile = shapeService.getMainShapeFile(fieldNameFilePath);
-			puzzleGeneratorModel.setFieldNameFilePath(fieldNameFile.getAbsolutePath());
+			File fieldNameFile = shapeService
+					.getMainShapeFile(fieldNameFilePath);
+			puzzleGeneratorModel.setFieldNameFilePath(fieldNameFile
+					.getAbsolutePath());
 		} catch (ServiceException e) {
 			puzzleGeneratorModel
 					.setNotification("Es wurden nicht alle drei benötigten Shape-Dateien gefunden. "
@@ -168,7 +175,8 @@ public class PuzzleGeneratorController {
 	private void moveFile(File file, File targetDestination) {
 		try {
 			String simpleFileName = file.getName();
-			String newPathToFile = String.format("%s%s%s", targetDestination, File.separatorChar, simpleFileName);
+			String newPathToFile = String.format("%s%s%s", targetDestination,
+					File.separatorChar, simpleFileName);
 			File newFile = new File(newPathToFile);
 			file.renameTo(newFile);
 		} catch (Exception e) {
@@ -182,7 +190,8 @@ public class PuzzleGeneratorController {
 		File temporaryDirectory = null;
 		try {
 			FileAttribute<?>[] fileAttributes = {};
-			temporaryDirectory = Files.createTempDirectory(TEMPORARY_DIRECTORY_NAME, fileAttributes).toFile();
+			temporaryDirectory = Files.createTempDirectory(
+					TEMPORARY_DIRECTORY_NAME, fileAttributes).toFile();
 		} catch (IOException e) {
 			puzzleGeneratorModel
 					.setNotification("Ein temporäres Verzeichnis zum Zwischenspeichern konnte nicht erstellt werden. Es kann nicht fortgefahren werden.");
@@ -197,10 +206,13 @@ public class PuzzleGeneratorController {
 			public void run() {
 				String stateFilePath = puzzleGeneratorModel.getStateFilePath();
 				String stateName = puzzleGeneratorModel.getStateName();
-				String fieldNameFilePath = puzzleGeneratorModel.getFieldNameFilePath();
+				String fieldNameFilePath = puzzleGeneratorModel
+						.getFieldNameFilePath();
 				String mapFilePath = puzzleGeneratorModel.getMapFilePath();
-				String pathToTemporaryDirectory = puzzleGeneratorModel.getTemporaryDirectory().getAbsolutePath();
-				Puzzle puzzle = puzzleGeneratorService.generatePuzzle(stateFilePath, stateName, fieldNameFilePath,
+				String pathToTemporaryDirectory = puzzleGeneratorModel
+						.getTemporaryDirectory().getAbsolutePath();
+				Puzzle puzzle = puzzleGeneratorService.generatePuzzle(
+						stateFilePath, stateName, fieldNameFilePath,
 						mapFilePath, pathToTemporaryDirectory);
 				puzzleGeneratorModel.setPuzzle(puzzle);
 				generationComplete();
@@ -208,34 +220,23 @@ public class PuzzleGeneratorController {
 		});
 		return puzzleGenerationThread;
 	}
-	
+
 	public void showPreviousCard() {
 		Steps currentStep = puzzleGeneratorModel.getCurrentStep();
-		Steps previousStep = this.getPreviousStep(currentStep);
+		Steps previousStep = getPreviousStep(currentStep);
 		puzzleGeneratorModel.setCurrentStep(previousStep);
 	}
-	
-	private Steps getPreviousStep(Steps currentStep){
+
+	private Steps getPreviousStep(Steps currentStep) {
 		Steps previousStep = null;
 		Steps[] steps = Steps.values();
-		for(int i = 0; i < steps.length; i++){
-			if(steps[i].equals(currentStep)){
-				previousStep = steps[i-1];
+		for (int i = 0; i < steps.length; i++) {
+			if (steps[i].equals(currentStep)) {
+				previousStep = steps[i - 1];
 				break;
 			}
 		}
 		return previousStep;
-	}
-	
-	public String getFileExtension(File file){
-		String ext = "";
-		String fileName = file.getName();
-		int index = fileName.lastIndexOf('.');
-
-	    if (index > 0 &&  index < fileName.length() - 1) {
-	        ext = fileName.substring(index+1).toLowerCase();
-	    }
-	    return ext;
 	}
 
 }

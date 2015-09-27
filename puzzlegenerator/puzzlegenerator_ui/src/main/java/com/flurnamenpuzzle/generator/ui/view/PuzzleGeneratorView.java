@@ -41,9 +41,12 @@ public class PuzzleGeneratorView extends JFrame implements Observer {
 	/**
 	 * This method will create and show the ui. The view builds its components
 	 * and shows everything accordingly.
-	 * @param cardMap TODO
+	 * 
+	 * @param cardMap
+	 *            TODO
 	 */
-	public void createAndShow(PuzzleGeneratorController controller, Map<String, JPanel> cardMap) {
+	public void createAndShow(PuzzleGeneratorController controller,
+			Map<String, JPanel> cardMap) {
 		this.controller = controller;
 		initializeComponents(cardMap);
 		addEvents();
@@ -93,7 +96,8 @@ public class PuzzleGeneratorView extends JFrame implements Observer {
 		JLabel logoPuzzle = new JLabel();
 		steps = new JLabel();
 		logoFHNW.setIcon(new ImageIcon(this.getClass().getResource(LOGO_FHNW)));
-		logoPuzzle.setIcon(new ImageIcon(this.getClass().getResource(LOGO_PUZZLE)));
+		logoPuzzle.setIcon(new ImageIcon(this.getClass().getResource(
+				LOGO_PUZZLE)));
 		headerPanel.add(logoFHNW, BorderLayout.WEST);
 		headerPanel.add(steps, BorderLayout.CENTER);
 		headerPanel.add(logoPuzzle, BorderLayout.EAST);

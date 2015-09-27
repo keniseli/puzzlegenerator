@@ -17,11 +17,11 @@ import com.flurnamenpuzzle.generator.PuzzleGeneratorConfig;
 import com.flurnamenpuzzle.generator.domain.PuzzleGeneratorModel;
 import com.flurnamenpuzzle.generator.ui.PuzzleGeneratorController;
 
-public class ConfirmCardGeneration extends JPanel implements Observer{
+public class ConfirmCardGeneration extends JPanel implements Observer {
 	private static final long serialVersionUID = 1L;
 
 	private PuzzleGeneratorController controller;
-	
+
 	private JLabel stateLabel;
 	private JLabel stateNameLabel;
 	private JLabel stateShapefileLabel;
@@ -30,16 +30,15 @@ public class ConfirmCardGeneration extends JPanel implements Observer{
 	private JLabel fieldnameShapefilePathLabel;
 	private JLabel cardTiffLabel;
 	private JLabel cardTiffPathLabel;
-	
+
 	private JButton generateButton;
 	private JButton backButton;
-	
+
 	private String stateName;
 	private String stateShapefilePath;
 	private String fieldnameShapefilePath;
 	private String cardTiffPath;
-	
-	
+
 	/**
 	 * Constructs a new instance
 	 * 
@@ -52,9 +51,10 @@ public class ConfirmCardGeneration extends JPanel implements Observer{
 		addComponentsToPanel();
 		addEvents();
 	}
+
 	/**
 	 * working with migLayout to set the components in place
-	 */	
+	 */
 	private void addComponentsToPanel() {
 		add(stateLabel, "gaptop 40");
 		add(stateNameLabel, "gap :40:, gapbottom 10, wrap");
@@ -67,6 +67,7 @@ public class ConfirmCardGeneration extends JPanel implements Observer{
 		add(backButton, "left, gaptop 40");
 		add(generateButton, "right, gaptop 40");
 	}
+
 	/**
 	 * initialize all components needed for the panel
 	 */
@@ -74,41 +75,42 @@ public class ConfirmCardGeneration extends JPanel implements Observer{
 		setLayout(new MigLayout());
 		setBorder(new EmptyBorder(20, 200, 20, 200));
 		setSize(new Dimension(600, 600));
-		this.setBackground(PuzzleGeneratorConfig.BACKGROUND_COLOR);
-		
+		setBackground(PuzzleGeneratorConfig.BACKGROUND_COLOR);
+
 		stateLabel = new JLabel("Gemeinde");
 		stateLabel.setFont(PuzzleGeneratorConfig.FONT_BOLD);
-		
+
 		stateNameLabel = new JLabel(stateName);
 		stateNameLabel.setFont(PuzzleGeneratorConfig.FONT_NORMAL);
-		
+
 		stateShapefileLabel = new JLabel("Gemeinde-Shapefile");
 		stateShapefileLabel.setFont(PuzzleGeneratorConfig.FONT_BOLD);
-		
+
 		stateShapefilePathLabel = new JLabel(stateShapefilePath);
 		stateShapefilePathLabel.setFont(PuzzleGeneratorConfig.FONT_NORMAL);
-		
+
 		fieldnameShapefileLabel = new JLabel("Flurnamen-Shapefile");
 		fieldnameShapefileLabel.setFont(PuzzleGeneratorConfig.FONT_BOLD);
-		
+
 		fieldnameShapefilePathLabel = new JLabel(fieldnameShapefilePath);
 		fieldnameShapefilePathLabel.setFont(PuzzleGeneratorConfig.FONT_NORMAL);
-		
+
 		cardTiffLabel = new JLabel("Karten-Tiff");
 		cardTiffLabel.setFont(PuzzleGeneratorConfig.FONT_BOLD);
-		
+
 		cardTiffPathLabel = new JLabel(cardTiffPath);
 		cardTiffPathLabel.setFont(PuzzleGeneratorConfig.FONT_NORMAL);
-		
+
 		backButton = new JButton("Zurück");
 		backButton.setFont(PuzzleGeneratorConfig.FONT_BOLD);
-		
+
 		generateButton = new JButton("Generieren");
 		generateButton.setFont(PuzzleGeneratorConfig.FONT_BOLD);
 	}
+
 	/**
 	 * add all action listener to the buttons
-	 */	
+	 */
 	private void addEvents() {
 		generateButton.addActionListener(new ActionListener() {
 			@Override
@@ -123,7 +125,7 @@ public class ConfirmCardGeneration extends JPanel implements Observer{
 			}
 		});
 	}
-	
+
 	@Override
 	public void update(Observable observable) {
 		PuzzleGeneratorModel model = (PuzzleGeneratorModel) observable;
