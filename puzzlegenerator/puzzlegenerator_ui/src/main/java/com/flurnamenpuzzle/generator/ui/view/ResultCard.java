@@ -26,9 +26,12 @@ public class ResultCard extends JPanel implements Observer {
 	private static final long serialVersionUID = 1L;
 
 	private PuzzleGeneratorController controller;
+	
 	private JLabel resultImage;
 	private JLabel resultLabel;
 	private JLabel resultList;
+	private JLabel notificationLabel;
+	
 	private JButton finishButton;
 
 	/**
@@ -51,6 +54,7 @@ public class ResultCard extends JPanel implements Observer {
 		add(resultList, "width 200::200, gapbottom 5");
 		add(resultImage, "right, span, gapbottom 5, wrap");
 		add(resultLabel, "center, span, height :30:");
+		add(notificationLabel, "span, gaptop 20");
 		add(finishButton, "right, span, gaptop 40");
 	}
 
@@ -69,6 +73,8 @@ public class ResultCard extends JPanel implements Observer {
 		resultImage.setFont(PuzzleGeneratorConfig.FONT_NORMAL);
 		resultLabel = new JLabel("");
 		resultLabel.setFont(PuzzleGeneratorConfig.FONT_BOLD);
+		notificationLabel = new JLabel("");
+		notificationLabel.setFont(PuzzleGeneratorConfig.FONT_BOLD);
 		finishButton = new JButton("Beenden");
 		finishButton.setFont(PuzzleGeneratorConfig.FONT_BOLD);
 	}
@@ -90,6 +96,7 @@ public class ResultCard extends JPanel implements Observer {
 	public void update(Observable observable) {
 		PuzzleGeneratorModel model = (PuzzleGeneratorModel) observable;
 		boolean success = model.isGenerationSuccess();
+		String notification = model.getNotification();
 		if (success) {
 			resultImage.setIcon(new ImageIcon(this.getClass().getResource(
 					PuzzleGeneratorConfig.SUCCESS_IMAGE)));
@@ -98,8 +105,10 @@ public class ResultCard extends JPanel implements Observer {
 			resultImage.setIcon(new ImageIcon(this.getClass().getResource(
 					PuzzleGeneratorConfig.FAIL_IMAGE)));
 			resultLabel.setText("Das Puzzle konnte nicht erstellt werden.");
-			resultList.setForeground(model.getNotificationColor());
-			resultList.setText(model.getNotification());
+		}
+		if(notification != null){
+			notificationLabel.setForeground(model.getNotificationColor());
+			notificationLabel.setText(notification);
 		}
 	}
 }

@@ -4,6 +4,7 @@ import java.awt.Color;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
+import java.nio.file.LinkOption;
 import java.nio.file.attribute.FileAttribute;
 import java.util.HashMap;
 import java.util.List;
@@ -157,15 +158,29 @@ public class PuzzleGeneratorController {
 	}
 
 	public void setTargetAndSavePuzzle(String targetPath) {
-		puzzleGeneratorModel.setTargetFolderPath(targetPath);
 		File targetDirectory = new File(targetPath);
-		Puzzle puzzle = puzzleGeneratorModel.getPuzzle();
-		for (File puzzleFile : puzzle.getImages()) {
-			moveFile(puzzleFile, targetDirectory);
+		if(targetDirectory.exists() && targetDirectory.isDirectory()){
+			puzzleGeneratorModel.setTargetFolderPath(targetPath);
+			try {
+				Puzzle puzzle = puzzleGeneratorModel.getPuzzle();
+				puzzleGeneratorModel.setGenerationSuccess(true);
+				for (File puzzleFile : puzzle.getImages()) {
+					moveFile(puzzleFile, targetDirectory);
+				}
+				File xmlFile = puzzle.getXmlFile();
+				moveFile(xmlFile, targetDirectory);
+				proceed(Steps.STEP_6);
+			} catch (Exception e) {
+				puzzleGeneratorModel.setNotification(
+						"Keine gültige Pfadangabe.",
+						PuzzleGeneratorConfig.FAIL_COLOR);
+				return;
+			}
+		}else{
+			puzzleGeneratorModel.setNotification(
+					"Bitte geben Sie einen gültigen Ordner an.",
+					PuzzleGeneratorConfig.FAIL_COLOR);
 		}
-		File xmlFile = puzzle.getXmlFile();
-		moveFile(xmlFile, targetDirectory);
-		proceed(Steps.STEP_6);
 	}
 
 	public void finish() {
@@ -185,7 +200,6 @@ public class PuzzleGeneratorController {
 					"Files konnten nicht verschoben werden.",
 					PuzzleGeneratorConfig.FAIL_COLOR);
 		}
-		puzzleGeneratorModel.setGenerationSuccess(true);
 	}
 
 	private File createTemporaryDirectory() {
@@ -226,7 +240,9 @@ public class PuzzleGeneratorController {
 							.setNotification(
 									"Beim Generieren der Puzzle-Teile ist ein Fehler aufgetreten.",
 									PuzzleGeneratorConfig.FAIL_COLOR);
+					puzzleGeneratorModel.setGenerationSuccess(false);
 					puzzleGeneratorModel.setCurrentStep(Steps.STEP_6);
+					return;
 				}
 
 				puzzleGeneratorModel.setPuzzle(puzzle);

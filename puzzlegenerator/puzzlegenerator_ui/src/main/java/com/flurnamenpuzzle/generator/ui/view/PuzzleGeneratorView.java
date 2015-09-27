@@ -122,7 +122,7 @@ public class PuzzleGeneratorView extends JFrame implements Observer {
 		String imagePath = currentStep.getImagePath();
 		URL imageResource = this.getClass().getResource(imagePath);
 		ImageIcon icon = new ImageIcon(imageResource);
-		this.steps.setIcon(icon);
+		steps.setIcon(icon);
 		cardLayout.show(cards, currentStepId);
 	}
 
