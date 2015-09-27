@@ -98,6 +98,7 @@ public class ResultCard extends JPanel implements Observer {
 			resultImage.setIcon(new ImageIcon(this.getClass().getResource(
 					PuzzleGeneratorConfig.FAIL_IMAGE)));
 			resultLabel.setText("Das Puzzle konnte nicht erstellt werden.");
+			resultList.setText("");
 		}
 	}
 }
