@@ -155,9 +155,9 @@ public class ConfirmCardGeneration extends JPanel implements Observer {
 	}
 
 	/**
-	 * kürzt Pfad nach meinen Kriterien:
-	 * @param filePathToShorten, wie ist Pfad aufgebaut
-	 * @return gekürzter Name
+	 * Shortens the given path if <ul><li>the length of the name is longer than 10 character</li><li>the path has 4 or more directories</li><li>the name of the path is longer than 40 characters</li></ul>
+	 * @param filePathToShorten: path structure: path, filename, name extension
+	 * @return shorted pathname
 	 */
 	public String shortenFilePath(String filePathToShorten) {
 		String pathToShorten = FilenameUtils.getFullPath(filePathToShorten);
