@@ -18,7 +18,6 @@ import com.flurnamenpuzzle.generator.PuzzleGeneratorConfig;
 import com.flurnamenpuzzle.generator.domain.PuzzleGeneratorModel;
 import com.flurnamenpuzzle.generator.ui.PuzzleGeneratorController;
 
-
 /**
  * Class for the state selection panel
  * 
@@ -27,9 +26,12 @@ public class ResultCard extends JPanel implements Observer {
 	private static final long serialVersionUID = 1L;
 
 	private PuzzleGeneratorController controller;
+	
 	private JLabel resultImage;
 	private JLabel resultLabel;
 	private JLabel resultList;
+	private JLabel notificationLabel;
+	
 	private JButton finishButton;
 
 	/**
@@ -52,6 +54,7 @@ public class ResultCard extends JPanel implements Observer {
 		add(resultList, "width 200::200, gapbottom 5");
 		add(resultImage, "right, span, gapbottom 5, wrap");
 		add(resultLabel, "center, span, height :30:");
+		add(notificationLabel, "span, gaptop 20");
 		add(finishButton, "right, span, gaptop 40");
 	}
 
@@ -59,19 +62,21 @@ public class ResultCard extends JPanel implements Observer {
 	 * initialize all components needed for the panel
 	 */
 	private void initializeComponents() {
-		this.setLayout(new MigLayout("debug"));
-		this.setBorder(new EmptyBorder(20, 200, 20, 200));
-		this.setSize(new Dimension(600, 600));
-		this.setBackground(PuzzleGeneratorConfig.BACKGROUND_COLOR);
+		setLayout(new MigLayout());
+		setBorder(new EmptyBorder(20, 200, 20, 200));
+		setSize(new Dimension(600, 600));
+		setBackground(PuzzleGeneratorConfig.BACKGROUND_COLOR);
 
-		this.resultList = new JLabel("");
-		this.resultList.setFont(PuzzleGeneratorConfig.FONT_NORMAL);
-		this.resultImage = new JLabel("");
-		this.resultImage.setFont(PuzzleGeneratorConfig.FONT_NORMAL);
-		this.resultLabel = new JLabel("");
-		this.resultLabel.setFont(PuzzleGeneratorConfig.FONT_BOLD);
-		this.finishButton = new JButton("Beenden");
-		this.finishButton.setFont(PuzzleGeneratorConfig.FONT_BOLD);
+		resultList = new JLabel("");
+		resultList.setFont(PuzzleGeneratorConfig.FONT_NORMAL);
+		resultImage = new JLabel("");
+		resultImage.setFont(PuzzleGeneratorConfig.FONT_NORMAL);
+		resultLabel = new JLabel("");
+		resultLabel.setFont(PuzzleGeneratorConfig.FONT_BOLD);
+		notificationLabel = new JLabel("");
+		notificationLabel.setFont(PuzzleGeneratorConfig.FONT_BOLD);
+		finishButton = new JButton("Beenden");
+		finishButton.setFont(PuzzleGeneratorConfig.FONT_BOLD);
 	}
 
 	/**
@@ -91,13 +96,19 @@ public class ResultCard extends JPanel implements Observer {
 	public void update(Observable observable) {
 		PuzzleGeneratorModel model = (PuzzleGeneratorModel) observable;
 		boolean success = model.isGenerationSuccess();
-		if (success){
-			this.resultImage.setIcon(new ImageIcon(this.getClass().getResource(PuzzleGeneratorConfig.SUCCESS_IMAGE)));
-			this.resultLabel.setText("Das Puzzle wurde erfolgreich erstellt!");
+		String notification = model.getNotification();
+		if (success) {
+			resultImage.setIcon(new ImageIcon(this.getClass().getResource(
+					PuzzleGeneratorConfig.SUCCESS_IMAGE)));
+			resultLabel.setText("Das Puzzle wurde erfolgreich erstellt!");
 		} else {
-			this.resultImage.setIcon(new ImageIcon(this.getClass().getResource(PuzzleGeneratorConfig.FAIL_IMAGE)));
-			this.resultLabel.setText("Das Puzzle konnte nicht erstellt werden.");
-			this.resultList.setText("…Fehlerliste…");
+			resultImage.setIcon(new ImageIcon(this.getClass().getResource(
+					PuzzleGeneratorConfig.FAIL_IMAGE)));
+			resultLabel.setText("Das Puzzle konnte nicht erstellt werden.");
+		}
+		if(notification != null){
+			notificationLabel.setForeground(model.getNotificationColor());
+			notificationLabel.setText(notification);
 		}
 	}
 }

@@ -10,11 +10,10 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 
+import net.miginfocom.swing.MigLayout;
+
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.lang3.StringUtils;
-import org.junit.Test;
-
-import net.miginfocom.swing.MigLayout;
 
 import com.flurnamenpuzzle.generator.Observable;
 import com.flurnamenpuzzle.generator.Observer;
@@ -45,7 +44,7 @@ public class ConfirmCardGeneration extends JPanel implements Observer {
 	private JLabel cardTiffPathLabel;
 
 	private JButton generateButton;
-
+	private JButton backButton;
 	private String stateName;
 	private String stateShapefilePath;
 	private String fieldnameShapefilePath;
@@ -76,7 +75,8 @@ public class ConfirmCardGeneration extends JPanel implements Observer {
 		add(fieldnameShapefilePathLabel, "gap :40:, gapbottom 10, wrap");
 		add(cardTiffLabel);
 		add(cardTiffPathLabel, "gap :40:, gapbottom 10, wrap");
-		add(generateButton, "right, span, gaptop 40");
+		add(backButton, "left, gaptop 40");
+		add(generateButton, "right, gaptop 40");
 	}
 
 	/**
@@ -86,7 +86,7 @@ public class ConfirmCardGeneration extends JPanel implements Observer {
 		setLayout(new MigLayout());
 		setBorder(new EmptyBorder(20, 200, 20, 200));
 		setSize(new Dimension(600, 600));
-		this.setBackground(PuzzleGeneratorConfig.BACKGROUND_COLOR);
+		setBackground(PuzzleGeneratorConfig.BACKGROUND_COLOR);
 
 		stateLabel = new JLabel("Gemeinde");
 		stateLabel.setFont(PuzzleGeneratorConfig.FONT_BOLD);
@@ -112,18 +112,31 @@ public class ConfirmCardGeneration extends JPanel implements Observer {
 		cardTiffPathLabel = new JLabel(cardTiffPath);
 		cardTiffPathLabel.setFont(PuzzleGeneratorConfig.FONT_NORMAL);
 
+		backButton = new JButton("Zurück");
+		backButton.setFont(PuzzleGeneratorConfig.FONT_BOLD);
+
 		generateButton = new JButton("Generieren");
 		generateButton.setFont(PuzzleGeneratorConfig.FONT_BOLD);
 	}
 
 	/**
+<<<<<<< HEAD
 	 * add all actionlistener to the buttons
+=======
+	 * add all action listener to the buttons
+>>>>>>> refs/remotes/origin/master
 	 */
 	private void addEvents() {
 		generateButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				controller.confirmGeneration();
+			}
+		});
+		backButton.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				controller.showPreviousCard();
 			}
 		});
 	}

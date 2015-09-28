@@ -62,12 +62,13 @@ public class ShapeService {
 	 *            List of SimpleFeatures to be filtered
 	 * @return Filtered {@code List<SimpleFeature>}
 	 */
-	public List<SimpleFeature> filterContainingFeaturesOfFeature(SimpleFeature parentFeature,
-			List<SimpleFeature> childFeatures) {
+	public List<SimpleFeature> filterContainingFeaturesOfFeature(
+			SimpleFeature parentFeature, List<SimpleFeature> childFeatures) {
 		List<SimpleFeature> filteredFeatures = new ArrayList<SimpleFeature>();
 		Geometry parentGeometry = (Geometry) parentFeature.getDefaultGeometry();
 		for (SimpleFeature childFeature : childFeatures) {
-			Geometry childGeometry = (Geometry) childFeature.getDefaultGeometry();
+			Geometry childGeometry = (Geometry) childFeature
+					.getDefaultGeometry();
 			if (parentGeometry.contains(childGeometry.getCentroid())) {
 				filteredFeatures.add(childFeature);
 			}
@@ -84,19 +85,24 @@ public class ShapeService {
 	 *            the file to find the features of.
 	 * @return the {@link SimpleFeatureCollection} of the given file.
 	 */
-	public SimpleFeatureCollection getFeaturesOfShapeFile(File flurnamenShapeFile) {
+	public SimpleFeatureCollection getFeaturesOfShapeFile(
+			File flurnamenShapeFile) {
 		SimpleFeatureCollection flurnamenSimpleFeatureCollection = null;
 		FileDataStore dataStoreFlurnamen = null;
 		try {
-			dataStoreFlurnamen = FileDataStoreFinder.getDataStore(flurnamenShapeFile);
-			SimpleFeatureSource shapeFileSourceFlurnamen = dataStoreFlurnamen.getFeatureSource();
+			dataStoreFlurnamen = FileDataStoreFinder
+					.getDataStore(flurnamenShapeFile);
+			SimpleFeatureSource shapeFileSourceFlurnamen = dataStoreFlurnamen
+					.getFeatureSource();
 			dataStoreFlurnamen.dispose();
-			flurnamenSimpleFeatureCollection = shapeFileSourceFlurnamen.getFeatures();
+			flurnamenSimpleFeatureCollection = shapeFileSourceFlurnamen
+					.getFeatures();
 		} catch (IOException | RuntimeException e) {
 			// FIXME: Actually this should be a java.io.IOException but for
 			// magical reasons it throws a java.lang.RuntimeException. Thanks.
 			dataStoreFlurnamen.dispose();
-			throw new ServiceException(e, "There was an error reading the file to get features of.");
+			throw new ServiceException(e,
+					"There was an error reading the file to get features of.");
 		}
 		return flurnamenSimpleFeatureCollection;
 	}
@@ -116,7 +122,8 @@ public class ShapeService {
 		SimpleFeatureIterator featuresIterator = featuresCollection.features();
 		while (featuresIterator.hasNext()) {
 			SimpleFeature feature = featuresIterator.next();
-			String shapeName = getAttributeValueOfFeature(feature, attributeNameKey);
+			String shapeName = getAttributeValueOfFeature(feature,
+					attributeNameKey);
 			names.add(shapeName);
 		}
 		featuresIterator.close();
@@ -133,7 +140,8 @@ public class ShapeService {
 	 *            The name of the shape to be found.
 	 * @return The found {@link SimpleFeature}, null otherwise.
 	 */
-	public SimpleFeature getFeatureOfShapeFileByName(String shapeFilePath, String shapeName) {
+	public SimpleFeature getFeatureOfShapeFileByName(String shapeFilePath,
+			String shapeName) {
 		File shapeFile = new File(shapeFilePath);
 		SimpleFeatureCollection featuresCollection = getFeaturesOfShapeFile(shapeFile);
 
@@ -142,7 +150,8 @@ public class ShapeService {
 		String attributeNameKey = determineNameAttributeKeyOfFeatures(featuresCollection);
 		while (featuresIterator.hasNext()) {
 			SimpleFeature foundFeature = featuresIterator.next();
-			String foundShapeName = getAttributeValueOfFeature(foundFeature, attributeNameKey);
+			String foundShapeName = getAttributeValueOfFeature(foundFeature,
+					attributeNameKey);
 			if (foundShapeName.equals(shapeName)) {
 				feature = foundFeature;
 			}
@@ -162,8 +171,8 @@ public class ShapeService {
 
 	/**
 	 * Checks if all three required Shape files are available (".shp", ".shx",
-	 * ".dbf") and returns the ".shp" file. If at least one of the three files is
-	 * missing a {@link ServiceException} will be thrown.
+	 * ".dbf") and returns the ".shp" file. If at least one of the three files
+	 * is missing a {@link ServiceException} will be thrown.
 	 * 
 	 * @param filePath
 	 *            Path of one of the three shape files.
@@ -171,30 +180,39 @@ public class ShapeService {
 	 */
 	public File getMainShapeFile(String filePath) {
 		// remove file extension from file path
-		String filePathWithoutExtension = filePath.substring(0, filePath.lastIndexOf('.'));
-
-		String shpFilePath = filePathWithoutExtension + SHAPE_FILE_EXTENSION_SHP;
+		int lastIndexOfDot = filePath.lastIndexOf('.');
+		String filePathWithoutExtension = filePath;
+		if (lastIndexOfDot >= 0) {
+			filePathWithoutExtension = filePath.substring(0, lastIndexOfDot);
+		}
+		String shpFilePath = filePathWithoutExtension
+				+ SHAPE_FILE_EXTENSION_SHP;
 		File shpFile = new File(shpFilePath);
 		if (!shpFile.exists()) {
-			throw new ServiceException(shpFile.getName()
-					+ " does not exist. All three shape files (.shp, .shx, .dbf) are required.");
+			throw new ServiceException(
+					"[" + shpFile.getName()
+							+ "] existiert nicht. Alle Dateien (.shp, .shx, .dbf) müssen vorhanden sein.");
 		}
 
-		String shxFilePath = filePathWithoutExtension + SHAPE_FILE_EXTENSION_SHX;
+		String shxFilePath = filePathWithoutExtension
+				+ SHAPE_FILE_EXTENSION_SHX;
 		File shxFile = new File(shxFilePath);
 		if (!shxFile.exists()) {
-			throw new ServiceException(shxFile.getName()
-					+ " does not exist. All three shape files (.shp, .shx, .dbf) are required.");
+			throw new ServiceException(
+					"[" + shxFile.getName()
+							+ "] existiert nicht. Alle Dateien (.shp, .shx, .dbf) müssen vorhanden sein.");
 		}
 
-		String dbfFilePath = filePathWithoutExtension + SHAPE_FILE_EXTENSION_DBF;
+		String dbfFilePath = filePathWithoutExtension
+				+ SHAPE_FILE_EXTENSION_DBF;
 		File dbfFile = new File(dbfFilePath);
 		if (!dbfFile.exists()) {
-			throw new ServiceException(dbfFile.getName()
-					+ " does not exist. All three shape files (.shp, .shx, .dbf) are required.");
+			throw new ServiceException(
+					"[" + dbfFile.getName()
+							+ "] existiert nicht. Alle Dateien (.shp, .shx, .dbf) müssen vorhanden sein.");
 		}
-
 		return shpFile;
+
 	}
 
 	/**
@@ -206,7 +224,8 @@ public class ShapeService {
 	 *            The collection to find the name attribute key of.
 	 * @return The found name
 	 */
-	private String determineNameAttributeKeyOfFeatures(SimpleFeatureCollection featuresCollection) {
+	private String determineNameAttributeKeyOfFeatures(
+			SimpleFeatureCollection featuresCollection) {
 		SimpleFeatureIterator featuresIterator = featuresCollection.features();
 		String nameAttributeKey = "";
 		if (featuresIterator.hasNext()) {
@@ -236,15 +255,18 @@ public class ShapeService {
 			Property property = propertiesArray[i];
 			Name propertyName = property.getName();
 			String localPartOfPropertyName = propertyName.getLocalPart();
-			if (localPartOfPropertyName.equalsIgnoreCase(MAP_SHEET_NAME_ATTRIBUTE_KEY)
-					|| localPartOfPropertyName.equalsIgnoreCase(NAME_ATTRIBUTE_KEY)) {
+			if (localPartOfPropertyName
+					.equalsIgnoreCase(MAP_SHEET_NAME_ATTRIBUTE_KEY)
+					|| localPartOfPropertyName
+							.equalsIgnoreCase(NAME_ATTRIBUTE_KEY)) {
 				nameAttributeKey = localPartOfPropertyName;
 				break;
 			}
 		}
 		if (nameAttributeKey == null && !properties.isEmpty()) {
 			Property firstProperty = propertiesArray[0];
-			nameAttributeKey = firstProperty.getName().getLocalPart().toString();
+			nameAttributeKey = firstProperty.getName().getLocalPart()
+					.toString();
 		}
 		return nameAttributeKey;
 	}
@@ -259,7 +281,8 @@ public class ShapeService {
 	 *            The attribute key of the attribute.
 	 * @return the value of the attribute.
 	 */
-	private String getAttributeValueOfFeature(SimpleFeature feature, String attributeNameKey) {
+	private String getAttributeValueOfFeature(SimpleFeature feature,
+			String attributeNameKey) {
 		Object nameAttribute = feature.getAttribute(attributeNameKey);
 		String foundShapeName = "";
 		if (nameAttribute != null) {

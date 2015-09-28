@@ -1,5 +1,6 @@
 package com.flurnamenpuzzle.generator.domain;
 
+import java.awt.Color;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
@@ -26,6 +27,7 @@ public class PuzzleGeneratorModel implements Observable, PuzzleGeneratorProgress
 	private boolean abortGeneration;
 	private File temporaryDirectory;
 	private boolean generationSuccess;
+	private Color notificationColor;
 
 	public PuzzleGeneratorModel() {
 		observers = new ArrayList<Observer>();
@@ -52,6 +54,12 @@ public class PuzzleGeneratorModel implements Observable, PuzzleGeneratorProgress
 
 	public void setNotification(String notification) {
 		this.notification = notification;
+		notifyObservers();
+	}
+	
+	public void setNotification(String notification, Color notificationColor) {
+		this.notification = notification;
+		setNotificationColor(notificationColor);
 		notifyObservers();
 	}
 
@@ -168,6 +176,14 @@ public class PuzzleGeneratorModel implements Observable, PuzzleGeneratorProgress
 
 	public void setGenerationSuccess(boolean generationSuccess) {
 		this.generationSuccess = generationSuccess;
+	}
+
+	public Color getNotificationColor() {
+		return notificationColor;
+	}
+
+	public void setNotificationColor(Color notificationColor) {
+		this.notificationColor = notificationColor;
 	}
 
 }

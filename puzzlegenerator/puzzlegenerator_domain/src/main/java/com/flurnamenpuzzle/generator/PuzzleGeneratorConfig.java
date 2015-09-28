@@ -30,4 +30,6 @@ public final class PuzzleGeneratorConfig {
 	public static final String FAIL_IMAGE = "/failed.png";
 	
 	public static final Color BACKGROUND_COLOR = Color.WHITE;
+	public static final Color SUCCESS_COLOR = new Color(161, 184, 56);
+	public static final Color FAIL_COLOR = new Color(212, 56, 61);
 }
