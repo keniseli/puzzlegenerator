@@ -4,15 +4,14 @@ import java.awt.Color;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
-import java.nio.file.LinkOption;
 import java.nio.file.attribute.FileAttribute;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Observer;
 
 import javax.swing.JPanel;
 
-import com.flurnamenpuzzle.generator.Observer;
 import com.flurnamenpuzzle.generator.PuzzleGeneratorConfig;
 import com.flurnamenpuzzle.generator.Steps;
 import com.flurnamenpuzzle.generator.domain.Puzzle;

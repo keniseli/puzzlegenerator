@@ -3,6 +3,7 @@ package com.flurnamenpuzzle.generator.ui.view;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.File;
 
 import javax.swing.JButton;
 import javax.swing.JLabel;
@@ -10,6 +11,9 @@ import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 
 import net.miginfocom.swing.MigLayout;
+
+import org.apache.commons.io.FilenameUtils;
+import org.apache.commons.lang3.StringUtils;
 
 import com.flurnamenpuzzle.generator.Observable;
 import com.flurnamenpuzzle.generator.Observer;
@@ -19,6 +23,14 @@ import com.flurnamenpuzzle.generator.ui.PuzzleGeneratorController;
 
 public class ConfirmCardGeneration extends JPanel implements Observer {
 	private static final long serialVersionUID = 1L;
+
+	private static final String FILE_PATH_SHORTENING_REGEX = "(.*?/.*?/).*";
+
+	private static final String FILE_NAME_SHORTENING_REGEX = "(.{10}).*";
+
+	private static final String FILE_PATH_SHORTENING_REPLACEMENT = "$1...";
+
+	private static final String FILE_NAME_SHORTENING_REPLACEMENT = "$1..";
 
 	private PuzzleGeneratorController controller;
 
@@ -33,7 +45,6 @@ public class ConfirmCardGeneration extends JPanel implements Observer {
 
 	private JButton generateButton;
 	private JButton backButton;
-
 	private String stateName;
 	private String stateShapefilePath;
 	private String fieldnameShapefilePath;
@@ -109,7 +120,11 @@ public class ConfirmCardGeneration extends JPanel implements Observer {
 	}
 
 	/**
+<<<<<<< HEAD
+	 * add all actionlistener to the buttons
+=======
 	 * add all action listener to the buttons
+>>>>>>> refs/remotes/origin/master
 	 */
 	private void addEvents() {
 		generateButton.addActionListener(new ActionListener() {
@@ -131,12 +146,36 @@ public class ConfirmCardGeneration extends JPanel implements Observer {
 		PuzzleGeneratorModel model = (PuzzleGeneratorModel) observable;
 		stateName = model.getStateName();
 		stateNameLabel.setText(stateName);
-		stateShapefilePath = model.getStateFilePath();
+		stateShapefilePath = shortenFilePath(model.getStateFilePath());
 		stateShapefilePathLabel.setText(stateShapefilePath);
-		fieldnameShapefilePath = model.getFieldNameFilePath();
+		fieldnameShapefilePath = shortenFilePath(model.getFieldNameFilePath());
 		fieldnameShapefilePathLabel.setText(fieldnameShapefilePath);
-		cardTiffPath = model.getMapFilePath();
+		cardTiffPath = shortenFilePath(model.getMapFilePath());
 		cardTiffPathLabel.setText(cardTiffPath);
+	}
+
+	/**
+	 * Shortens the given path if <ul><li>the length of the name is longer than 10 character</li><li>the path has 4 or more directories</li><li>the name of the path is longer than 40 characters</li></ul>
+	 * @param filePathToShorten: path structure: path, filename, name extension
+	 * @return shorted pathname
+	 */
+	public String shortenFilePath(String filePathToShorten) {
+		String pathToShorten = FilenameUtils.getFullPath(filePathToShorten);
+		String nameToShorten = FilenameUtils.getBaseName(filePathToShorten);
+		String nameExtension = FilenameUtils.getExtension(filePathToShorten);
+		
+		int amountOfPathSeparators = StringUtils.countMatches(pathToShorten, File.separator);
+		if (pathToShorten.length() > 40 || amountOfPathSeparators > 4) {
+			pathToShorten = pathToShorten.replaceAll(FILE_PATH_SHORTENING_REGEX, FILE_PATH_SHORTENING_REPLACEMENT);
+			pathToShorten = String.format("%s%s", pathToShorten, File.separator);
+		}
+		
+		if (nameToShorten.length() > 10) {
+			nameToShorten = nameToShorten.replaceAll(FILE_NAME_SHORTENING_REGEX, FILE_NAME_SHORTENING_REPLACEMENT);
+		}
+
+		filePathToShorten = String.format("%s%s.%s", pathToShorten, nameToShorten, nameExtension);
+		return filePathToShorten;
 	}
 
 }
