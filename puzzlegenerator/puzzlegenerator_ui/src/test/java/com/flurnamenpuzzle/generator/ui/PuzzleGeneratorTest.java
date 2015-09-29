@@ -15,7 +15,6 @@ import com.flurnamenpuzzle.generator.domain.PuzzleGeneratorModel;
 
 public class PuzzleGeneratorTest {
 
-	@Ignore
 	@Test
 	public void testPuzzleGenerator() throws IOException {
 		PuzzleGeneratorModel puzzleGeneratorModel = new PuzzleGeneratorModel();
@@ -33,15 +32,15 @@ public class PuzzleGeneratorTest {
 		String fieldShapeFilePath = getResourcePath("/Flure.shp");
 		puzzleGeneratorController.saveFieldNameFilePathAndCardMaterialFilePath(fieldShapeFilePath, cardMaterialPath,
 				"Thun");
-		
+
 		// TODO assertions
-		
+
 		puzzleGeneratorController.confirmGeneration();
-		
+
 		// TODO assertions
-		
+
 		FileAttribute<?>[] attrs = {};
-		Path createTempDirectory = Files.createTempDirectory("puzzleGeneratorTestTemporaryDirectory", attrs );
+		Path createTempDirectory = Files.createTempDirectory("puzzleGeneratorTestTemporaryDirectory", attrs);
 		String pathToTargetDirectory = createTempDirectory.toFile().getAbsolutePath();
 		puzzleGeneratorController.setTargetAndSavePuzzle(pathToTargetDirectory);
 	}

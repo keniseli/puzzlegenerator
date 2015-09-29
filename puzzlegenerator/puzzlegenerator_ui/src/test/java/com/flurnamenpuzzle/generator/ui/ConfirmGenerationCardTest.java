@@ -4,14 +4,14 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
-import com.flurnamenpuzzle.generator.ui.view.ConfirmCardGeneration;
+import com.flurnamenpuzzle.generator.ui.view.ConfirmGenerationCard;
 
-public class ConfirmCardGenerationTest {
-	ConfirmCardGeneration card;
+public class ConfirmGenerationCardTest {
+	private ConfirmGenerationCard card;
 
 	@Before
 	public void setUp() {
-		card = new ConfirmCardGeneration(null);
+		card = new ConfirmGenerationCard(null);
 	}
 
 	@Test
@@ -65,11 +65,10 @@ public class ConfirmCardGenerationTest {
 				.shortenFilePath("C:/Users/ordner/nomoleine/undnomoleine/dahetssogarnomoleine/bla/bli/blu/shapefilemegalang.shp");
 		Assert.assertEquals("C:/Users/.../shapefilem...shp", shortenedFilePath);
 	}
-	
+
 	@Test
 	public void testShortPathWithShortFilenameWithMultipleFolders() {
-		String shortenedFilePath = card
-				.shortenFilePath("C:/a/b/c/d/e/f/g/h/i/j/file.shp");
+		String shortenedFilePath = card.shortenFilePath("C:/a/b/c/d/e/f/g/h/i/j/file.shp");
 		Assert.assertEquals("C:/a/.../file.shp", shortenedFilePath);
 	}
 

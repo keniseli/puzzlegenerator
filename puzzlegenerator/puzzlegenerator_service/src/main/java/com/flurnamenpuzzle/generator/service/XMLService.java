@@ -26,16 +26,14 @@ public class XMLService {
 
 	public XMLService() {
 		try {
-
 			DocumentBuilderFactory docFactory = DocumentBuilderFactory.newInstance();
 			DocumentBuilder docBuilder = docFactory.newDocumentBuilder();
 
 			document = docBuilder.newDocument();
 			rootElement = document.createElement("puzzle");
 			document.appendChild(rootElement);
-
 		} catch (ParserConfigurationException e) {
-			e.printStackTrace();
+			throw new ServiceException("Puzzle Konfigurationsdatei konnte nicht erstellt werden.");
 		}
 	}
 

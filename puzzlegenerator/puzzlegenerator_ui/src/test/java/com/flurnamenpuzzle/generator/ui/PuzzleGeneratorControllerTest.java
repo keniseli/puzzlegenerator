@@ -17,7 +17,7 @@ import com.flurnamenpuzzle.generator.Observer;
 import com.flurnamenpuzzle.generator.Steps;
 import com.flurnamenpuzzle.generator.domain.PuzzleGeneratorModel;
 import com.flurnamenpuzzle.generator.service.ShapeService;
-import com.flurnamenpuzzle.generator.ui.view.ConfirmCardGeneration;
+import com.flurnamenpuzzle.generator.ui.view.ConfirmGenerationCard;
 import com.flurnamenpuzzle.generator.ui.view.FieldNameMapSelectionCard;
 import com.flurnamenpuzzle.generator.ui.view.PuzzleGeneratorView;
 import com.flurnamenpuzzle.generator.ui.view.StateSelectionCard;
@@ -42,7 +42,7 @@ public class PuzzleGeneratorControllerTest {
 				new FieldNameMapSelectionCard(controller);
 				times = 1;
 
-				new ConfirmCardGeneration(controller);
+				new ConfirmGenerationCard(controller);
 				times = 1;
 
 				puzzleGeneratorModelMock.addObserver((Observer) any);
@@ -53,7 +53,7 @@ public class PuzzleGeneratorControllerTest {
 	}
 
 	@Test
-	public void testSaveStateFilePath(@Mocked ShapeService shapeService, @Injectable File shapeFile, 
+	public void testSaveStateFilePath(@Mocked ShapeService shapeService, @Injectable File shapeFile,
 			@Injectable PuzzleGeneratorModel puzzleGeneratorModelMock) {
 		String pathname = "path/to/shape/file.shp";
 		List<String> returnedNames = new ArrayList<>();
@@ -65,30 +65,30 @@ public class PuzzleGeneratorControllerTest {
 				shapeService.getNamesOfShapeFile(shapeFile);
 				returns(returnedNames);
 				times = 1;
-				
+
 				shapeFile.getAbsolutePath();
 				returns(pathname);
 				times = 1;
-				
+
 				shapeService.getMainShapeFile(pathname);
 				returns(shapeFile);
 				times = 1;
 			}
-			
+
 		};
-		
+
 		PuzzleGeneratorController controller = new PuzzleGeneratorController(puzzleGeneratorModelMock);
 		controller.saveStateFilePath(pathname);
-		
+
 		String[] returnedNamesArray = { "first shape name", "second shape name", "third shape name" };
 		new Verifications() {
 			{
 				puzzleGeneratorModelMock.setStateFilePath(pathname);
 				times = 1;
-				
+
 				puzzleGeneratorModelMock.setStates(returnedNamesArray);
 				times = 1;
-				
+
 				puzzleGeneratorModelMock.setCurrentStep(Steps.STEP_2);
 				times = 1;
 			}

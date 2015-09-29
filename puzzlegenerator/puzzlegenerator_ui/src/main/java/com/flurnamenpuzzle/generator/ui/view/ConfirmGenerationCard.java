@@ -21,15 +21,13 @@ import com.flurnamenpuzzle.generator.PuzzleGeneratorConfig;
 import com.flurnamenpuzzle.generator.domain.PuzzleGeneratorModel;
 import com.flurnamenpuzzle.generator.ui.PuzzleGeneratorController;
 
-public class ConfirmCardGeneration extends JPanel implements Observer {
+public class ConfirmGenerationCard extends JPanel implements Observer {
 	private static final long serialVersionUID = 1L;
 
-	private static final String FILE_PATH_SHORTENING_REGEX = "(.*?/.*?/).*";
-
+	private static final String FILE_PATH_SHORTENING_REGEX = String.format("(.*?\\%s.*?\\%s).*", File.separator,
+			File.separator);
 	private static final String FILE_NAME_SHORTENING_REGEX = "(.{10}).*";
-
 	private static final String FILE_PATH_SHORTENING_REPLACEMENT = "$1...";
-
 	private static final String FILE_NAME_SHORTENING_REPLACEMENT = "$1..";
 
 	private PuzzleGeneratorController controller;
@@ -56,7 +54,7 @@ public class ConfirmCardGeneration extends JPanel implements Observer {
 	 * @param controller
 	 *            the instance to control this class' behaviour.
 	 */
-	public ConfirmCardGeneration(PuzzleGeneratorController controller) {
+	public ConfirmGenerationCard(PuzzleGeneratorController controller) {
 		this.controller = controller;
 		initializeComponents();
 		addComponentsToPanel();
@@ -120,11 +118,7 @@ public class ConfirmCardGeneration extends JPanel implements Observer {
 	}
 
 	/**
-<<<<<<< HEAD
 	 * add all actionlistener to the buttons
-=======
-	 * add all action listener to the buttons
->>>>>>> refs/remotes/origin/master
 	 */
 	private void addEvents() {
 		generateButton.addActionListener(new ActionListener() {
@@ -155,27 +149,37 @@ public class ConfirmCardGeneration extends JPanel implements Observer {
 	}
 
 	/**
-	 * Shortens the given path if <ul><li>the length of the name is longer than 10 character</li><li>the path has 4 or more directories</li><li>the name of the path is longer than 40 characters</li></ul>
-	 * @param filePathToShorten: path structure: path, filename, name extension
+	 * Shortens the given path if
+	 * <ul>
+	 * <li>the length of the name is longer than 10 character</li>
+	 * <li>the path has 4 or more directories</li>
+	 * <li>the name of the path is longer than 40 characters</li>
+	 * </ul>
+	 * 
+	 * @param filePathToShorten
+	 *            : path structure: path, filename, name extension
 	 * @return shorted pathname
 	 */
 	public String shortenFilePath(String filePathToShorten) {
-		String pathToShorten = FilenameUtils.getFullPath(filePathToShorten);
-		String nameToShorten = FilenameUtils.getBaseName(filePathToShorten);
-		String nameExtension = FilenameUtils.getExtension(filePathToShorten);
-		
-		int amountOfPathSeparators = StringUtils.countMatches(pathToShorten, File.separator);
-		if (pathToShorten.length() > 40 || amountOfPathSeparators > 4) {
-			pathToShorten = pathToShorten.replaceAll(FILE_PATH_SHORTENING_REGEX, FILE_PATH_SHORTENING_REPLACEMENT);
-			pathToShorten = String.format("%s%s", pathToShorten, File.separator);
-		}
-		
-		if (nameToShorten.length() > 10) {
-			nameToShorten = nameToShorten.replaceAll(FILE_NAME_SHORTENING_REGEX, FILE_NAME_SHORTENING_REPLACEMENT);
-		}
+		if (filePathToShorten != null) {
+			String pathToShorten = FilenameUtils.getFullPath(filePathToShorten);
+			String nameToShorten = FilenameUtils.getBaseName(filePathToShorten);
+			String nameExtension = FilenameUtils.getExtension(filePathToShorten);
 
-		filePathToShorten = String.format("%s%s.%s", pathToShorten, nameToShorten, nameExtension);
-		return filePathToShorten;
+			int amountOfPathSeparators = StringUtils.countMatches(pathToShorten, File.separator);
+			if (pathToShorten.length() > 40 || amountOfPathSeparators > 4) {
+				pathToShorten = pathToShorten.replaceAll(FILE_PATH_SHORTENING_REGEX, FILE_PATH_SHORTENING_REPLACEMENT);
+				pathToShorten = String.format("%s%s", pathToShorten, File.separator);
+			}
+
+			if (nameToShorten.length() > 10) {
+				nameToShorten = nameToShorten.replaceAll(FILE_NAME_SHORTENING_REGEX, FILE_NAME_SHORTENING_REPLACEMENT);
+			}
+
+			filePathToShorten = String.format("%s%s.%s", pathToShorten, nameToShorten, nameExtension);
+			return filePathToShorten;
+		}
+		return "";
 	}
 
 }
