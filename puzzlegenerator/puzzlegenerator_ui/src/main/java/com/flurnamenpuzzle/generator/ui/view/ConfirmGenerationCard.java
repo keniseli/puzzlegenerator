@@ -66,13 +66,13 @@ public class ConfirmGenerationCard extends JPanel implements Observer {
 	 */
 	private void addComponentsToPanel() {
 		add(stateLabel, "gaptop 40");
-		add(stateNameLabel, "gap :40:, gapbottom 10, wrap");
+		add(stateNameLabel, "gap :40:, pushx, growx, gapbottom 10, wrap");
 		add(stateShapefileLabel);
-		add(stateShapefilePathLabel, "gap :40:, gapbottom 10, wrap");
+		add(stateShapefilePathLabel, "gap :40:, pushx, growx, gapbottom 10, wrap");
 		add(fieldnameShapefileLabel);
-		add(fieldnameShapefilePathLabel, "gap :40:, gapbottom 10, wrap");
+		add(fieldnameShapefilePathLabel, "gap :40:, pushx, growx, gapbottom 10, wrap");
 		add(cardTiffLabel);
-		add(cardTiffPathLabel, "gap :40:, gapbottom 10, wrap");
+		add(cardTiffPathLabel, "gap :40:, pushx, growx, gapbottom 10, wrap");
 		add(backButton, "left, gaptop 40");
 		add(generateButton, "right, gaptop 40");
 	}
@@ -83,7 +83,7 @@ public class ConfirmGenerationCard extends JPanel implements Observer {
 	private void initializeComponents() {
 		setLayout(new MigLayout());
 		setBorder(new EmptyBorder(20, 200, 20, 200));
-		setSize(new Dimension(600, 600));
+		this.setSize(new Dimension(600, 1000));
 		setBackground(PuzzleGeneratorConfig.BACKGROUND_COLOR);
 
 		stateLabel = new JLabel("Gemeinde");
