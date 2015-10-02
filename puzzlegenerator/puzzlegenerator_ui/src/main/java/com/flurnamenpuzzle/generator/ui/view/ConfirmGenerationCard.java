@@ -83,7 +83,7 @@ public class ConfirmGenerationCard extends JPanel implements Observer {
 	private void initializeComponents() {
 		setLayout(new MigLayout());
 		setBorder(new EmptyBorder(20, 200, 20, 200));
-		this.setSize(new Dimension(600, 1000));
+		this.setSize(new Dimension(600, 600));
 		setBackground(PuzzleGeneratorConfig.BACKGROUND_COLOR);
 
 		stateLabel = new JLabel("Gemeinde");
