@@ -66,13 +66,13 @@ public class ConfirmGenerationCard extends JPanel implements Observer {
 	 */
 	private void addComponentsToPanel() {
 		add(stateLabel, "gaptop 40");
-		add(stateNameLabel, "gap :40:, gapbottom 10, wrap");
+		add(stateNameLabel, "gap :40:, pushx, growx, gapbottom 10, wrap");
 		add(stateShapefileLabel);
-		add(stateShapefilePathLabel, "gap :40:, gapbottom 10, wrap");
+		add(stateShapefilePathLabel, "gap :40:, pushx, growx, gapbottom 10, wrap");
 		add(fieldnameShapefileLabel);
-		add(fieldnameShapefilePathLabel, "gap :40:, gapbottom 10, wrap");
+		add(fieldnameShapefilePathLabel, "gap :40:, pushx, growx, gapbottom 10, wrap");
 		add(cardTiffLabel);
-		add(cardTiffPathLabel, "gap :40:, gapbottom 10, wrap");
+		add(cardTiffPathLabel, "gap :40:, pushx, growx, gapbottom 10, wrap");
 		add(backButton, "left, gaptop 40");
 		add(generateButton, "right, gaptop 40");
 	}
