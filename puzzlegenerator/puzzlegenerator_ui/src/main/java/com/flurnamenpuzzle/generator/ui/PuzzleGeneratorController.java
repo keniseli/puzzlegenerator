@@ -217,7 +217,8 @@ public class PuzzleGeneratorController {
 				try {
 					puzzle = puzzleGeneratorService.generatePuzzle(stateFilePath, stateName, fieldNameFilePath,
 							mapFilePath, pathToTemporaryDirectory);
-				} catch (Exception e) {
+				} catch (ServiceException e) {
+					e.printStackTrace();
 					puzzleGeneratorModel.setNotification(
 							"Beim Generieren der Puzzle-Teile ist ein Fehler aufgetreten.",
 							PuzzleGeneratorConfig.FAIL_COLOR);

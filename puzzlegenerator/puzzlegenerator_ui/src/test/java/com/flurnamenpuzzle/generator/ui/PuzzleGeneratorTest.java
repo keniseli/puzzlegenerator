@@ -15,6 +15,7 @@ import com.flurnamenpuzzle.generator.domain.PuzzleGeneratorModel;
 
 public class PuzzleGeneratorTest {
 
+	@Ignore
 	@Test
 	public void testPuzzleGenerator() throws IOException {
 		PuzzleGeneratorModel puzzleGeneratorModel = new PuzzleGeneratorModel();
