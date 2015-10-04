@@ -95,8 +95,14 @@ public class PuzzleGeneratorController {
 			return;
 		}
 		puzzleGeneratorModel.setStateFilePath(stateFile.getAbsolutePath());
-		namesOfShapesInFile = shapeService.getNamesOfShapeFile(stateFile);
-
+		
+		try {
+			namesOfShapesInFile = shapeService.getNamesOfShapeFile(stateFile);
+		} catch (ServiceException e) {
+			puzzleGeneratorModel.setNotification(e.getMessage(), PuzzleGeneratorConfig.FAIL_COLOR);
+			return;
+		}
+		
 		int numberOfStates = namesOfShapesInFile.size();
 		String[] states = new String[numberOfStates];
 		states = namesOfShapesInFile.toArray(states);
