@@ -89,14 +89,12 @@ public class FieldNameMapSelectionCard extends JPanel implements Observer {
 		setBackground(PuzzleGeneratorConfig.BACKGROUND_COLOR);
 
 		shapeFileChooser = new JFileChooser();
-		FileNameExtensionFilter shapeFileFilter = new FileNameExtensionFilter(
-				"Shape-Datei", "shp", "shx", "dbf");
+		FileNameExtensionFilter shapeFileFilter = new FileNameExtensionFilter("Shape-Datei", "shp", "shx", "dbf");
 		shapeFileChooser.setFileFilter(shapeFileFilter);
 		shapeFileChooser.setAcceptAllFileFilterUsed(false);
 
 		tifFileChooser = new JFileChooser();
-		FileNameExtensionFilter tifFileFilter = new FileNameExtensionFilter(
-				"TIFF-Datei", "tif", "tiff");
+		FileNameExtensionFilter tifFileFilter = new FileNameExtensionFilter("TIFF-Datei", "tif", "tiff");
 		tifFileChooser.setFileFilter(tifFileFilter);
 		tifFileChooser.setAcceptAllFileFilterUsed(false);
 
@@ -109,12 +107,10 @@ public class FieldNameMapSelectionCard extends JPanel implements Observer {
 		stateDropdownLabel = new JLabel("Bitte wählen Sie eine Gemeinde aus:");
 		stateDropdownLabel.setFont(PuzzleGeneratorConfig.FONT_NORMAL);
 
-		chooseFieldNameLabel = new JLabel(
-				"Wählen Sie das Shapefile der Flurnamen:");
+		chooseFieldNameLabel = new JLabel("Wählen Sie das Shapefile der Flurnamen:");
 		chooseFieldNameLabel.setFont(PuzzleGeneratorConfig.FONT_NORMAL);
 
-		chooseMapLabel = new JLabel(
-				"Wählen Sie das Tiff-File mit dem Kartenmaterial:");
+		chooseMapLabel = new JLabel("Wählen Sie das Tiff-File mit dem Kartenmaterial:");
 		chooseMapLabel.setFont(PuzzleGeneratorConfig.FONT_NORMAL);
 
 		chooseFieldNameButton = new JButton("Durchsuchen");
@@ -146,8 +142,7 @@ public class FieldNameMapSelectionCard extends JPanel implements Observer {
 				String fieldNamePathText = fieldNamePath.getText();
 				String mapPathText = mapPath.getText();
 				String stateName = stateDropdown.getSelectedItem().toString();
-				controller.saveFieldNameFilePathAndCardMaterialFilePath(
-						fieldNamePathText, mapPathText, stateName);
+				controller.saveFieldNameFilePathAndCardMaterialFilePath(fieldNamePathText, mapPathText, stateName);
 			}
 		});
 
@@ -159,8 +154,7 @@ public class FieldNameMapSelectionCard extends JPanel implements Observer {
 				if (returnVal == JFileChooser.APPROVE_OPTION) {
 					String success = "Shape Datei wurde ausgewählt.";
 					String fail = "Es wurde keine Shape-Datei ausgewählt.";
-					handleSelectedFile(shapeFileChooser, fieldNamePath,
-							success, fail, SHAPE_FILE_EXTENSION);
+					handleSelectedFile(shapeFileChooser, fieldNamePath, success, fail, SHAPE_FILE_EXTENSION);
 				}
 			}
 		});
@@ -173,8 +167,7 @@ public class FieldNameMapSelectionCard extends JPanel implements Observer {
 				if (returnVal == JFileChooser.APPROVE_OPTION) {
 					String success = "Tiff-Datei wurde ausgewählt.";
 					String fail = "Es wurde keine Tiff-Datei ausgewählt.";
-					handleSelectedFile(tifFileChooser, mapPath, success, fail,
-							TIFF_FILE_EXTENSION);
+					handleSelectedFile(tifFileChooser, mapPath, success, fail, TIFF_FILE_EXTENSION);
 				}
 			}
 		});
@@ -198,19 +191,18 @@ public class FieldNameMapSelectionCard extends JPanel implements Observer {
 				stateDropdown.addItem(selectableState);
 			}
 		}
-		if(notification != null){
+		if (notification != null) {
 			notificationLabel.setForeground(model.getNotificationColor());
 			notificationLabel.setText(notification);
 		}
 	}
 
-	private void handleSelectedFile(JFileChooser fc, JTextField label,
-			String success, String fail, String ext) {
+	private void handleSelectedFile(JFileChooser fc, JTextField label, String success, String fail, String ext) {
 		File selectedFile = fc.getSelectedFile();
 		String pathOfSelectedFile = selectedFile.getPath();
 		label.setText(pathOfSelectedFile);
-		String extension = FilenameUtils
-				.getExtension(selectedFile.getName());;
+		String extension = FilenameUtils.getExtension(selectedFile.getName());
+		;
 		if (extension.equals(ext)) {
 			controller.setNotification(success, PuzzleGeneratorConfig.SUCCESS_COLOR);
 		} else {

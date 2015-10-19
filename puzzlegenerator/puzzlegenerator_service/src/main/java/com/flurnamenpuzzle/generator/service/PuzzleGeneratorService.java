@@ -398,7 +398,7 @@ public class PuzzleGeneratorService {
 				return new BufferedImage(colorModel, raster, colorModel.isAlphaPremultiplied(), null);
 			}
 		} catch (Exception e) {
-			throw new ServiceException("Could not crop image.");
+			throw new ServiceException("Bild konnte nicht geschnitten werden.");
 		}
 		return null;
 	}

@@ -24,15 +24,15 @@ public class TargetPathSelectionCard extends JPanel implements Observer {
 	private static final long serialVersionUID = 1L;
 
 	private PuzzleGeneratorController controller;
-	
+
 	private JFileChooser fileChooser;
-	
+
 	private JButton chooseButton;
 	private JButton nextButton;
-	
+
 	private JLabel savePathLabel;
 	private JLabel notificationLabel;
-	
+
 	private JTextField pathField;
 
 	public TargetPathSelectionCard(PuzzleGeneratorController controller) {
@@ -83,8 +83,7 @@ public class TargetPathSelectionCard extends JPanel implements Observer {
 		fileChooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
 		chooseButton = new JButton("Durchsuchen");
 		chooseButton.setFont(PuzzleGeneratorConfig.FONT_NORMAL);
-		savePathLabel = new JLabel(
-				"Bitte wählen Sie den Speicherort für das Puzzle aus:");
+		savePathLabel = new JLabel("Bitte wählen Sie den Speicherort für das Puzzle aus:");
 		savePathLabel.setFont(PuzzleGeneratorConfig.FONT_NORMAL);
 		notificationLabel = new JLabel();
 		notificationLabel.setFont(PuzzleGeneratorConfig.FONT_NORMAL);
@@ -98,7 +97,7 @@ public class TargetPathSelectionCard extends JPanel implements Observer {
 	public void update(Observable observable) {
 		PuzzleGeneratorModel model = (PuzzleGeneratorModel) observable;
 		String notification = model.getNotification();
-		if(notification != null){
+		if (notification != null) {
 			notificationLabel.setForeground(model.getNotificationColor());
 			notificationLabel.setText(notification);
 		}

@@ -26,12 +26,12 @@ public class ResultCard extends JPanel implements Observer {
 	private static final long serialVersionUID = 1L;
 
 	private PuzzleGeneratorController controller;
-	
+
 	private JLabel resultImage;
 	private JLabel resultLabel;
 	private JLabel resultList;
 	private JLabel notificationLabel;
-	
+
 	private JButton finishButton;
 
 	/**
@@ -98,15 +98,13 @@ public class ResultCard extends JPanel implements Observer {
 		boolean success = model.isGenerationSuccess();
 		String notification = model.getNotification();
 		if (success) {
-			resultImage.setIcon(new ImageIcon(this.getClass().getResource(
-					PuzzleGeneratorConfig.SUCCESS_IMAGE)));
+			resultImage.setIcon(new ImageIcon(this.getClass().getResource(PuzzleGeneratorConfig.SUCCESS_IMAGE)));
 			resultLabel.setText("Das Puzzle wurde erfolgreich erstellt!");
 		} else {
-			resultImage.setIcon(new ImageIcon(this.getClass().getResource(
-					PuzzleGeneratorConfig.FAIL_IMAGE)));
+			resultImage.setIcon(new ImageIcon(this.getClass().getResource(PuzzleGeneratorConfig.FAIL_IMAGE)));
 			resultLabel.setText("Das Puzzle konnte nicht erstellt werden.");
 		}
-		if(notification != null){
+		if (notification != null) {
 			notificationLabel.setForeground(model.getNotificationColor());
 			notificationLabel.setText(notification);
 		}

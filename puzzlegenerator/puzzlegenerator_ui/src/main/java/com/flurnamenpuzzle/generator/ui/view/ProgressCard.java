@@ -67,8 +67,7 @@ public class ProgressCard extends JPanel implements Observer {
 		progressTitleLabel = new JLabel("Status");
 		progressTitleLabel.setFont(PuzzleGeneratorConfig.FONT_BOLD);
 
-		progressLabel = new JLabel(
-				"Die Puzzleteile werden in diesem Moment erstellt.");
+		progressLabel = new JLabel("Die Puzzleteile werden in diesem Moment erstellt.");
 		progressLabel.setFont(PuzzleGeneratorConfig.FONT_NORMAL);
 
 		stopButton = new JButton("Abbrechen");
@@ -87,10 +86,8 @@ public class ProgressCard extends JPanel implements Observer {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				int dialogButton = JOptionPane.YES_NO_OPTION;
-				int dialogResult = JOptionPane.showConfirmDialog(null,
-						"Wollen Sie den Vorgang wirklich abbrechen?",
+				int dialogResult = JOptionPane.showConfirmDialog(null, "Wollen Sie den Vorgang wirklich abbrechen?",
 						"Warning", dialogButton, JOptionPane.PLAIN_MESSAGE);
-
 				if (dialogResult == JOptionPane.YES_OPTION) {
 					controller.abortGenerationProcess();
 				}
